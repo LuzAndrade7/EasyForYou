@@ -1,0 +1,60 @@
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EasyForYou - Login</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>EasyForYou</h1>
+    <p class="muted">Inicia sesión o crea tu cuenta.</p>
+
+    <div class="card">
+      <h2>Registrarse</h2>
+      <form id="registerForm">
+        <label>
+          Nombre
+          <input type="text" id="regName" required />
+        </label>
+        <label>
+          Correo
+          <input type="email" id="regEmail" required />
+        </label>
+        <label>
+          Contraseña
+          <input type="password" id="regPassword" minlength="6" required />
+        </label>
+        <button type="submit">Crear cuenta</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Iniciar sesión</h2>
+      <form id="loginForm">
+        <label>
+          Correo
+          <input type="email" id="logEmail" required />
+        </label>
+        <label>
+          Contraseña
+          <input type="password" id="logPassword" required />
+        </label>
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+
+    <p id="msg" class="msg"></p>
+  </main>
+
+  <!-- Supabase JS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Tus scripts -->
+  <script src="./js/supabaseClient.js"></script>
+  <script src="./js/auth.js"></script>
+</body>
+</html>

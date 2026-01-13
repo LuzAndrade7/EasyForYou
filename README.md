@@ -2,7 +2,7 @@
 
 EasyForYou es una aplicación web educativa dirigida a estudiantes de colegio, cuyo objetivo es apoyar el aprendizaje mediante contenidos interactivos y un sistema de progreso visual basado en un animalito virtual.
 
-Cada estudiante puede registrarse, elegir un animal, avanzar por los contenidos de la asignatura y ver cómo su animal va subiendo de nivel conforme completa los temas. Además, la aplicación incluye una calculadora académica y un historial donde se guardan los resultados utilizados por el estudiante.
+Cada estudiante puede registrarse, elegir un animal, avanzar por los contenidos de la asignatura y ver cómo su animal sube de nivel conforme completa los temas. Además, la aplicación incluye una calculadora académica y un historial donde se guardan los resultados (Arch).
 
 ---
 
@@ -19,17 +19,17 @@ Desarrollar una plataforma web sencilla y amigable que:
 
 ## 🧩 Funcionalidades principales
 
-- Registro e inicio de sesión de usuarios.
+- Registro e inicio de sesión (Email + contraseña).
 - Selección de un animal virtual (5 tipos disponibles).
 - Sistema de niveles (hasta 5 niveles por animal).
 - Visualización del progreso del estudiante.
-- Acceso a contenidos de la asignatura.
+- Acceso a contenidos de la asignatura y marcado de temas completados.
 - Calculadora con fórmulas académicas.
 - Historial de cálculos guardados (Arch).
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## 🛠️ Tecnologías utilizadas (stack final)
 
 ### Frontend
 
@@ -37,31 +37,58 @@ Desarrollar una plataforma web sencilla y amigable que:
 - CSS
 - JavaScript (Vanilla)
 
-### Backend
+### Backend/DB como servicio
 
-- Node.js
-- Express.js
+- **Supabase** (Auth + PostgreSQL + API)
 
-### Base de datos
+### Publicación
 
-- PostgreSQL (Neon)
-
-### Herramientas adicionales
-
-- Git y GitHub (control de versiones)
-- Render (deploy del backend)
-- GitHub Pages o Netlify (deploy del frontend)
+- **GitHub Pages** (sitio web)
 
 ---
 
-## 📂 Estructura del proyecto
+## ▶️ Cómo ejecutar el proyecto (local)
 
-```text
+### Opción A: abrir el archivo directamente
+
+1. Entra a la carpeta `frontend/`
+2. Abre `index.html` con doble clic
+
+> Nota: si el navegador bloquea algunas funciones, usa la opción B.
+
+### Opción B (recomendada): servidor local simple
+
+Desde la carpeta `frontend/`:
+
+```bash
+python -m http.server 5500
+
+
+```
+
+Luego abre:
+
+http://localhost:5500
+
+---
+
+## Estructura del proyecto
+
 EasyForYou/
 │
-├── frontend/        # HTML, CSS y JavaScript del cliente
-│
-├── backend/         # API, lógica de negocio y conexión a BD
-│
+├── frontend/ # Sitio web (HTML, CSS, JS)
+├── backend/ # (No usado en la versión final) Experimentos con Node/Express
 └── README.md
-```
+
+---
+
+## 🔐 Configuración de Supabase
+
+En frontend/js/supabaseClient.js se configuran:
+
+SUPABASE_URL
+
+SUPABASE_ANON_KEY
+
+Estas credenciales se obtienen en Supabase:
+Project Settings → API.
