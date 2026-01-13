@@ -1,0 +1,40 @@
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS avatars (
+  id SERIAL PRIMARY KEY,
+  user_id INT UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+  animal_type INT NOT NULL CHECK (animal_type BETWEEN 1 AND 5),
+  level INT NOT NULL DEFAULT 1 CHECK (level BETWEEN 1 AND 5),
+  xp INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS topics (
+  id SERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT,
+  points INT NOT NULL DEFAULT 10
+);
+
+CREATE TABLE IF NOT EXISTS content_progress (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  topic_id INT REFERENCES topics(id) ON DELETE CASCADE,
+  completed BOOLEAN NOT NULL DEFAULT FALSE,
+  completed_at TIMESTAMP,
+  UNIQUE(user_id, topic_id)
+);
+
+CREATE TABLE IF NOT EXISTS arch_results (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  formula_name TEXT NOT NULL,
+  input_json JSONB NOT NULL,
+  result_value DOUBLE PRECISION NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
