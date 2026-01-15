@@ -3,29 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EasyForYou - Login</title>
+  <title>EasyForYou - Registro</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <main class="container">
     <h1>EasyForYou</h1>
-    <p class="muted">Inicia sesión para continuar</p>
+    <p class="muted">Crea tu cuenta</p>
 
     <div class="card">
-      <h2>Iniciar sesión</h2>
-      <form id="loginForm">
+      <h2>Registrarse</h2>
+      <form id="registerForm">
+        <label>
+          Nombre
+          <input type="text" id="regName" required />
+        </label>
         <label>
           Correo
-          <input type="email" id="logEmail" required />
+          <input type="email" id="regEmail" required />
         </label>
         <label>
           Contraseña
-          <input type="password" id="logPassword" required />
+          <input type="password" id="regPassword" minlength="6" required />
         </label>
-        <button type="submit">Entrar</button>
+        <button type="submit">Crear cuenta</button>
       </form>
       <p class="register-link">
-        ¿No tienes cuenta? <a href="./register.html">Regístrate aquí</a>
+        ¿Ya tienes cuenta? <a href="./index.html">Inicia sesión</a>
       </p>
     </div>
 
@@ -37,6 +41,6 @@
 
   <!-- Tus scripts -->
   <script src="./js/supabaseClient.js"></script>
-  <script src="./js/login.js"></script>
+  <script src="./js/register.js"></script>
 </body>
 </html>

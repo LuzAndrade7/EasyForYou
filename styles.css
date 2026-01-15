@@ -1,6 +1,21 @@
-body { font-family: Arial, sans-serif; margin: 0; background: #f6f6f6; }
-.container { max-width: 700px; margin: 40px auto; padding: 20px; }
-.card { background: white; padding: 16px; border-radius: 12px; margin: 14px 0; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+body { 
+    font-family: Arial, sans-serif; 
+    margin: 0; 
+    background: #f6f6f6; 
+    /*background:linear-gradient(135deg, #4f46e5, #ff8c00); ;}*/
+
+.container { 
+    max-width: 700px; 
+    margin: 40px auto; 
+    padding: 20px; }
+
+.card { 
+    background: white; 
+    padding: 16px; 
+    border-radius: 12px; 
+    margin: 14px 0; 
+    box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+    
 label { display: block; margin: 10px 0; }
 input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-top: 6px; box-sizing: border-box; }
 button { padding: 10px 14px; border: 0; border-radius: 8px; cursor: pointer; background: #4f46e5; color: white; }
@@ -275,112 +290,4 @@ button {
 
 button:hover {
   background-color: #4338ca;
-}
-
-/* ========================================
-   CONTENIDOS - Grilla de tarjetas
-   ======================================== */
-.contenidos-wrapper {
-  background: #d0d0d0;
-  padding: 30px;
-  border-radius: 12px;
-  margin: 20px 0;
-}
-
-.contenidos-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.contenidos-title {
-  background: #4f46e5;
-  color: white;
-  padding: 10px 30px;
-  font-weight: bold;
-  font-size: 14px;
-  border-radius: 4px;
-  display: inline-block;
-}
-
-.content-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.content-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 20px;
-  border-radius: 30px;
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-  font-size: 11px;
-  min-height: 40px;
-  position: relative;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.content-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-.content-card .content-text {
-  flex: 1;
-  padding-right: 10px;
-}
-
-.content-card .plus-btn {
-  width: 32px;
-  height: 32px;
-  background: #ff3b3b;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  font-weight: bold;
-  color: white;
-  flex-shrink: 0;
-}
-
-/* Colores de las tarjetas */
-.content-card.red {
-  background: linear-gradient(90deg, #5c4adb 0%, #ff3b3b 100%);
-}
-
-.content-card.orange {
-  background: linear-gradient(90deg, #ff8c00 0%, #ffa500 100%);
-}
-
-.content-card.yellow {
-  background: linear-gradient(90deg, #ffcc00 0%, #00cfff 100%);
-}
-
-.content-card.blue {
-  background: linear-gradient(90deg, #4444ff 0%, #6666ff 100%);
-}
-
-.content-card.cyan {
-  background: linear-gradient(90deg, #00a8cc 0%, #00cfff 100%);
-}
-
-.content-card.lightblue {
-  background: linear-gradient(90deg, #00cfff 0%, #40e0d0 100%);
-}
-
-@media (max-width: 600px) {
-  .content-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .content-card {
-    font-size: 10px;
-    padding: 10px 15px;
-  }
 }

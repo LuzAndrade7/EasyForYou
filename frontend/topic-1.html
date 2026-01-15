@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Segmentación de Mercado - EasyForYou</title>
+  <link rel="stylesheet" href="./styles/styles.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0879F1;
+      min-height: 100vh;
+      justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    display: flex;
+    }
+    
+    .topic-container {
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: left; /* Ajusta el texto hacia la izquierda */
+    }
+    
+    /* Título principal */
+    .main-title {
+      background: white;
+      border: 3px solid #333;
+      border-radius: 30px;
+      padding: 15px 40px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px auto 30px;
+      max-width: 500px;
+    }
+    
+    /* Header con línea y caja info */
+    .header-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      justify-content: center;
+      margin: 30px 0;
+    }
+    
+    .dashed-line-horizontal {
+      flex: 1;
+      border-top: 3px dashed #333;
+    }
+    
+    /* Caja de información */
+    .info-box {
+      background: #87CEEB;
+      border: 2px solid #333;
+      border-radius: 12px;
+      padding: 12px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Esto centra el contenido horizontalmente */
+      gap: 12px;
+      white-space: nowrap;
+      position: relative;
+    }
+    
+    .info-box .icon_method {
+      font-size: 35px;
+    }
+    
+    .info-box span {
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    
+    /* Métodos de obtención de info */
+    .methods-row {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+    
+    .method-card {
+      background: #FFBD58;
+      border: 3px solid #333;
+      border-radius: 20px;
+      padding: 12px 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #333;
+      transition: transform 0.2s;
+      box-shadow: 4px 4px 0 #333;
+    }
+    
+    .method-card:hover {
+      transform: translateY(-3px);
+      background: #ffc978;
+    }
+    
+    .method-card .icon_method{
+      width: 40x;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+    
+    .method-card span {
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    /* Texto de análisis */
+    .analysis-text {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      font-style: italic;
+      margin: 40px 0;
+    }
+    
+    /* Sección de segmentación */
+    .segmentation-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    
+    /* Flecha izquierda apuntando a la derecha */
+    .arrow-left {
+      background: #5CE7FF;
+      color: #333;
+      padding: 20px 30px 20px 20px;
+      font-weight: bold;
+      font-size: 12px;
+      text-align: center;
+      clip-path: polygon(0 0, 75% 0, 100% 50%, 75% 100%, 0 100%);
+      min-width: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60px;
+    }
+    
+    /* Flecha derecha apuntando a la izquierda */
+    .arrow-right {
+      background: #5CE7FF;
+      color: #333;
+      padding: 20px 20px 20px 30px;
+      font-weight: bold;
+      font-size: 12px;
+      text-align: center;
+      clip-path: polygon(25% 0, 100% 0, 100% 100%, 25% 100%, 0 50%);
+      min-width: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60px;
+    }
+    
+    .seg-box {
+      background: white;
+      border: 2px solid #333;
+      padding: 12px 15px;
+      min-width: 140px;
+    }
+    
+    .seg-box h4 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+      text-align: center;
+    }
+    
+    .seg-box ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .seg-box li {
+      padding: 4px 0;
+      font-size: 13px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .seg-box li:last-child {
+      border-bottom: none;
+    }
+    
+    /* Wrapper para flecha + caja */
+    .seg-group {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    
+    .seg-group-right {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-direction: row-reverse;
+    }
+    
+    /* Columna central */
+    .center-column {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+    
+    /* Columnas laterales */
+    .side-column {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    /* Botón volver */
+    .back-btn {
+      display: inline-block;
+      background: #FFA521;
+      color: black;
+      padding: 12px 30px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 30px;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .back-btn:hover {
+      background: #EA8B00;
+    }
+
+    .back-btn {
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 12px;
+}
+
+    @media (max-width: 768px) {
+      .segmentation-section {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .seg-group, .seg-group-right {
+        flex-direction: column;
+      }
+      
+      .arrow-left, .arrow-right {
+        clip-path: none;
+        border-radius: 10px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topic-container">
+    <!-- Título principal -->
+    <div class="main-title">¿QUIÉNES VAN A SER TUS CLIENTES?</div>
+    
+    <!-- Header con línea y caja info -->
+    <div class="header-row">
+      
+      <div class="info-box">
+        <span class="icon_method">📋</span>
+        <span>¿CÓMO OBTENER LA INFORMACIÓN?</span>
+      </div>
+    </div>
+    
+    <!-- Métodos -->
+    <div class="methods-row">
+      <div class="method-card">
+        <div class="icon_method"><img src="../images/observacion.png" alt="Observación"></div>
+        <span>Observación</span>
+      </div>
+      <div class="method-card">
+        <div class="icon_method"><img src="../images/reunion_grupos.png" alt="Reunión de grupos"></div>
+        <span>Reunión<br>de grupos</span>
+      </div>
+      <a href="https://forms.gle/SmMaJ4wHu1JRCdsn7" target="_blank" class="method-card">
+        <div class="icon_method"><img src="../images/entrevista.png" alt="Entrevista"></div>
+        <span>Entrevista</span>
+      </a>
+    </div>
+    
+    <!-- Texto de análisis -->
+    <div class="analysis-text">
+      Analiza quién está interesado en tu proyecto y determina:
+    </div>
+    
+    <!-- Sección de segmentación -->
+    <div class="segmentation-section">
+      <!-- Columna izquierda - Segmentación demográfica -->
+      <div class="side-column">
+        <div class="seg-group">
+          <div class="arrow-left">Segmentación<br>demográfica</div>
+          <div class="seg-box">
+            <ul>
+              <li>EDAD</li>
+              <li>SEXO</li>
+              <li>GENERO</li>
+              <li>INGRESOS</li>
+              <li>PROFESION</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Columna central -->
+      <div class="center-column">
+        <div class="seg-box">
+          <ul>
+            <li>Personalidad</li>
+            <li>Estilo de vida</li>
+            <li>Clase social</li>
+          </ul>
+        </div>
+        <div class="seg-box">
+          <h4>Ubicación geográfica</h4>
+          <ul>
+            <li>(clima, país, ciudad,</li>
+            <li>parroquia, cantón)</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Columna derecha - Segmentación psicográfica y geográfica -->
+      <div class="side-column">
+        <div class="seg-group-right">
+          <div class="arrow-right">Segmentación<br>psicográfica</div>
+        </div>
+        <div class="seg-group-right">
+          <div class="arrow-right">Segmentación<br>Geográfica</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Botón volver -->
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="./app.html" class="back-btn"><img src="../images/back.png" alt="Volver"> Volver</a>
+    </div>
+  </div>
+</body>
+</html>

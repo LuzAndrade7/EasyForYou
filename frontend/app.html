@@ -3,17 +3,105 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EasyForYou - App</title>
-  <link rel="stylesheet" href="./css/styles.css" />
+  <title>EasyForYou - Dashboard</title>
+  <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <main class="container">
+  <header class="app-header">
     <h1>EasyForYou</h1>
-    <p id="welcome" class="muted">Cargando...</p>
-
-    <div class="card">
-      <button id="logoutBtn">Cerrar sesión</button>
+    <div class="header-right">
+      <span id="welcome">Cargando...</span>
+      <button id="logoutBtn" class="btn-logout">Cerrar sesión</button>
     </div>
+  </header>
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="usuario">USUARIO</button>
+    <button class="tab-btn" data-tab="mascota">MASCOTA</button>
+    <button class="tab-btn" data-tab="contenidos">CONTENIDOS</button>
+    <button class="tab-btn" data-tab="ejercicios">EJERCICIOS</button>
+    <button class="tab-btn" data-tab="archivo">ARCHIVO</button>
+  </nav>
+
+  <main class="container">
+    <!-- Tab USUARIO -->
+    <section class="tab-content active" id="tab-usuario">
+      <div class="card">
+        <h2>👤 Usuario</h2>
+        <div id="userInfo">
+          <p>Cargando información del usuario...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab MASCOTA -->
+    <section class="tab-content" id="tab-mascota">
+      <div class="card">
+        <h2>🐾 Mascota</h2>
+        <div id="petInfo">
+          <p>Cargando información de la mascota...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab CONTENIDOS -->
+    
+    <section class="tab-content" id="tab-contenidos">
+      <div class="contenidos-wrapper">
+        <div class="contenidos-header">
+          <span class="contenidos-title">CONTENIDOS</span>
+        </div>
+        <div class="content-grid">
+          <!-- Fila 1 -->
+          <a href="./topic-1.html" class="content-card red">
+            <span class="content-text">SEGMENTACIÓN DEL MERCADO</span>
+            <span class="plus-btn">+</span>
+          </a>
+          <a href="./topic-2.html" class="content-card orange">
+            <span class="content-text">MARGEN DE GANANCIA</span>
+            <span class="plus-btn">+</span>
+          </a>
+          <a href="./topic-3.html" class="content-card yellow">
+            <span class="content-text">PRECIO DE VENTA UNITARIO</span>
+            <span class="plus-btn">+</span>
+          </a>
+          <!-- Fila 2 -->
+          <a href="./topic-4.html" class="content-card blue">
+            <span class="content-text">PUNTO DE EQUILIBRIO</span>
+            <span class="plus-btn">+</span>
+          </a>
+          <a href="./topic-5.html" class="content-card cyan">
+            <span class="content-text"></span>
+            <span class="plus-btn">+</span>
+          </a>
+          <a href="./topic-6.html" class="content-card lightblue">
+            <span class="content-text"></span>
+            <span class="plus-btn">+</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Tab EJERCICIOS -->
+    <section class="tab-content" id="tab-ejercicios">
+      <div class="card">
+        <h2>✏️ Ejercicios</h2>
+        <div id="exerciseList">
+          <p>Próximamente: Ejercicios interactivos</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab ARCHIVO -->
+    <section class="tab-content" id="tab-archivo">
+      <div class="card">
+        <h2>📁 Archivo</h2>
+        <div id="archiveList">
+          <p>Próximamente: Historial y archivos guardados</p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

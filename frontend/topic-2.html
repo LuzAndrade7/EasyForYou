@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fórmula Margen de Ganancia - EasyForYou</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #FFD597;
+      min-height: 100vh;
+    }
+
+    .topic-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Título principal */
+    .main-title {
+      background: #ffffff;
+      border: 3px solid #333;
+      border-radius: 30px;
+      padding: 15px 40px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px auto 20px;
+      max-width: 500px;
+    }
+
+    /* Contenedor de la fórmula */
+    .formula-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Imagen de la fórmula */
+    .formula-image {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 70%;
+      padding-top: 0px;
+      padding-bottom: 20px;
+    }
+
+    /* Cuadros explicativos */
+    .variables-container {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      align-items: center;
+      height: 40px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .variables-box {
+      background-color: #37B5FF;
+      color: white;
+      padding: 20px 25px;
+      border-radius: 8px;
+      width: 150px;
+      height: 40px;
+      display: flex; 
+      justify-content: center; 
+      align-items: center;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    /* Explicación de la fórmula */
+    .explanation-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 30px;
+      align-items: center;
+    }
+
+    .explanation-box {
+      background: #fff;
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 15px;
+      width: 200px;
+      text-align: center;
+      margin: 5px;
+      height: 60px;
+      display: flex;  
+      justify-content: center;  
+      align-items: center;  
+    }
+
+    .explanation-box p {
+      font-size: 14px;
+      color: #333;
+    }
+
+    /* Contenedor de los tres cuadros horizontales */
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    /* Estilos de los cuadros */
+    .info-box {
+      color: black;
+      padding: 15px;
+      border-radius: 8px;
+      width: 35%;
+      text-align: center;
+      display: flex;  
+      justify-content: center; 
+      align-items: center;  
+    }
+
+    .sabiasQue{
+      background-color: #FFA521;
+      color: black;
+      padding: 15px;
+      border-radius: 8px;
+      width: 15%;
+      text-align: center;
+      display: flex;  
+      justify-content: center;  
+      align-items: center; 
+      font-weight: bold;
+    }
+
+    .info-box:nth-child(2) {
+      background-color: #37B5FF;
+      color: white;
+    }
+
+    .info-box:nth-child(3) {
+      background-color: #00b4d8;
+      color: white;
+    }
+
+    /* Botón volver */
+    .back-btn {
+      display: inline-block;
+      background: #FFA521;
+      color: black;
+      padding: 12px 30px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      display: inline-grid;
+      grid-template-columns: auto auto;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn:hover {
+      background: #EA8B00;
+    }
+
+    .back-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Responsividad: Ajuste en pantallas pequeñas */
+    @media (max-width: 600px) {
+      .info-row {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .info-box {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topic-container">
+    <!-- Título de la sección -->
+    <div class="main-title">FÓRMULA DEL MARGEN DE GANANCIA</div>
+    
+    <!-- Imagen de la fórmula -->
+    <img src="../images/FmarGanancia.png" alt="Fórmula Margen de Ganancia" class="formula-image">
+    
+    <!-- Explicación de las variables -->
+    <div class="variables-container">
+      <div class="variables-box">INGRESOS</div>
+      <div class="variables-box">COSTOS</div>
+      <div class="variables-box">PRECIO</div>
+      <div class="variables-box">MARGEN DE GANANCIA</div>
+    </div>
+
+    <!-- Explicación de cada término -->
+    <div class="explanation-container">
+      <div class="explanation-box">
+        <p>Dinero total que entra por las ventas.</p>
+      </div>
+      <div class="explanation-box">
+        <p>Dinero que se gasta para producir o comprar un producto.</p>
+      </div>
+      <div class="explanation-box">
+        <p>Valor al que se vende el producto al cliente.</p>
+      </div>
+      <div class="explanation-box">
+        <p>Porcentaje de dinero que se gana después de restar los costos al precio de venta.</p>
+      </div>
+    </div>
+
+    <!-- Tres cuadros horizontales -->
+    <div class="info-row">
+      <div class="sabiasQue">
+        <span>¿Sabías qué?</span>
+      </div>
+      <div class="info-box">
+        <span>Si tu margen es alto, tu negocio es rentable.</span>
+      </div>
+      <div class="info-box">
+        <span>Para poder usar la fórmula,<br> los datos deben ser correctos.</span>
+      </div>
+    </div>
+
+    <!-- Botón de regresar -->
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="./app.html" class="back-btn"><img src="../images/back.png" alt="Volver"> Volver</a>
+    </div>
+  </div>
+</body>
+</html>
