@@ -17,11 +17,11 @@ const animalNames = {
 };
 
 const animalImages = {
-  1: "../images/CONEJO MUESTRA .jpeg",
-  2: "../images/GATO MUESTRA.jpeg",
-  3: "../images/PERRO MUESTRA .jpeg",
-  4: "../images/CERDITO MUESTRA.jpeg",
-  5: "../images/GALLO MUESTRA.jpeg"
+  1: "./images/CONEJO MUESTRA .jpeg",
+  2: "./images/GATO MUESTRA.jpeg",
+  3: "./images/PERRO MUESTRA .jpeg",
+  4: "./images/CERDITO MUESTRA.jpeg",
+  5: "./images/GALLO MUESTRA.jpeg"
 };
 
 async function loadUser() {

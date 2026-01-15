@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fórmula Precio Unitario de Venta - EasyForYou</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #FFD597;
+      min-height: 100vh;
+    }
+
+    .topic-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Título principal */
+    .main-title {
+      background: #ffffff;
+      border: 3px solid #333;
+      border-radius: 30px;
+      padding: 15px 40px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px auto 20px;
+      max-width: 500px;
+    }
+
+    /* Sección de fórmula */
+    .formula-section {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .formula-label {
+      font-size: 22px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+      text-decoration: underline;
+    }
+
+    .formula-image {
+      width: 100%;
+      max-width: 600px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Recuadro ¿QUE ES? debajo de la fórmula */
+    .que-es-box {
+      background: #FFBD58;
+      color: black;
+      padding: 25px;
+      border-radius: 12px;
+      border: 3px solid #333;
+      text-align: left;
+      box-shadow: 0 4px 0 #222;
+      margin: 40px auto;
+      max-width: 800px;
+    }
+
+    .que-es-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .que-es-content {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    /* Contenedor de botones */
+    .buttons-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      margin: 40px 0;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Botones generales */
+    .info-button {
+      background: #FFA521;
+      color: black;
+      padding: 30px 20px;
+      border-radius: 12px;
+      border: 3px solid #333;
+      position: relative;
+      box-shadow: 0 4px 0 #222;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 50px;
+      
+    }
+
+    .info-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 0 #222;
+      background: #ffb23c;
+    }
+
+    .info-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 0 #222;
+    }
+
+    /* Colores específicos para cada botón */
+    .button-tips {
+      background: #FFA521;
+    }
+
+    .button-sabiasque {
+      background: #37B5FF;
+      color: white;
+
+    }
+
+    .button-tiposcostos {
+      background: #10b981;
+      color: white;
+    }
+
+    .button-diferencia {
+      background: #8b5cf6;
+      color: white;
+    }
+
+    .button-tips:hover { background: #ffb23c; }
+    .button-sabiasque:hover { background: #4abfff; }
+    .button-tiposcostos:hover { background: #12cc8c; }
+    .button-diferencia:hover { background: #9b6dff; }
+
+    .button-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 0;
+      text-align: center;
+    }
+
+    .button-plus {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #333;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      border: 2px solid white;
+    }
+
+    /* Botón volver */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: #FFA521;
+      color: black;
+      padding: 14px 35px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      border: 2px solid #333;
+      cursor: pointer;
+      margin-top: 30px;
+      box-shadow: 0 4px 0 #333;
+      transition: all 0.3s;
+    }
+
+    .back-btn:hover {
+      background: #EA8B00;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #333;
+    }
+
+    .back-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .btn-container {
+      text-align: center;
+      margin-top: 30px;
+      margin-bottom: 20px;
+    }
+
+    /* Popups / Ventanas emergentes */
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .popup-content {
+      background-color: #fff;
+      margin: 50px auto;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 600px;
+      position: relative;
+      border: 3px solid #333;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      animation: slideIn 0.3s;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #333;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .popup-close:hover {
+      color: #ff4444;
+    }
+
+    .popup-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      color: #333;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #FFA521;
+      text-align: center;
+    }
+
+    .popup-body {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* Estilos específicos para popup de TIPOS DE COSTOS */
+    .cost-types-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .cost-type-item {
+      margin-bottom: 10px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+    }
+
+    .cost-type-header {
+      padding: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #333;
+      background: #e9ecef;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+
+    .cost-type-header:hover {
+      background: #dee2e6;
+    }
+
+    .cost-type-header.active {
+      background: #10b981;
+      color: white;
+    }
+
+    .cost-type-arrow {
+      font-size: 18px;
+      transition: transform 0.3s;
+    }
+
+    .cost-type-header.active .cost-type-arrow {
+      transform: rotate(180deg);
+    }
+
+    .cost-type-content {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s;
+      background: white;
+    }
+
+    .cost-type-content.active {
+      padding: 15px;
+      max-height: 200px;
+      border-top: 1px solid #eee;
+    }
+
+    /* Responsividad */
+    @media (max-width: 768px) {
+      .buttons-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        max-width: 400px;
+      }
+      
+      .info-button {
+        height: 100px;
+        padding: 20px;
+      }
+      
+      .popup-content {
+        width: 95%;
+        margin: 20px auto;
+        padding: 20px;
+      }
+      
+      .main-title {
+        font-size: 20px;
+        padding: 12px 25px;
+      }
+      
+      .que-es-box {
+        margin: 30px auto;
+        padding: 20px;
+      }
+      
+      .button-title {
+        font-size: 22px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .button-title {
+        font-size: 20px;
+      }
+      
+      .button-plus {
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
+        right: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topic-container">
+    <!-- Título de la sección -->
+    <div class="main-title">PRECIO UNITARIO DE VENTA</div>
+    
+    <!-- Sección de fórmula -->
+    <div class="formula-section">
+      <div class="formula-label">FÓRMULA</div>
+      <img src="./images/FprecioVentaU.png" alt="Fórmula Precio Unitario de Venta" class="formula-image">
+    </div>
+    
+    <!-- Recuadro ¿QUE ES? debajo de la fórmula -->
+    <div class="que-es-box">
+      <div class="que-es-title">¿QUE ES?</div>
+      <div class="que-es-content">
+        El precio unitario de venta es la cantidad de dinero que pagará una persona por cada unidad de un determinado producto o servicio. Es muy importante para el vendedor porque le da una idea del costo de producción de determinado producto.
+      </div>
+    </div>
+    
+    <!-- Grid de 4 botones (2x2) -->
+    <div class="buttons-container">
+      <!-- TIPS -->
+      <div class="info-button button-tips" onclick="openPopup('popupTIPS')">
+        <div class="button-title">TIPS</div>
+        <div class="button-plus">+</div>
+      </div>
+      
+      <!-- SABIAS QUE -->
+      <div class="info-button button-sabiasque" onclick="openPopup('popupSABIASQUE')">
+        <div class="button-title">¿SABÍAS QUÉ?</div>
+        <div class="button-plus">+</div>
+      </div>
+      
+      <!-- TIPOS DE COSTOS -->
+      <div class="info-button button-tiposcostos" onclick="openPopup('popupCOSTOS')">
+        <div class="button-title">TIPOS DE COSTOS</div>
+        <div class="button-plus">+</div>
+      </div>
+      
+      <!-- DIFERENCIA -->
+      <div class="info-button button-diferencia" onclick="openPopup('popupDIFERENCIA')">
+        <div class="button-title">DIFERENCIA ENTRE PRECIO Y COSTO</div>
+        <div class="button-plus">+</div>
+      </div>
+    </div>
+
+    <!-- Botón de regresar -->
+    <div class="btn-container">
+      <a href="./app.html" class="back-btn">
+        <img src="./images/back.png" alt="Volver"> 
+        <span>Volver</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Popup de TIPS -->
+  <div id="popupTIPS" class="popup">
+    <div class="popup-content">
+      <span class="popup-close" onclick="closePopup('popupTIPS')">&times;</span>
+      <div class="popup-title">TIPS</div>
+      <div class="popup-body">
+        <p>Recuerda que este cálculo se hace tomando en cuenta un periodo de tiempo específico.</p>
+        <p>Se deben tomar en cuenta factores externos como el mercado y la competencia para poder sacar los precios de cada producto o servicio.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup de SABIAS QUE -->
+  <div id="popupSABIASQUE" class="popup">
+    <div class="popup-content">
+      <span class="popup-close" onclick="closePopup('popupSABIASQUE')">&times;</span>
+      <div class="popup-title">¿SABÍAS QUÉ?</div>
+      <div class="popup-body">
+        <p>LOS COSTOS SON: el desembolso económico que se realiza para la producción de algún bien o la oferta de algún servicio.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup de TIPOS DE COSTOS -->
+  <div id="popupCOSTOS" class="popup">
+    <div class="popup-content">
+      <span class="popup-close" onclick="closePopup('popupCOSTOS')">&times;</span>
+      <div class="popup-title">TIPOS DE COSTOS</div>
+      <div class="popup-body">
+        <ul class="cost-types-list" id="costTypesList">
+          <!-- Los tipos de costos se cargarán aquí dinámicamente -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup de DIFERENCIA -->
+  <div id="popupDIFERENCIA" class="popup">
+    <div class="popup-content">
+      <span class="popup-close" onclick="closePopup('popupDIFERENCIA')">&times;</span>
+      <div class="popup-title">DIFERENCIA ENTRE PRECIO UNITARIO DE VENTA Y COSTO UNITARIO DE PRODUCCIÓN</div>
+      <div class="popup-body">
+        <p>El costo de producción es lo que le cuesta al vendedor producir o poner a la venta un producto. Este se calcula de acuerdo a dos tipos de costos, los variables y los fijos.</p>
+        
+        <p><strong>Los variables</strong> son aquellos que no siempre son los mismos en el periodo de tiempo en el que vas a producir, por ejemplo: materias primas, mano de obra directa.</p>
+        
+        <p><strong>Por otro lado, los gastos fijos</strong> son los que puedes contemplar dentro de tu periodo de tiempo establecido como algo que sí o sí debes cubrir para tu producción, por ejemplo: alquiler, servicios básicos, salarios administrativos.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Datos de los tipos de costos
+    const costTypes = [
+      {
+        title: "Costos fijos",
+        content: "Son aquellos costos que posee una empresa más allá de la producción obtenida su valor no varía según lo producido."
+      },
+      {
+        title: "Costos variables",
+        content: "Son aquellos costos que varían en relación a lo producido si se aumenta la producción estos costos serán mayores y viceversa."
+      },
+      {
+        title: "Costo semi-variable",
+        content: "Son aquellos costos que pueden variar según lo producido, pero estos cambios son más bien progresivos."
+      },
+      {
+        title: "Costos indirectos",
+        content: "Son aquellos costos que tienen consecuencias sobre la producción en forma total no pueden ser asignados a un determinado producto."
+      },
+      {
+        title: "Costos directos",
+        content: "Son aquellos costos que pueden ser asignados a cada bien o servicio en particular."
+      }
+    ];
+
+    // Función para cargar los tipos de costos en el popup
+    function loadCostTypes() {
+      const costTypesList = document.getElementById('costTypesList');
+      if (!costTypesList) return;
+      
+      costTypesList.innerHTML = costTypes.map((cost, index) => `
+        <li class="cost-type-item">
+          <div class="cost-type-header" onclick="toggleCostType(${index})">
+            <span>${cost.title}</span>
+            <span class="cost-type-arrow">▼</span>
+          </div>
+          <div class="cost-type-content" id="costContent-${index}">
+            ${cost.content}
+          </div>
+        </li>
+      `).join('');
+    }
+
+    // Función para expandir/colapsar tipos de costos
+    function toggleCostType(index) {
+      const content = document.getElementById(`costContent-${index}`);
+      const header = content.parentElement.querySelector('.cost-type-header');
+      
+      // Cerrar todos los demás
+      document.querySelectorAll('.cost-type-content').forEach(item => {
+        if (item.id !== `costContent-${index}`) {
+          item.classList.remove('active');
+          item.parentElement.querySelector('.cost-type-header').classList.remove('active');
+        }
+      });
+      
+      // Alternar el actual
+      content.classList.toggle('active');
+      header.classList.toggle('active');
+    }
+
+    // Funciones para los popups
+    function openPopup(popupId) {
+      // Si es el popup de tipos de costos, cargar la lista
+      if (popupId === 'popupCOSTOS') {
+        loadCostTypes();
+      }
+      document.getElementById(popupId).style.display = "block";
+    }
+
+    function closePopup(popupId) {
+      document.getElementById(popupId).style.display = "none";
+    }
+
+    // Cerrar popups al hacer clic fuera del contenido
+    window.onclick = function(event) {
+      if (event.target.classList.contains('popup')) {
+        event.target.style.display = "none";
+      }
+    }
+
+    // Cerrar popups con ESC
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        document.querySelectorAll('.popup').forEach(popup => {
+          popup.style.display = "none";
+        });
+      }
+    });
+  </script>
+</body>
+</html>
