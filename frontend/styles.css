@@ -384,3 +384,583 @@ button:hover {
     padding: 10px 15px;
   }
 }
+
+/* ========================================
+   CALCULADORAS - Pestaña Ejercicios
+   ======================================== */
+.calculadoras-wrapper {
+  background: #d0d0d0;
+  padding: 30px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.calculadoras-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.calculadoras-title {
+  background: #4f46e5;
+  color: white;
+  padding: 10px 30px;
+  font-weight: bold;
+  font-size: 18px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.calc-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 25px 20px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  min-height: 120px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+
+.calc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.calc-card .calc-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.calc-card .calc-text {
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.calc-card.orange {
+  background: linear-gradient(135deg, #ff8c00 0%, #ffa500 100%);
+}
+
+.calc-card.yellow {
+  background: linear-gradient(135deg, #ffcc00 0%, #ffd700 100%);
+  color: #333;
+}
+
+.calc-card.blue {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+}
+
+/* Modal de Calculadoras */
+.calc-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  animation: fadeIn 0.3s;
+}
+
+.calc-modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.calc-modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 450px;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  animation: slideIn 0.3s;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.calc-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.calc-modal-close:hover {
+  color: #ff4444;
+}
+
+.calc-modal-title {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: #4f46e5;
+  text-align: center;
+}
+
+.calc-formula {
+  background: #f0f0f0;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.calc-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.calc-inputs label {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.calc-inputs input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: 6px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.calc-inputs input:focus {
+  border-color: #4f46e5;
+  outline: none;
+}
+
+.calc-btn {
+  width: 100%;
+  padding: 14px;
+  background: #FFA521;
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.calc-btn:hover {
+  background: #EA8B00;
+}
+
+.calc-resultado {
+  margin-top: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+  display: none;
+}
+
+.calc-resultado.show {
+  display: block;
+  animation: fadeIn 0.3s;
+}
+
+.calc-resultado .resultado-label {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 5px;
+}
+
+.calc-resultado .resultado-valor {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.calc-resultado .resultado-info {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .calc-grid {
+    grid-template-columns: 1fr;
+    max-width: 300px;
+  }
+  
+  .calc-modal-content {
+    padding: 20px;
+    margin: 20px;
+  }
+  
+  .calc-modal-title {
+    font-size: 20px;
+  }
+}
+
+/*CALCULADORAS*/
+
+/* Modal de Calculadoras */
+.calc-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  animation: fadeIn 0.3s;
+}
+
+.calc-modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.calc-modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 450px;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  animation: slideIn 0.3s;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.calc-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.calc-modal-close:hover {
+  color: #ff4444;
+}
+
+/* ========================================
+   MODALES CON SCROLL MEJORADO
+   ======================================== */
+.calc-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  animation: fadeIn 0.3s;
+}
+
+.calc-modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calc-modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px; /* Un poco más ancho */
+  max-height: 85vh; /* Mayor altura */
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  animation: slideIn 0.3s;
+  margin: 20px; /* Margen para móviles */
+}
+
+/* Para pantallas pequeñas */
+@media (max-width: 480px) {
+  .calc-modal-content {
+    padding: 20px 15px;
+    margin: 10px;
+    max-height: 90vh;
+  }
+}
+
+/* Estilo para el scroll personalizado */
+.calc-modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.calc-modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.calc-modal-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.calc-modal-content::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* ========================================
+   BOTONES DE INFORMACIÓN (CLIC)
+   ======================================== */
+.input-with-info {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.input-with-info label {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.info-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: #e0e0e0;
+  color: #4f46e5;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: all 0.2s;
+  z-index: 2;
+}
+
+.info-btn:hover {
+  background: #4f46e5;
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Tooltip que aparece al hacer clic */
+.info-tooltip {
+  position: absolute;
+  z-index: 1001;
+  background: #4f46e5;
+  color: white;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-size: 12px;
+  width: 250px;
+  top: 30px;
+  right: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  text-align: left;
+  line-height: 1.5;
+}
+
+.info-tooltip.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.info-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  right: 10px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent #4f46e5 transparent;
+}
+
+/* Ajuste para los inputs con botón de info */
+.input-with-info input {
+  width: 100%;
+  padding: 12px 40px 12px 12px; /* Más padding a la derecha */
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.input-with-info input:focus {
+  border-color: #4f46e5;
+  outline: none;
+}
+
+/* ========================================
+   ESPACIADO MEJORADO PARA LOS MODALES
+   ======================================== */
+.calc-modal-title {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: #4f46e5;
+  text-align: center;
+  padding-right: 30px; /* Espacio para el botón cerrar */
+}
+
+.calc-formula {
+  background: #f0f0f0;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 25px;
+  font-style: italic;
+}
+
+.calc-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.calc-btn {
+  width: 100%;
+  padding: 14px;
+  background: #FFA521;
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 10px;
+}
+
+.calc-btn:hover {
+  background: #EA8B00;
+}
+
+.calc-resultado {
+  margin-top: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+  display: none;
+  min-height: 80px;
+}
+
+.calc-resultado.show {
+  display: block;
+  animation: fadeIn 0.3s;
+}
+
+.calc-resultado .resultado-label {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+  font-weight: normal;
+}
+
+.calc-resultado .resultado-valor {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 10px 0;
+  word-break: break-word;
+}
+
+.calc-resultado .resultado-info {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* Botón cerrar mejorado */
+.calc-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.calc-modal-close:hover {
+  background: #f0f0f0;
+  color: #ff4444;
+}

@@ -52,11 +52,6 @@
       margin: 0 auto;
     }
 
-<<<<<<< HEAD
-
-=======
-    /* Cuadro ¿QUÉ ES? (no es botón) */
->>>>>>> 95c32ecc0494e3692f9fc9aff7395be349bac049
     .que-es-box {
       background: #FFBD58;
       color: black;
@@ -430,9 +425,52 @@
         font-size: 22px;
       }
     }
+
+
+        /* Barra de navegación superior */
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .continue-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #37B5FF;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .continue-btn:hover {
+      background: #2a9fd8;
+    }
+
+    .btn-container {
+      display: none;
+    }
   </style>
 </head>
 <body>
+
+  <div class="topic-container">
+    <!-- Barra de navegación superior -->
+    <div class="top-nav">
+      <button onclick="if(window.parent && window.parent.closeTopicModal) { window.parent.closeTopicModal(); } else { window.location.href='./app.html'; }" class="back-btn">
+        <img src="./images/back.png" alt="Volver"> Volver
+      </button>
+      <button class="continue-btn" onclick="alert('¡Próximamente!')">
+        Continuar ➜
+      </button>
+    </div>
+
   <div class="topic-container">
     <!-- Título de la sección -->
     <div class="main-title">MARGEN DE GANANCIA</div>

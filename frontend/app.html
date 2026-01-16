@@ -83,15 +83,143 @@
     </section>
 
 
-    <!-- Tab EJERCICIOS -->
-    <section class="tab-content" id="tab-ejercicios">
-      <div class="card">
-        <h2>✏️ Ejercicios</h2>
-        <div id="exerciseList">
-          <p>Próximamente: Ejercicios interactivos</p>
+<!-- Tab EJERCICIOS -->
+<section class="tab-content" id="tab-ejercicios">
+  <div class="calculadoras-wrapper">
+    <div class="calculadoras-header">
+      <span class="calculadoras-title">CALCULADORAS</span>
+    </div>
+    <div class="calc-grid">
+      <button class="calc-card orange" onclick="openCalcModal('margenGanancia')">
+        <span class="calc-icon">📊</span>
+        <span class="calc-text">MARGEN DE GANANCIA</span>
+      </button>
+      <button class="calc-card yellow" onclick="openCalcModal('precioVenta')">
+        <span class="calc-icon">💰</span>
+        <span class="calc-text">PRECIO DE VENTA UNITARIO</span>
+      </button>
+      <button class="calc-card blue" onclick="openCalcModal('puntoEquilibrio')">
+        <span class="calc-icon">⚖️</span>
+        <span class="calc-text">PUNTO DE EQUILIBRIO</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal Calculadora Margen de Ganancia -->
+  <div id="calcModal-margenGanancia" class="calc-modal">
+    <div class="calc-modal-content">
+      <button class="calc-modal-close" onclick="closeCalcModal('margenGanancia')">&times;</button>
+      <h2 class="calc-modal-title">Margen de Ganancia</h2>
+      <p class="calc-formula">Fórmula: ((Precio de Venta - Costo) / Precio de Venta) × 100</p>
+      
+      <div class="calc-inputs">
+        <div class="input-with-info">
+          <label for="mg-precioVenta">Precio de Venta ($)</label>
+          <input type="number" id="mg-precioVenta" placeholder="Ej: 100" step="0.01" min="0">
+          <button class="info-btn" onclick="showInfo(this, 'mg-precioVenta-info')">i</button>
+          <div id="mg-precioVenta-info" class="info-tooltip">
+            Precio al que vendes tu producto o servicio al cliente final.
+          </div>
+        </div>
+        
+        <div class="input-with-info">
+          <label for="mg-costo">Costo ($)</label>
+          <input type="number" id="mg-costo" placeholder="Ej: 60" step="0.01" min="0">
+          <button class="info-btn" onclick="showInfo(this, 'mg-costo-info')">i</button>
+          <div id="mg-costo-info" class="info-tooltip">
+            Costo total de producir o adquirir el producto, incluyendo materiales, mano de obra y gastos directos.
+          </div>
         </div>
       </div>
-    </section>
+      
+      <button class="calc-btn" onclick="calcularMargenGanancia()">Calcular</button>
+      <div id="resultado-margenGanancia" class="calc-resultado"></div>
+    </div>
+  </div>
+
+  <!-- Modal Calculadora Precio de Venta Unitario -->
+  <div id="calcModal-precioVenta" class="calc-modal">
+    <div class="calc-modal-content">
+      <button class="calc-modal-close" onclick="closeCalcModal('precioVenta')">&times;</button>
+      <h2 class="calc-modal-title">Precio de Venta Unitario</h2>
+      <p class="calc-formula">Fórmula: (Costo Total / Unidades) × (1 + Margen/100)</p>
+      
+      <div class="calc-inputs">
+        <div class="input-with-info">
+          <label for="pv-costoTotal">Costo Total de Producción ($)</label>
+          <input type="number" id="pv-costoTotal" placeholder="Ej: 1000" step="0.01" min="0">
+          <button class="info-btn" onclick="showInfo(this, 'pv-costoTotal-info')">i</button>
+          <div id="pv-costoTotal-info" class="info-tooltip">
+            Suma de todos los costos para producir el lote completo (materiales, mano de obra, empaque, etc.).
+          </div>
+        </div>
+        
+        <div class="input-with-info">
+          <label for="pv-unidades">Unidades Producidas</label>
+          <input type="number" id="pv-unidades" placeholder="Ej: 50" step="1" min="1">
+          <button class="info-btn" onclick="showInfo(this, 'pv-unidades-info')">i</button>
+          <div id="pv-unidades-info" class="info-tooltip">
+            Número total de productos fabricados en este lote de producción.
+          </div>
+        </div>
+        
+        <div class="input-with-info">
+          <label for="pv-margen">Margen de Ganancia Deseado (%)</label>
+          <input type="number" id="pv-margen" placeholder="Ej: 30" step="0.01" min="0">
+          <button class="info-btn" onclick="showInfo(this, 'pv-margen-info')">i</button>
+          <div id="pv-margen-info" class="info-tooltip">
+            Porcentaje de ganancia que deseas obtener sobre el costo unitario.
+          </div>
+        </div>
+      </div>
+      
+      <button class="calc-btn" onclick="calcularPrecioVenta()">Calcular</button>
+      <div id="resultado-precioVenta" class="calc-resultado"></div>
+    </div>
+  </div>
+
+  <!-- Modal Calculadora Punto de Equilibrio -->
+  <div id="calcModal-puntoEquilibrio" class="calc-modal">
+    <div class="calc-modal-content">
+      <button class="calc-modal-close" onclick="closeCalcModal('puntoEquilibrio')">&times;</button>
+      <h2 class="calc-modal-title">Punto de Equilibrio</h2>
+      <p class="calc-formula">Fórmula: Costos Fijos / (Precio de Venta - Costo Variable Unitario)</p>
+      
+      <div class="calc-inputs">
+        <div class="input-with-info">
+          <label for="pe-costosFijos">Costos Fijos Totales ($)</label>
+          <input type="number" id="pe-costosFijos" placeholder="Ej: 5000" step="0.01" min="0">
+          <button class="info-btn" onclick="showInfo(this, 'pe-costosFijos-info')">i</button>
+          <div id="pe-costosFijos-info" class="info-tooltip">
+            Costos que posee una empresa más allá de la producción obtenida. Su valor no varía según lo producido (alquiler, salarios, servicios básicos, seguros).
+          </div>
+        </div>
+        
+        <div class="input-with-info">
+          <label for="pe-precioVenta">Precio de Venta Unitario ($)</label>
+          <input type="number" id="pe-precioVenta" placeholder="Ej: 50" step="0.01" min="0">
+          <button class="info-btn" onclick="showInfo(this, 'pe-precioVenta-info')">i</button>
+          <div id="pe-precioVenta-info" class="info-tooltip">
+            Precio al que vendes cada unidad de tu producto o servicio.
+          </div>
+        </div>
+        
+        <div class="input-with-info">
+          <label for="pe-costoVariable">Costo Variable Unitario ($)</label>
+          <input type="number" id="pe-costoVariable" placeholder="Ej: 20" step="0.01" min="0">
+          <button class="info-btn" onclick="showInfo(this, 'pe-costoVariable-info')">i</button>
+          <div id="pe-costoVariable-info" class="info-tooltip">
+            Costo que varía según la cantidad producida (materiales, empaque, comisiones por venta, transporte). Por cada unidad adicional, este costo aumenta proporcionalmente.
+          </div>
+        </div>
+      </div>
+      
+      <button class="calc-btn" onclick="calcularPuntoEquilibrio()">Calcular</button>
+      <div id="resultado-puntoEquilibrio" class="calc-resultado"></div>
+    </div>
+  </div>
+</section>
+
 
     <!-- Tab ARCHIVO -->
     <section class="tab-content" id="tab-archivo">
@@ -103,6 +231,77 @@
       </div>
     </section>
   </main>
+
+  <!-- Modal Calculadora Margen de Ganancia -->
+  <div id="calcModal-margenGanancia" class="calc-modal">
+    <div class="calc-modal-content">
+      <button class="calc-modal-close" onclick="closeCalcModal('margenGanancia')">&times;</button>
+      <h2 class="calc-modal-title">📊 Margen de Ganancia</h2>
+      <p class="calc-formula">Fórmula: ((Precio de Venta - Costo) / Precio de Venta) × 100</p>
+      <div class="calc-inputs">
+        <label>
+          Precio de Venta ($)
+          <input type="number" id="mg-precioVenta" placeholder="Ej: 100" step="0.01" min="0">
+        </label>
+        <label>
+          Costo ($)
+          <input type="number" id="mg-costo" placeholder="Ej: 60" step="0.01" min="0">
+        </label>
+      </div>
+      <button class="calc-btn" onclick="calcularMargenGanancia()">Calcular</button>
+      <div id="resultado-margenGanancia" class="calc-resultado"></div>
+    </div>
+  </div>
+
+  <!-- Modal Calculadora Precio de Venta Unitario -->
+  <div id="calcModal-precioVenta" class="calc-modal">
+    <div class="calc-modal-content">
+      <button class="calc-modal-close" onclick="closeCalcModal('precioVenta')">&times;</button>
+      <h2 class="calc-modal-title">💰 Precio de Venta Unitario</h2>
+      <p class="calc-formula">Fórmula: (Costo Total / Unidades) × (1 + Margen/100)</p>
+      <div class="calc-inputs">
+        <label>
+          Costo Total de Producción ($)
+          <input type="number" id="pv-costoTotal" placeholder="Ej: 1000" step="0.01" min="0">
+        </label>
+        <label>
+          Unidades Producidas
+          <input type="number" id="pv-unidades" placeholder="Ej: 50" step="1" min="1">
+        </label>
+        <label>
+          Margen de Ganancia Deseado (%)
+          <input type="number" id="pv-margen" placeholder="Ej: 30" step="0.01" min="0">
+        </label>
+      </div>
+      <button class="calc-btn" onclick="calcularPrecioVenta()">Calcular</button>
+      <div id="resultado-precioVenta" class="calc-resultado"></div>
+    </div>
+  </div>
+
+  <!-- Modal Calculadora Punto de Equilibrio -->
+  <div id="calcModal-puntoEquilibrio" class="calc-modal">
+    <div class="calc-modal-content">
+      <button class="calc-modal-close" onclick="closeCalcModal('puntoEquilibrio')">&times;</button>
+      <h2 class="calc-modal-title">⚖️ Punto de Equilibrio</h2>
+      <p class="calc-formula">Fórmula: Costos Fijos / (Precio de Venta - Costo Variable Unitario)</p>
+      <div class="calc-inputs">
+        <label>
+          Costos Fijos Totales ($)
+          <input type="number" id="pe-costosFijos" placeholder="Ej: 5000" step="0.01" min="0">
+        </label>
+        <label>
+          Precio de Venta Unitario ($)
+          <input type="number" id="pe-precioVenta" placeholder="Ej: 50" step="0.01" min="0">
+        </label>
+        <label>
+          Costo Variable Unitario ($)
+          <input type="number" id="pe-costoVariable" placeholder="Ej: 20" step="0.01" min="0">
+        </label>
+      </div>
+      <button class="calc-btn" onclick="calcularPuntoEquilibrio()">Calcular</button>
+      <div id="resultado-puntoEquilibrio" class="calc-resultado"></div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./js/supabaseClient.js"></script>

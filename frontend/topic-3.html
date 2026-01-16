@@ -83,10 +83,10 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 25px;
       margin: 40px 0;
-      max-width: 800px;
+      max-width: 850px;
       margin-left: auto;
       margin-right: auto;
-      
+
     }
 
     /* Botones generales */
@@ -106,8 +106,7 @@
       justify-content: center;
       align-items: center;
       height: 50px;
-      
-      
+    
     }
 
     .info-button:hover {
@@ -383,12 +382,54 @@
         right: 15px;
       }
     }
+
+        /* Barra de navegación superior */
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .continue-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #37B5FF;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .continue-btn:hover {
+      background: #2a9fd8;
+    }
+
+    .btn-container {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <div class="topic-container">
+    <!-- Barra de navegación superior -->
+    <div class="top-nav">
+      <button onclick="if(window.parent && window.parent.closeTopicModal) { window.parent.closeTopicModal(); } else { window.location.href='./app.html'; }" class="back-btn">
+        <img src="./images/back.png" alt="Volver"> Volver
+      </button>
+      <button class="continue-btn" onclick="alert('¡Próximamente!')">
+        Continuar ➜
+      </button>
+    </div>
+
+
+  <div class="topic-container">
     <!-- Título de la sección -->
-    <div class="main-title">PRECIO UNITARIO DE VENTA</div>
+    <div class="main-title">PRECIO DE VENTA UNITARIO</div>
     
     <!-- Sección de fórmula -->
     <div class="formula-section">
@@ -426,11 +467,7 @@
       
       <!-- DIFERENCIA -->
       <div class="info-button button-diferencia" onclick="openPopup('popupDIFERENCIA')">
-<<<<<<< HEAD
         <div class="button-title">DIFERENCIA VS COSTO</div>
-=======
-        <div class="button-title">PRECIO VS COSTO</div>
->>>>>>> 95c32ecc0494e3692f9fc9aff7395be349bac049
         <div class="button-plus">+</div>
       </div>
     </div>
