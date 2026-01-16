@@ -233,29 +233,32 @@
     
     /* Botón volver */
     .back-btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
       background: #F89B54;
       color: #FFFFFF;
-      padding: 12px 30px;
+      padding: 14px 35px;
       border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
-      margin-top: 30px;
-      border: none;
+      border: 2px solid #001F8B;
       cursor: pointer;
+      box-shadow: 0 4px 0 #001F8B;
+      transition: all 0.3s;
     }
-    
+
     .back-btn:hover {
       background: #F67E1D;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #001F8B;
     }
 
-    .back-btn {
-  display: inline-grid;
-  grid-template-columns: auto auto;
-  align-items: center;
-  gap: 12px;
-}
-
+    .back-btn img {
+      width: 20px;
+      height: 20px;
+    }
+    
     @media (max-width: 768px) {
       .segmentation-section {
         flex-direction: column;
@@ -318,7 +321,6 @@
       </button>
     </div>
 
-  <div class="topic-container">
     <!-- Título principal -->
     <div class="main-title">¿QUIÉNES VAN A SER TUS CLIENTES?</div>
     

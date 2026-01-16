@@ -41,7 +41,7 @@ registerForm.addEventListener("submit", async (e) => {
     if (error) {
       // Manejar rate limit
       if (error.message.includes("security purposes")) {
-        setMsg("⏳ Por seguridad, espera unos segundos e intenta de nuevo.", true);
+        setMsg("Por seguridad, espera unos segundos e intenta de nuevo.", true);
         return;
       }
       throw error;
@@ -53,7 +53,7 @@ registerForm.addEventListener("submit", async (e) => {
     
     // Verificar si el email necesita confirmación
     if (data.user && !data.session) {
-      setMsg("📧 Cuenta creada. Revisa tu correo para confirmar.", false);
+      setMsg("Cuenta creada. Revisa tu correo para confirmar tu email.", false);
       return;
     }
     
@@ -76,7 +76,7 @@ registerForm.addEventListener("submit", async (e) => {
       console.log("Profile created successfully");
     }
 
-    setMsg("✅ Cuenta creada. Ahora inicia sesión.", false);
+    setMsg("Cuenta creada exitosamente. Redirigiendo al login...", false);
     
     // Redirigir al login después de 2 segundos
     setTimeout(() => {
@@ -88,10 +88,12 @@ registerForm.addEventListener("submit", async (e) => {
     
     // Mensajes de error más amigables
     let errorMsg = err.message || "Error al registrarse";
-    if (errorMsg.includes("already registered")) {
+    if (errorMsg.includes("already registered") || errorMsg.includes("User already registered")) {
       errorMsg = "Este correo ya está registrado. Intenta iniciar sesión.";
+    } else if (errorMsg.includes("duplicate key") || errorMsg.includes("unique constraint")) {
+      errorMsg = "Este correo ya está en uso. Intenta con otro.";
     }
     
-    setMsg("❌ " + errorMsg, true);
+    setMsg(errorMsg, true);
   }
 });

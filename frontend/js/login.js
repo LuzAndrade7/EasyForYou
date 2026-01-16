@@ -89,7 +89,7 @@ loginForm.addEventListener("submit", async (e) => {
       errorMsg = "Correo o contraseña incorrectos.";
     }
     
-    setMsg("❌ " + errorMsg, true);
+    setMsg(errorMsg, true);
   }
 });
 

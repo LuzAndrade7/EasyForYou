@@ -139,7 +139,7 @@ confirmPetBtn.addEventListener("click", async () => {
       if (error) throw error;
     }
 
-    setMsg("✅ ¡Mascota guardada! Entrando al dashboard...", false);
+    setMsg("¡Mascota guardada! Entrando al dashboard...", false);
 
     // Ir al dashboard
     setTimeout(() => {

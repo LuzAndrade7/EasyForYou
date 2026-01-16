@@ -171,19 +171,23 @@
     .back-btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
       background: #F89B54;
-      color: #333333;
-      padding: 10px 20px;
+      color: #FFFFFF;
+      padding: 14px 35px;
       border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
       border: 2px solid #001F8B;
       cursor: pointer;
+      box-shadow: 0 4px 0 #001F8B;
+      transition: all 0.3s;
     }
 
     .back-btn:hover {
       background: #F67E1D;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #001F8B;
     }
 
     .back-btn img {
@@ -340,10 +344,10 @@
       border-radius: 2px;
     }
 
-    .line-red { background: #F67E1D; }
+    .line-red { background: #f61d1d; }
     .line-green { background: #4CAF50; }
-    .line-blue { background: #0828DB; }
-    .line-yellow { background: #F89B54; }
+    .line-blue { background: #0a1f91; }
+    .line-yellow { background: #ffee00; }
 
     /* Responsividad */
     @media (max-width: 900px) {
