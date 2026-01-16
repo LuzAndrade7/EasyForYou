@@ -384,3 +384,435 @@ button:hover {
     padding: 10px 15px;
   }
 }
+
+/* ========================================
+   MODAL PARA TOPICS (CONTENIDOS)
+   ======================================== */
+.topic-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topic-modal-content {
+  width: 95%;
+  height: 95%;
+  background: white;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.topic-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 32px;
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: white;
+  cursor: pointer;
+  z-index: 2001;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.topic-modal-close:hover {
+  background: rgba(0,0,0,0.8);
+}
+
+.topic-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+}
+
+/* ========================================
+   CALCULADORAS - Pestaña Ejercicios
+   ======================================== */
+.calculadoras-wrapper {
+  background: #d0d0d0;
+  padding: 30px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.calculadoras-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.calculadoras-title {
+  background: #4f46e5;
+  color: white;
+  padding: 10px 30px;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.calc-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  min-height: 100px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.calc-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.calc-card .calc-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.calc-card .calc-text {
+  text-align: center;
+}
+
+.calc-card.orange {
+  background: linear-gradient(135deg, #ff8c00 0%, #ffa500 100%);
+}
+
+.calc-card.yellow {
+  background: linear-gradient(135deg, #ffcc00 0%, #ffdd44 100%);
+}
+
+.calc-card.blue {
+  background: linear-gradient(135deg, #4444ff 0%, #6666ff 100%);
+}
+
+/* Modal de Calculadoras */
+.calc-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.calc-modal.active {
+  display: flex;
+}
+
+.calc-modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 450px;
+  width: 90%;
+  position: relative;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+/* Scroll personalizado para modales */
+.calc-modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.calc-modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.calc-modal-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.calc-modal-content::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+.calc-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+}
+
+.calc-modal-close:hover {
+  color: #ff3b3b;
+}
+
+.calc-modal-title {
+  margin: 0 0 10px 0;
+  color: #4f46e5;
+  font-size: 1.4rem;
+}
+
+.calc-formula {
+  background: #f0f0f0;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Input con botón de información */
+.input-with-info {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.input-with-info label {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.input-with-info input {
+  width: calc(100% - 45px);
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.info-btn {
+  position: absolute;
+  right: 0;
+  top: 28px;
+  width: 32px;
+  height: 38px;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+  margin: 0;
+}
+
+.info-btn:hover {
+  background: linear-gradient(135deg, #4338ca, #4f46e5);
+  transform: scale(1.05);
+}
+
+.info-tooltip {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  color: white;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: normal;
+  z-index: 100;
+  margin-top: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  animation: fadeInTooltip 0.3s ease;
+}
+
+.info-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 10px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #1e1b4b;
+}
+
+.info-tooltip.show {
+  display: block;
+}
+
+@keyframes fadeInTooltip {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.calc-inputs label {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.calc-inputs input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.calc-btn {
+  width: 100%;
+  padding: 12px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.calc-btn:hover {
+  background: #4338ca;
+}
+
+/* Contenedor de resultados */
+.calc-resultado {
+  margin-top: 20px;
+  display: none;
+}
+
+.calc-resultado.show {
+  display: block;
+  animation: fadeInResult 0.4s ease;
+}
+
+@keyframes fadeInResult {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Resultado exitoso */
+.resultado-box {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+}
+
+.resultado-label {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+}
+
+.resultado-valor {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin: 10px 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.resultado-info {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Mensaje de error */
+.resultado-error {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+.error-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.error-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .calc-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .calc-modal-content {
+    width: 95%;
+    padding: 20px;
+    max-height: 90vh;
+  }
+  
+  .calc-modal-title {
+    font-size: 1.2rem;
+    padding-right: 30px;
+  }
+  
+  .resultado-valor {
+    font-size: 1.8rem;
+  }
+  
+  .info-tooltip {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+}
