@@ -70,7 +70,7 @@ loginForm.addEventListener("submit", async (e) => {
       .eq("user_id", data.user.id)
       .single();
 
-    setMsg("✅ Login exitoso. Entrando...", false);
+    setMsg("Login exitoso. Entrando...", false);
 
     // Redirigir según si tiene mascota o no
     if (avatar && avatar.pet_name) {
@@ -84,7 +84,7 @@ loginForm.addEventListener("submit", async (e) => {
     // Mensajes de error más amigables
     let errorMsg = err.message || "Error al iniciar sesión";
     if (errorMsg.includes("Email not confirmed")) {
-      errorMsg = "📧 Debes confirmar tu email antes de iniciar sesión. Revisa tu bandeja de entrada.";
+      errorMsg = "Debes confirmar tu email antes de iniciar sesión. Revisa tu bandeja de entrada.";
     } else if (errorMsg.includes("Invalid login credentials")) {
       errorMsg = "Correo o contraseña incorrectos.";
     }

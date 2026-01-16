@@ -204,16 +204,20 @@ function calcularMargenGanancia() {
   const resultadoDiv = document.getElementById("resultado-margenGanancia");
 
   if (isNaN(precioVenta) || isNaN(costo) || precioVenta <= 0) {
-    resultadoDiv.innerHTML = `<div class="resultado-valor" style="font-size: 16px; color: #ffcccc;">Por favor ingresa valores válidos</div>`;
+    resultadoDiv.innerHTML = `
+      <div class="resultado-error">
+        <div class="error-text">Por favor ingresa valores válidos</div>
+      </div>
+    `;
     resultadoDiv.classList.add("show");
     return;
   }
 
   if (costo >= precioVenta) {
     resultadoDiv.innerHTML = `
-      <div class="resultado-label">Atención</div>
-      <div class="resultado-valor" style="font-size: 18px;">El costo es mayor o igual al precio de venta</div>
-      <div class="resultado-info">No hay margen de ganancia positivo</div>
+      <div class="resultado-error">
+        <div class="error-text">El costo es mayor o igual al precio de venta. No hay margen de ganancia positivo.</div>
+      </div>
     `;
     resultadoDiv.classList.add("show");
     return;
@@ -223,9 +227,11 @@ function calcularMargenGanancia() {
   const gananciaUnidad = precioVenta - costo;
 
   resultadoDiv.innerHTML = `
-    <div class="resultado-label">Tu margen de ganancia es:</div>
-    <div class="resultado-valor">${margen.toFixed(2)}%</div>
-    <div class="resultado-info">Ganas $${gananciaUnidad.toFixed(2)} por cada venta</div>
+    <div class="resultado-box">
+      <div class="resultado-label">Tu margen de ganancia es:</div>
+      <div class="resultado-valor">${margen.toFixed(2)}%</div>
+      <div class="resultado-info">Ganas $${gananciaUnidad.toFixed(2)} por cada venta</div>
+    </div>
   `;
   resultadoDiv.classList.add("show");
 }
@@ -239,7 +245,11 @@ function calcularPrecioVenta() {
   const resultadoDiv = document.getElementById("resultado-precioVenta");
 
   if (isNaN(costoTotal) || isNaN(unidades) || isNaN(margen) || unidades <= 0) {
-    resultadoDiv.innerHTML = `<div class="resultado-valor" style="font-size: 16px; color: #ffcccc;">Por favor ingresa valores válidos</div>`;
+    resultadoDiv.innerHTML = `
+      <div class="resultado-error">
+        <div class="error-text">Por favor ingresa valores válidos</div>
+      </div>
+    `;
     resultadoDiv.classList.add("show");
     return;
   }
@@ -249,11 +259,13 @@ function calcularPrecioVenta() {
   const gananciaUnitaria = precioVenta - costoUnitario;
 
   resultadoDiv.innerHTML = `
-    <div class="resultado-label">Precio de venta sugerido:</div>
-    <div class="resultado-valor">$${precioVenta.toFixed(2)}</div>
-    <div class="resultado-info">
-      Costo unitario: $${costoUnitario.toFixed(2)}<br>
-      Ganancia por unidad: $${gananciaUnitaria.toFixed(2)}
+    <div class="resultado-box">
+      <div class="resultado-label">Precio de venta sugerido:</div>
+      <div class="resultado-valor">$${precioVenta.toFixed(2)}</div>
+      <div class="resultado-info">
+        Costo unitario: $${costoUnitario.toFixed(2)}<br>
+        Ganancia por unidad: $${gananciaUnitaria.toFixed(2)}
+      </div>
     </div>
   `;
   resultadoDiv.classList.add("show");
@@ -268,7 +280,11 @@ function calcularPuntoEquilibrio() {
   const resultadoDiv = document.getElementById("resultado-puntoEquilibrio");
 
   if (isNaN(costosFijos) || isNaN(precioVenta) || isNaN(costoVariable)) {
-    resultadoDiv.innerHTML = `<div class="resultado-valor" style="font-size: 16px; color: #ffcccc;">Por favor ingresa valores válidos</div>`;
+    resultadoDiv.innerHTML = `
+      <div class="resultado-error">
+        <div class="error-text">Por favor ingresa valores válidos</div>
+      </div>
+    `;
     resultadoDiv.classList.add("show");
     return;
   }
@@ -277,8 +293,9 @@ function calcularPuntoEquilibrio() {
 
   if (margenContribucion <= 0) {
     resultadoDiv.innerHTML = `
-      <div class="resultado-label" style="font-size: 16px; font-weight: bold;">Error</div>
-      <div class="resultado-valor" style="font-size: 16px;">El precio de venta debe ser mayor al costo variable</div>
+      <div class="resultado-error">
+        <div class="error-text">El precio de venta debe ser mayor al costo variable</div>
+      </div>
     `;
     resultadoDiv.classList.add("show");
     return;
@@ -288,11 +305,13 @@ function calcularPuntoEquilibrio() {
   const ventasEquilibrio = puntoEquilibrio * precioVenta;
 
   resultadoDiv.innerHTML = `
-    <div class="resultado-label">Punto de equilibrio:</div>
-    <div class="resultado-valor">${Math.ceil(puntoEquilibrio)} unidades</div>
-    <div class="resultado-info">
-      Debes vender al menos ${Math.ceil(puntoEquilibrio)} unidades<br>
-      para cubrir tus costos (= $${ventasEquilibrio.toFixed(2)} en ventas)
+    <div class="resultado-box">
+      <div class="resultado-label">Punto de equilibrio:</div>
+      <div class="resultado-valor">${Math.ceil(puntoEquilibrio)} unidades</div>
+      <div class="resultado-info">
+        Debes vender al menos ${Math.ceil(puntoEquilibrio)} unidades<br>
+        para cubrir tus costos (= $${ventasEquilibrio.toFixed(2)} en ventas)
+      </div>
     </div>
   `;
   resultadoDiv.classList.add("show");
@@ -372,8 +391,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // ========================================
 
 // Variable para controlar el tooltip activo
-let activeTooltip = null;
-let tooltipTimeout = null;
+//let activeTooltip = null;
+//let tooltipTimeout = null;
 
 // Mostrar/ocultar información al hacer clic
 function showInfo(button, tooltipId) {

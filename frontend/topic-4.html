@@ -8,7 +8,7 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #FFD597;
+      background: #FDBA74;
       min-height: 100vh;
     }
 
@@ -21,12 +21,13 @@
     /* Título principal */
     .main-title {
       background: #ffffff;
-      border: 3px solid #333;
+      border: 3px solid #001F8B;
       border-radius: 30px;
       padding: 15px 40px;
       text-align: center;
       font-size: 24px;
       font-weight: bold;
+      color: #000000;
       margin: 20px auto 20px;
       max-width: 500px;
     }
@@ -40,27 +41,27 @@
     .formula-label {
       font-size: 22px;
       font-weight: bold;
-      color: #333;
+      color: #000000;
       margin-bottom: 20px;
       text-decoration: underline;
     }
 
     .formula-image {
       width: 100%;
-      max-width: 1000px; /* Imagen más grande */
+      max-width: 1000px;
       display: block;
       margin: 0 auto;
     }
 
     /* Cuadro ¿QUÉ ES? (no es botón) */
     .que-es-box {
-      background: #FFBD58;
-      color: black;
+      background: #F89B54;
+      color: #ffffff;
       padding: 25px;
       border-radius: 12px;
-      border: 3px solid #333;
+      border: 3px solid #001F8B;
       text-align: left;
-      box-shadow: 0 4px 0 #222;
+      box-shadow: 0 4px 0 #001F8B;
       margin: 40px auto;
       max-width: 800px;
     }
@@ -70,6 +71,7 @@
       font-weight: bold;
       margin-bottom: 15px;
       text-align: center;
+      color: #ffffff;
     }
 
     .que-es-content {
@@ -89,15 +91,15 @@
       justify-content: center;
     }
 
-    /* Botones generales (más pequeños) */
+    /* Botones generales */
     .info-button {
-      background: #FFA521;
-      color: black;
-      padding: 20px 15px; /* Más pequeño */
+      background: #F89B54;
+      color: #333333;
+      padding: 20px 15px;
       border-radius: 12px;
-      border: 3px solid #333;
+      border: 3px solid #001F8B;
       position: relative;
-      box-shadow: 0 4px 0 #222;
+      box-shadow: 0 4px 0 #001F8B;
       cursor: pointer;
       transition: all 0.3s;
       text-align: center;
@@ -111,37 +113,37 @@
 
     .info-button:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 0 #222;
-      background: #ffb23c;
+      box-shadow: 0 8px 0 #001F8B;
+      background: #F67E1D;
     }
 
     .info-button:active {
       transform: translateY(0);
-      box-shadow: 0 2px 0 #222;
+      box-shadow: 0 2px 0 #001F8B;
     }
 
     /* Colores específicos para cada botón */
     .button-importancia {
-      background: #37B5FF;
+      background: #0828DB;
       color: white;
     }
 
     .button-elementos {
-      background: #10b981;
+      background: #0828DB;
       color: white;
     }
 
     .button-grafico {
-      background: #8b5cf6;
+      background: #0828DB;
       color: white;
     }
 
-    .button-importancia:hover { background: #4abfff; }
-    .button-elementos:hover { background: #12cc8c; }
-    .button-grafico:hover { background: #9b6dff; }
+    .button-importancia:hover { background: #2D53B8; }
+    .button-elementos:hover { background: #2D53B8; }
+    .button-grafico:hover { background: #2D53B8; }
 
     .button-title {
-      font-size: 20px; /* Tamaño de letra 20px */
+      font-size: 20px;
       font-weight: bold;
       margin: 0;
       text-align: center;
@@ -152,7 +154,7 @@
       right: 15px;
       top: 50%;
       transform: translateY(-50%);
-      background: #333;
+      background: #001F8B;
       color: white;
       width: 32px;
       height: 32px;
@@ -170,18 +172,18 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: #FFA521;
-      color: black;
+      background: #F89B54;
+      color: #333333;
       padding: 10px 20px;
       border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
-      border: none;
+      border: 2px solid #001F8B;
       cursor: pointer;
     }
 
     .back-btn:hover {
-      background: #EA8B00;
+      background: #F67E1D;
     }
 
     .back-btn img {
@@ -201,18 +203,18 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: #37B5FF;
+      background: #0828DB;
       color: white;
       padding: 10px 20px;
       border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
-      border: none;
+      border: 2px solid #001F8B;
       cursor: pointer;
     }
 
     .continue-btn:hover {
-      background: #2a9fd8;
+      background: #001F8B;
     }
 
     .btn-container {
@@ -245,7 +247,7 @@
       width: 90%;
       max-width: 600px;
       position: relative;
-      border: 3px solid #333;
+      border: 3px solid #001F8B;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       animation: slideIn 0.3s;
       max-height: 80vh;
@@ -263,30 +265,30 @@
       right: 20px;
       font-size: 28px;
       font-weight: bold;
-      color: #333;
+      color: #333333;
       cursor: pointer;
       background: none;
       border: none;
     }
 
     .popup-close:hover {
-      color: #ff4444;
+      color: #F67E1D;
     }
 
     .popup-title {
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 25px;
-      color: #333;
+      color: #2D53B8;
       padding-bottom: 10px;
-      border-bottom: 2px solid #FFA521;
+      border-bottom: 2px solid #F89B54;
       text-align: center;
     }
 
     .popup-body {
       font-size: 16px;
       line-height: 1.6;
-      color: #555;
+      color: #333333;
     }
 
     /* Lista de elementos clave */
@@ -301,25 +303,25 @@
       padding: 15px;
       background: #f8f9fa;
       border-radius: 8px;
-      border-left: 4px solid #37B5FF;
+      border-left: 4px solid #0828DB;
     }
 
     .element-title {
       font-weight: bold;
-      color: #333;
+      color: #2D53B8;
       margin-bottom: 5px;
       font-size: 17px;
     }
 
     .element-desc {
       font-size: 15px;
-      color: #666;
+      color: #333333;
       line-height: 1.5;
     }
 
     /* Estilos para el gráfico en popup */
     .graphic-explanation {
-      background: #f0f8ff;
+      background: #E0E0E0;
       padding: 20px;
       border-radius: 10px;
       margin: 20px 0;
@@ -338,10 +340,10 @@
       border-radius: 2px;
     }
 
-    .line-red { background: #ef4444; }
-    .line-green { background: #10b981; }
-    .line-blue { background: #3b82f6; }
-    .line-yellow { background: #f59e0b; }
+    .line-red { background: #F67E1D; }
+    .line-green { background: #4CAF50; }
+    .line-blue { background: #0828DB; }
+    .line-yellow { background: #F89B54; }
 
     /* Responsividad */
     @media (max-width: 900px) {

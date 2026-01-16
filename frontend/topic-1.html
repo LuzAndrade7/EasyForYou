@@ -9,10 +9,10 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #0879F1;
+      background: #7391FF;
       min-height: 100vh;
-      justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
+      justify-content: center;
+    align-items: center;
     display: flex;
     }
     
@@ -20,13 +20,13 @@
       max-width: 950px;
       margin: 0 auto;
       padding: 20px;
-      text-align: left; /* Ajusta el texto hacia la izquierda */
+      text-align: left;
     }
     
     /* Título principal */
     .main-title {
-      background: white;
-      border: 3px solid #333;
+      background: #FFFFFF;
+      border: 3px solid #001F8B;
       border-radius: 30px;
       padding: 15px 40px;
       text-align: center;
@@ -34,6 +34,7 @@
       font-weight: bold;
       margin: 20px auto 30px;
       max-width: 500px;
+      color: #333333;
     }
     
     /* Header con línea y caja info */
@@ -47,18 +48,18 @@
     
     .dashed-line-horizontal {
       flex: 1;
-      border-top: 3px dashed #333;
+      border-top: 3px dashed #001F8B;
     }
     
     /* Caja de información */
     .info-box {
-      background: #87CEEB;
-      border: 2px solid #333;
+      background: #FDBA74;
+      border: 2px solid #001F8B;
       border-radius: 12px;
       padding: 12px 25px;
       display: flex;
       align-items: center;
-      justify-content: center; /* Esto centra el contenido horizontalmente */
+      justify-content: center;
       gap: 12px;
       white-space: nowrap;
       position: relative;
@@ -72,6 +73,7 @@
       font-weight: bold;
       font-size: 14px;
       line-height: 1.3;
+      color: #333333;
     }
     
     /* Métodos de obtención de info */
@@ -84,22 +86,22 @@
     }
     
     .method-card {
-      background: #FFBD58;
-      border: 3px solid #333;
+      background: #F89B54;
+      border: 3px solid #001F8B;
       border-radius: 20px;
       padding: 12px 30px;
       display: flex;
       align-items: center;
       gap: 12px;
       text-decoration: none;
-      color: #333;
+      color: #FFFFFF;
       transition: transform 0.2s;
-      box-shadow: 4px 4px 0 #333;
+      box-shadow: 4px 4px 0 #001F8B;
     }
     
     .method-card:hover {
       transform: translateY(-3px);
-      background: #ffc978;
+      background: #F67E1D;
     }
     
     .method-card .icon_method{
@@ -121,7 +123,7 @@
       text-align: center;
       font-size: 24px;
       font-weight: bold;
-      color: white;
+      color: #FFFFFF;
       font-style: italic;
       margin: 40px 0;
     }
@@ -137,8 +139,8 @@
     
     /* Flecha izquierda apuntando a la derecha */
     .arrow-left {
-      background: #5CE7FF;
-      color: #333;
+      background: #0828DB;
+      color: #FFFFFF;
       padding: 20px 30px 20px 20px;
       font-weight: bold;
       font-size: 12px;
@@ -153,8 +155,8 @@
     
     /* Flecha derecha apuntando a la izquierda */
     .arrow-right {
-      background: #5CE7FF;
-      color: #333;
+      background: #0828DB;
+      color: #FFFFFF;
       padding: 20px 20px 20px 30px;
       font-weight: bold;
       font-size: 12px;
@@ -168,8 +170,8 @@
     }
     
     .seg-box {
-      background: white;
-      border: 2px solid #333;
+      background: #FFFFFF;
+      border: 2px solid #001F8B;
       padding: 12px 15px;
       min-width: 140px;
     }
@@ -177,9 +179,10 @@
     .seg-box h4 {
       margin: 0 0 8px;
       font-size: 13px;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #001F8B;
       padding-bottom: 5px;
       text-align: center;
+      color: #2D53B8;
     }
     
     .seg-box ul {
@@ -191,7 +194,8 @@
     .seg-box li {
       padding: 4px 0;
       font-size: 13px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #E0E0E0;
+      color: #333333;
     }
     
     .seg-box li:last-child {
@@ -230,8 +234,8 @@
     /* Botón volver */
     .back-btn {
       display: inline-block;
-      background: #FFA521;
-      color: black;
+      background: #F89B54;
+      color: #FFFFFF;
       padding: 12px 30px;
       border-radius: 8px;
       text-decoration: none;
@@ -242,7 +246,7 @@
     }
     
     .back-btn:hover {
-      background: #EA8B00;
+      background: #F67E1D;
     }
 
     .back-btn {
@@ -281,18 +285,18 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: #37B5FF;
+      background: #0828DB;
       color: white;
       padding: 10px 20px;
       border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
-      border: none;
+      border: 2px solid #001F8B;
       cursor: pointer;
     }
 
     .continue-btn:hover {
-      background: #2a9fd8;
+      background: #001F8B;
     }
 
     .btn-container {

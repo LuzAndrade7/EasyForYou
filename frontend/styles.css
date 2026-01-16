@@ -1,18 +1,27 @@
-body { font-family: Arial, sans-serif; margin: 0; background: #f6f6f6; }
+body { font-family: Arial, sans-serif; margin: 0; background: #E0E0E0; }
 .container { max-width: 700px; margin: 40px auto; padding: 20px; }
-.card { background: white; padding: 16px; border-radius: 12px; margin: 14px 0; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
-label { display: block; margin: 10px 0; }
-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-top: 6px; box-sizing: border-box; }
-button { padding: 10px 14px; border: 0; border-radius: 8px; cursor: pointer; background: #4f46e5; color: white; }
-button:hover { background: #4338ca; }
-button:disabled { background: #ccc; cursor: not-allowed; }
+.card { background: #FFFFFF; padding: 16px; border-radius: 12px; margin: 14px 0; box-shadow: 0 2px 10px rgba(0,0,0,.06); border: 1px solid #E0E0E0; }
+label { display: block; margin: 10px 0; color: #333333; }
+input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E0E0E0; margin-top: 6px; box-sizing: border-box; }
+input:focus { border-color: #0828DB; outline: none; }
+button { padding: 10px 14px; border: 0; border-radius: 8px; cursor: pointer; background: #F89B54; color: #FFFFFF; }
+button:hover { background: #F67E1D; }
+button:disabled { background: #E0E0E0; color: #999; cursor: not-allowed; }
 .muted { color: #666; }
 .msg { margin-top: 16px; font-weight: bold; }
+.msg.success { color: #4CAF50; }
+.msg.error { color: #F67E1D; }
 
 /* Links */
 .register-link { text-align: center; margin-top: 16px; }
-.register-link a { color: #4f46e5; text-decoration: none; }
-.register-link a:hover { text-decoration: underline; }
+.register-link a { color: #2D53B8; text-decoration: none; }
+.register-link a:hover { color: #0828DB; text-decoration: underline; }
+
+/* Páginas de Login y Registro - Gradiente de fondo */
+.auth-page { background: linear-gradient(135deg, #0828DB 0%, #F89B54 100%); min-height: 100vh; }
+.auth-page .container { padding-top: 60px; }
+.auth-page h1 { color: #FFFFFF; text-align: center; }
+.auth-page .muted { color: rgba(255,255,255,0.8); text-align: center; }
 
 /* Pet Selection */
 .pet-grid {
@@ -31,17 +40,17 @@ button:disabled { background: #ccc; cursor: not-allowed; }
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: #f9f9f9;
+  background: #FFFFFF;
 }
 
 .pet-option:hover {
-  background: #e8e8ff;
-  border-color: #c7c4f3;
+  background: #FDBA74;
+  border-color: #F89B54;
 }
 
 .pet-option.selected {
-  border-color: #4f46e5;
-  background: #eef2ff;
+  border-color: #0828DB;
+  background: #7391FF;
 }
 
 .pet-option img {
@@ -66,8 +75,8 @@ button:disabled { background: #ccc; cursor: not-allowed; }
 
 /* Header & Navigation */
 .app-header {
-  background: #4f46e5;
-  color: white;
+  background: linear-gradient(135deg, #0828DB 0%, #F89B54 100%);
+  color: #FFFFFF;
   padding: 16px 24px;
   display: flex;
   justify-content: space-between;
@@ -83,11 +92,13 @@ button:disabled { background: #ccc; cursor: not-allowed; }
   display: flex;
   align-items: center;
   gap: 16px;
+  
 }
 
 .btn-logout {
   background: rgba(255,255,255,0.2);
   border: 1px solid rgba(255,255,255,0.3);
+  margin: 0px;
 }
 
 .btn-logout:hover {
@@ -108,20 +119,20 @@ button:disabled { background: #ccc; cursor: not-allowed; }
   background: transparent;
   border: none;
   border-bottom: 3px solid transparent;
-  color: #666;
+  color: #333333;
   font-weight: bold;
   border-radius: 0;
   transition: all 0.2s;
 }
 
 .tab-btn:hover {
-  background: #f5f5f5;
-  color: #4f46e5;
+  background: #E0E0E0;
+  color: #0828DB;
 }
 
 .tab-btn.active {
-  color: #4f46e5;
-  border-bottom-color: #4f46e5;
+  color: #0828DB;
+  border-bottom-color: #0828DB;
   background: transparent;
 }
 
@@ -146,12 +157,12 @@ button:disabled { background: #ccc; cursor: not-allowed; }
   height: 120px;
   object-fit: cover;
   border-radius: 50%;
-  border: 4px solid #4f46e5;
+  border: 4px solid #0828DB;
 }
 
 .pet-details h3 {
   margin: 0 0 10px 0;
-  color: #4f46e5;
+  color: #2D53B8;
   font-size: 1.5rem;
 }
 
@@ -211,12 +222,12 @@ button:disabled { background: #ccc; cursor: not-allowed; }
 .plus-icon {
   margin-left: 10px;
   font-size: 20px;
-  color: #4f46e5;
+  color: #0828DB;
 }
 
 .content-item:active {
-  background-color: #ccc;
-  border-color: #4f46e5;
+  background-color: #E0E0E0;
+  border-color: #0828DB;
 }
 
 /*CONTENIDOS*/
@@ -248,14 +259,14 @@ button:disabled { background: #ccc; cursor: not-allowed; }
 }
 
 .segmentation {
-  background: #f0f0f0;
+  background: #E0E0E0;
   border-radius: 8px;
   padding: 10px;
   margin-bottom: 20px;
 }
 
 .segmentation h3 {
-  color: #4f46e5;
+  color: #2D53B8;
 }
 
 .segmentation ul {
@@ -264,8 +275,8 @@ button:disabled { background: #ccc; cursor: not-allowed; }
 }
 
 button {
-  background: #4f46e5;
-  color: white;
+  background: #F89B54;
+  color: #FFFFFF;
   padding: 12px 20px;
   border-radius: 8px;
   cursor: pointer;
@@ -274,17 +285,19 @@ button {
 }
 
 button:hover {
-  background-color: #4338ca;
+  background-color: #F67E1D;
 }
 
 /* ========================================
    CONTENIDOS - Grilla de tarjetas
    ======================================== */
 .contenidos-wrapper {
-  background: #d0d0d0;
+  background: #FFFFFF;
   padding: 30px;
   border-radius: 12px;
   margin: 20px 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  border: 1px solid #E0E0E0;
 }
 
 .contenidos-header {
@@ -293,11 +306,11 @@ button:hover {
 }
 
 .contenidos-title {
-  background: #4f46e5;
-  color: white;
+
+  color: #000000;
   padding: 10px 30px;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 20px;
   border-radius: 4px;
   display: inline-block;
 }
@@ -338,40 +351,41 @@ button:hover {
 .content-card .plus-btn {
   width: 32px;
   height: 32px;
-  background: #ff3b3b;
+  background: #F67E1D;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 20px;
   font-weight: bold;
-  color: white;
+  color: #FFFFFF;
   flex-shrink: 0;
 }
 
 /* Colores de las tarjetas */
 .content-card.red {
-  background: linear-gradient(90deg, #5c4adb 0%, #ff3b3b 100%);
+  background: #0828DB;
 }
 
 .content-card.orange {
-  background: linear-gradient(90deg, #ff8c00 0%, #ffa500 100%);
+  background: #F89B54;
 }
 
 .content-card.yellow {
-  background: linear-gradient(90deg, #ffcc00 0%, #00cfff 100%);
+  background: #FDBA74;
+  color: #333333;
 }
 
 .content-card.blue {
-  background: linear-gradient(90deg, #4444ff 0%, #6666ff 100%);
+  background: #2D53B8;
 }
 
 .content-card.cyan {
-  background: linear-gradient(90deg, #00a8cc 0%, #00cfff 100%);
+  background: #7391FF;
 }
 
 .content-card.lightblue {
-  background: linear-gradient(90deg, #00cfff 0%, #40e0d0 100%);
+  background: #7391FF;
 }
 
 @media (max-width: 600px) {
@@ -444,10 +458,12 @@ button:hover {
    CALCULADORAS - Pestaña Ejercicios
    ======================================== */
 .calculadoras-wrapper {
-  background: #d0d0d0;
+  background: #FFFFFF;
   padding: 30px;
   border-radius: 12px;
   margin: 20px 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  border: 1px solid #E0E0E0;
 }
 
 .calculadoras-header {
@@ -456,11 +472,10 @@ button:hover {
 }
 
 .calculadoras-title {
-  background: #4f46e5;
-  color: white;
+  color: #000000;
   padding: 10px 30px;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 20px;
   border-radius: 4px;
   display: inline-block;
 }
@@ -482,7 +497,7 @@ button:hover {
   border-radius: 12px;
   border: none;
   cursor: pointer;
-  color: white;
+  color: #FFFFFF;
   font-weight: bold;
   font-size: 12px;
   min-height: 100px;
@@ -504,15 +519,29 @@ button:hover {
 }
 
 .calc-card.orange {
-  background: linear-gradient(135deg, #ff8c00 0%, #ffa500 100%);
+  background: #F89B54;
+}
+
+.calc-card.orange:hover {
+  background: #F67E1D;
 }
 
 .calc-card.yellow {
-  background: linear-gradient(135deg, #ffcc00 0%, #ffdd44 100%);
+  background: #FDBA74;
+  color: #333333;
+}
+
+.calc-card.yellow:hover {
+  background: #F89B54;
+  color: #FFFFFF;
 }
 
 .calc-card.blue {
-  background: linear-gradient(135deg, #4444ff 0%, #6666ff 100%);
+  background: #0828DB;
+}
+
+.calc-card.blue:hover {
+  background: #001F8B;
 }
 
 /* Modal de Calculadoras */
@@ -578,12 +607,12 @@ button:hover {
 }
 
 .calc-modal-close:hover {
-  color: #ff3b3b;
+  color: #F67E1D;
 }
 
 .calc-modal-title {
   margin: 0 0 10px 0;
-  color: #4f46e5;
+  color: #2D53B8;
   font-size: 1.4rem;
 }
 
@@ -623,10 +652,10 @@ button:hover {
   top: 28px;
   width: 32px;
   height: 38px;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  background: linear-gradient(135deg, #0828DB, #7391FF);
   border: none;
   border-radius: 8px;
-  color: white;
+  color: #FFFFFF;
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
@@ -639,7 +668,7 @@ button:hover {
 }
 
 .info-btn:hover {
-  background: linear-gradient(135deg, #4338ca, #4f46e5);
+  background: linear-gradient(135deg, #001F8B, #0828DB);
   transform: scale(1.05);
 }
 
@@ -649,8 +678,8 @@ button:hover {
   top: 100%;
   left: 0;
   right: 0;
-  background: linear-gradient(135deg, #1e1b4b, #312e81);
-  color: white;
+  background: linear-gradient(135deg, #001F8B, #0828DB);
+  color: #FFFFFF;
   padding: 12px 15px;
   border-radius: 8px;
   font-size: 13px;
@@ -668,7 +697,7 @@ button:hover {
   right: 10px;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-bottom: 8px solid #1e1b4b;
+  border-bottom: 8px solid #001F8B;
 }
 
 .info-tooltip.show {
@@ -705,8 +734,8 @@ button:hover {
 .calc-btn {
   width: 100%;
   padding: 12px;
-  background: #4f46e5;
-  color: white;
+  background: #0828DB;
+  color: #FFFFFF;
   border: none;
   border-radius: 8px;
   font-weight: bold;
@@ -715,7 +744,7 @@ button:hover {
 }
 
 .calc-btn:hover {
-  background: #4338ca;
+  background: #001F8B;
 }
 
 /* Contenedor de resultados */
@@ -742,12 +771,12 @@ button:hover {
 
 /* Resultado exitoso */
 .resultado-box {
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  background: linear-gradient(135deg, #4CAF50, #7391FF);
   border-radius: 12px;
   padding: 20px;
   text-align: center;
-  color: white;
-  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+  color: #FFFFFF;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
 }
 
 .resultado-label {
@@ -773,12 +802,12 @@ button:hover {
 
 /* Mensaje de error */
 .resultado-error {
-  background: linear-gradient(135deg, #dc2626, #ef4444);
+  background: linear-gradient(135deg, #F67E1D, #F89B54);
   border-radius: 12px;
   padding: 18px;
   text-align: center;
-  color: white;
-  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+  color: #FFFFFF;
+  box-shadow: 0 4px 15px rgba(246, 126, 29, 0.3);
 }
 
 .error-icon {
