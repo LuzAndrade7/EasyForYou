@@ -26,8 +26,8 @@ async function checkUserAndPet() {
   const { data: { user } } = await sb.auth.getUser();
   
   if (!user) {
-    // No hay sesión, ir al login
-    window.location.href = "./index.html";
+    // No hay sesión, ir al login (index en la raíz)
+    window.location.href = "../index.html";
     return;
   }
 

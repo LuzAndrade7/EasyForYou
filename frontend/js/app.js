@@ -29,7 +29,7 @@ async function loadUser() {
   if (error) console.error(error);
 
   if (!user) {
-    window.location.href = "./index.html";
+    window.location.href = "../index.html";
     return;
   }
 
@@ -99,7 +99,7 @@ tabBtns.forEach(btn => {
 // Logout
 logoutBtn.addEventListener("click", async () => {
   await sb.auth.signOut();
-  window.location.href = "./index.html";
+  window.location.href = "../index.html";
 });
 
 

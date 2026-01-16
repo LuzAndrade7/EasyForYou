@@ -78,9 +78,9 @@ registerForm.addEventListener("submit", async (e) => {
 
     setMsg("Cuenta creada exitosamente. Redirigiendo al login...", false);
     
-    // Redirigir al login después de 2 segundos
+    // Redirigir al login después de 2 segundos (index en la raíz)
     setTimeout(() => {
-      window.location.href = "./index.html";
+      window.location.href = "../index.html";
     }, 2000);
 
   } catch (err) {
