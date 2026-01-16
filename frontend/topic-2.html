@@ -13,7 +13,7 @@
     }
 
     .topic-container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 20px;
     }
@@ -31,137 +31,234 @@
       max-width: 500px;
     }
 
-    /* Contenedor de la fórmula */
-    .formula-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    /* Sección de fórmula */
+    .formula-section {
+      text-align: center;
+      margin: 30px 0;
     }
 
-    /* Imagen de la fórmula */
+    .formula-label {
+      font-size: 22px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+      text-decoration: underline;
+    }
+
     .formula-image {
+      width: 100%;
+      max-width: 600px;
       display: block;
+      margin: 0 auto;
+    }
+
+    /* Cuadro ¿QUÉ ES? (no es botón) */
+    .que-es-box {
+      background: #FFBD58;
+      color: black;
+      padding: 25px;
+      border-radius: 12px;
+      border: 3px solid #333;
+      text-align: left;
+      box-shadow: 0 4px 0 #222;
+      margin: 40px auto;
+      max-width: 800px;
+    }
+
+    .que-es-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .que-es-content {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* Contenedor de botones de variables */
+    .variables-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin: 40px 0;
+      max-width: 900px;
       margin-left: auto;
       margin-right: auto;
-      width: 70%;
-      padding-top: 0px;
-      padding-bottom: 20px;
+      justify-content: center;
     }
 
-    /* Cuadros explicativos */
-    .variables-container {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-      align-items: center;
-      height: 40px;
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-
-    .variables-box {
-      background-color: #37B5FF;
+    /* Botones de variables */
+    .var-button {
+      background: #37B5FF;
       color: white;
-      padding: 20px 25px;
-      border-radius: 8px;
-      width: 150px;
-      height: 40px;
-      display: flex; 
-      justify-content: center; 
-      align-items: center;
-      font-size: 16px;
-      font-weight: bold;
+      padding: 20px 15px;
+      border-radius: 12px;
+      border: 3px solid #333;
+      position: relative;
+      box-shadow: 0 4px 0 #222;
+      cursor: pointer;
+      transition: all 0.3s;
       text-align: center;
-    }
-
-    /* Explicación de la fórmula */
-    .explanation-container {
       display: flex;
-      justify-content: space-around;
-      margin-top: 30px;
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
-    }
-
-    .explanation-box {
-      background: #fff;
-      border: 2px solid #333;
-      border-radius: 10px;
-      padding: 15px;
+      height: 50px;
       width: 200px;
-      text-align: center;
-      margin: 5px;
-      height: 60px;
-      display: flex;  
-      justify-content: center;  
-      align-items: center;  
     }
 
-    .explanation-box p {
-      font-size: 14px;
-      color: #333;
+    .var-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 0 #222;
+      background: #4abfff;
     }
 
-    /* Contenedor de los tres cuadros horizontales */
-    .info-row {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
+    .var-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 0 #222;
     }
 
-    /* Estilos de los cuadros */
-    .info-box {
+    /* Colores específicos para cada botón de variable */
+    .var-button:nth-child(1) {
+      background: #FFA521;
       color: black;
-      padding: 15px;
-      border-radius: 8px;
-      width: 35%;
-      text-align: center;
-      display: flex;  
-      justify-content: center; 
-      align-items: center;  
     }
 
-    .sabiasQue{
-      background-color: #FFA521;
-      color: black;
-      padding: 15px;
-      border-radius: 8px;
-      width: 15%;
-      text-align: center;
-      display: flex;  
-      justify-content: center;  
-      align-items: center; 
+    .var-button:nth-child(1):hover {
+      background: #ffb23c;
+    }
+
+    .var-button:nth-child(2) {
+      background: #ef4444;
+      color: white;
+    }
+
+    .var-button:nth-child(2):hover {
+      background: #f87171;
+    }
+
+    .var-button:nth-child(3) {
+      background: #10b981;
+      color: white;
+    }
+
+    .var-button:nth-child(3):hover {
+      background: #12cc8c;
+    }
+
+    .var-button:nth-child(4) {
+      background: #8b5cf6;
+      color: white;
+    }
+
+    .var-button:nth-child(4):hover {
+      background: #9b6dff;
+    }
+
+    .var-title {
+      font-size: 20px;
       font-weight: bold;
+      margin: 0;
+      text-align: center;
     }
 
-    .info-box:nth-child(2) {
-      background-color: #37B5FF;
+    .var-plus {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #333;
       color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      border: 2px solid white;
     }
 
-    .info-box:nth-child(3) {
-      background-color: #00b4d8;
+    /* Botón SABÍAS QUÉ */
+    .sabiasque-container {
+      max-width: 400px;
+      margin: 40px auto;
+    }
+
+    .sabiasque-button {
+      background: #FFA521;
+      color: black;
+      padding: 25px 20px;
+      border-radius: 12px;
+      border: 3px solid #333;
+      position: relative;
+      box-shadow: 0 4px 0 #222;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 50px;
+    }
+
+    .sabiasque-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 0 #222;
+      background: #ffb23c;
+    }
+
+    .sabiasque-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 0;
+      text-align: center;
+    }
+
+    .sabiasque-plus {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #333;
       color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      border: 2px solid white;
     }
 
     /* Botón volver */
     .back-btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
       background: #FFA521;
       color: black;
-      padding: 12px 30px;
+      padding: 14px 35px;
       border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
-      border: none;
+      border: 2px solid #333;
       cursor: pointer;
-      display: inline-grid;
-      grid-template-columns: auto auto;
-      align-items: center;
-      gap: 12px;
+      margin-top: 30px;
+      box-shadow: 0 4px 0 #333;
+      transition: all 0.3s;
     }
 
     .back-btn:hover {
       background: #EA8B00;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #333;
     }
 
     .back-btn img {
@@ -169,15 +266,164 @@
       height: 20px;
     }
 
-    /* Responsividad: Ajuste en pantallas pequeñas */
-    @media (max-width: 600px) {
-      .info-row {
-        flex-direction: column;
-        gap: 20px;
-      }
+    .btn-container {
+      text-align: center;
+      margin-top: 30px;
+      margin-bottom: 20px;
+    }
 
-      .info-box {
-        width: 100%;
+    /* Popups / Ventanas emergentes */
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .popup-content {
+      background-color: #fff;
+      margin: 50px auto;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 600px;
+      position: relative;
+      border: 3px solid #333;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      animation: slideIn 0.3s;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #333;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .popup-close:hover {
+      color: #ff4444;
+    }
+
+    .popup-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      color: #333;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #FFA521;
+      text-align: center;
+    }
+
+    .popup-body {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* Responsividad */
+    @media (max-width: 900px) {
+      .variables-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        max-width: 500px;
+      }
+      
+      .formula-image {
+        max-width: 500px;
+      }
+      
+      .popup-content {
+        width: 95%;
+        margin: 20px auto;
+        padding: 20px;
+      }
+      
+      .main-title {
+        font-size: 20px;
+        padding: 12px 25px;
+      }
+      
+      .que-es-box {
+        margin: 30px auto;
+        padding: 20px;
+      }
+      
+      .var-title {
+        font-size: 18px;
+      }
+      
+      .sabiasque-title {
+        font-size: 22px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .formula-image {
+        max-width: 90%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .variables-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .var-title {
+        font-size: 17px;
+      }
+      
+      .var-plus {
+        width: 28px;
+        height: 28px;
+        font-size: 18px;
+        right: 12px;
+      }
+      
+      .sabiasque-button {
+        height: 90px;
+        padding: 20px 15px;
+      }
+      
+      .sabiasque-title {
+        font-size: 20px;
+      }
+      
+      .sabiasque-plus {
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
+        right: 15px;
+      }
+      
+      .que-es-box {
+        padding: 18px;
+      }
+      
+      .que-es-title {
+        font-size: 22px;
       }
     }
   </style>
@@ -185,52 +431,289 @@
 <body>
   <div class="topic-container">
     <!-- Título de la sección -->
-    <div class="main-title">FÓRMULA DEL MARGEN DE GANANCIA</div>
+    <div class="main-title">MARGEN DE GANANCIA</div>
     
-    <!-- Imagen de la fórmula -->
-    <img src="./images/FmarGanancia.png" alt="Fórmula Margen de Ganancia" class="formula-image">
+    <!-- Sección de fórmula -->
+    <div class="formula-section">
+      <div class="formula-label">FÓRMULA</div>
+      <img src="./images/FmarGanancia.png" alt="Fórmula Margen de Ganancia" class="formula-image">
+    </div>
     
-    <!-- Explicación de las variables -->
+    <!-- Cuadro ¿QUÉ ES? (no es botón) -->
+    <div class="que-es-box">
+      <div class="que-es-title">¿QUÉ ES EL MARGEN DE GANANCIA?</div>
+      <div class="que-es-content">
+        <p>El margen de ganancia es el porcentaje de dinero que se gana después de restar todos los costos al precio de venta. Representa la rentabilidad de tu negocio y te indica cuánto estás ganando realmente por cada producto o servicio que vendes.</p>
+      </div>
+    </div>
+    
+    <!-- Grid de 4 botones de variables -->
     <div class="variables-container">
-      <div class="variables-box">INGRESOS</div>
-      <div class="variables-box">COSTOS</div>
-      <div class="variables-box">PRECIO</div>
-      <div class="variables-box">MARGEN DE GANANCIA</div>
+      <!-- INGRESOS -->
+      <div class="var-button" onclick="openPopup('popupINGRESOS')">
+        <div class="var-title">INGRESOS</div>
+        <div class="var-plus">+</div>
+      </div>
+      
+      <!-- COSTOS -->
+      <div class="var-button" onclick="openPopup('popupCOSTOS')">
+        <div class="var-title">COSTOS</div>
+        <div class="var-plus">+</div>
+      </div>
+      
+      <!-- PRECIO -->
+      <div class="var-button" onclick="openPopup('popupPRECIO')">
+        <div class="var-title">PRECIO</div>
+        <div class="var-plus">+</div>
+      </div>
+      
+      <!-- MARGEN DE GANANCIA -->
+      <div class="var-button" onclick="openPopup('popupMARGEN')">
+        <div class="var-title">MARGEN DE GANANCIA</div>
+        <div class="var-plus">+</div>
+      </div>
     </div>
-
-    <!-- Explicación de cada término -->
-    <div class="explanation-container">
-      <div class="explanation-box">
-        <p>Dinero total que entra por las ventas.</p>
-      </div>
-      <div class="explanation-box">
-        <p>Dinero que se gasta para producir o comprar un producto.</p>
-      </div>
-      <div class="explanation-box">
-        <p>Valor al que se vende el producto al cliente.</p>
-      </div>
-      <div class="explanation-box">
-        <p>Porcentaje de dinero que se gana después de restar los costos al precio de venta.</p>
-      </div>
-    </div>
-
-    <!-- Tres cuadros horizontales -->
-    <div class="info-row">
-      <div class="sabiasQue">
-        <span>¿Sabías qué?</span>
-      </div>
-      <div class="info-box">
-        <span>Si tu margen es alto, tu negocio es rentable.</span>
-      </div>
-      <div class="info-box">
-        <span>Para poder usar la fórmula,<br> los datos deben ser correctos.</span>
+    
+    <!-- Botón SABÍAS QUÉ -->
+    <div class="sabiasque-container">
+      <div class="sabiasque-button" onclick="openPopup('popupSABIASQUE')">
+        <div class="sabiasque-title">¿SABÍAS QUÉ?</div>
+        <div class="sabiasque-plus">+</div>
       </div>
     </div>
 
     <!-- Botón de regresar -->
-    <div style="text-align: center; margin-top: 40px;">
-      <a href="./app.html" class="back-btn"><img src="./images/back.png" alt="Volver"> Volver</a>
+    <div class="btn-container">
+      <a href="./app.html" class="back-btn">
+        <img src="./images/back.png" alt="Volver"> 
+        <span>Volver</span>
+      </a>
     </div>
   </div>
+
+  <!-- Popup de INGRESOS -->
+  <div id="popupINGRESOS" class="popup">
+    <div class="popup-content">
+      <span class="popup-close" onclick="closePopup('popupINGRESOS')">&times;</span>
+      <div class="popup-title">INGRESOS</div>
+      <div class="popup-body">
+        <p>Dinero total que entra por las ventas de tus productos o servicios.</p>
+        
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+          <strong>¿Cómo calcularlo?</strong>
+          <p style="margin: 10px 0; text-align: center;">
+            <strong>Ingresos Totales = Precio de Venta × Cantidad Vendida</strong>
+          </p>
+          
+          <strong>Ejemplo:</strong>
+          <ul>
+            <li>Si vendes 100 productos a $10 cada uno</li>
+            <li>Tus ingresos totales serán: 100 × $10 = $1,000</li>
+          </ul>
+        </div>
+        
+        <p><strong>Importante:</strong> Los ingresos no son lo mismo que las ganancias. Los ingresos son el dinero que entra, pero aún no has restado los costos.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup de COSTOS -->
+  <div id="popupCOSTOS" class="popup">
+    <div class="popup-content">
+      <span class="popup-close" onclick="closePopup('popupCOSTOS')">&times;</span>
+      <div class="popup-title">COSTOS</div>
+      <div class="popup-body">
+        <p>Dinero que se gasta para producir o comprar un producto, o para ofrecer un servicio.</p>
+        
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+          <strong>Tipos de costos:</strong>
+          
+          <div style="margin: 15px 0;">
+            <strong>Costos Fijos:</strong>
+            <p style="margin: 5px 0;">No cambian con la producción (alquiler, luz, salarios fijos).</p>
+          </div>
+          
+          <div style="margin: 15px 0;">
+            <strong>Costos Variables:</strong>
+            <p style="margin: 5px 0;">Cambian con la producción (materias primas, embalaje, comisiones).</p>
+          </div>
+          
+          <strong>Fórmula para costos totales:</strong>
+          <p style="margin: 10px 0; text-align: center;">
+            <strong>Costos Totales = Costos Fijos + Costos Variables</strong>
+          </p>
+        </div>
+        
+        <p><strong>Recuerda:</strong> Para calcular el margen de ganancia correctamente, debes incluir TODOS tus costos, no solo los más obvios.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup de PRECIO -->
+  <div id="popupPRECIO" class="popup">
+    <div class="popup-content">
+      <span class="popup-close" onclick="closePopup('popupPRECIO')">&times;</span>
+      <div class="popup-title">PRECIO</div>
+      <div class="popup-body">
+        <p>Valor al que se vende el producto o servicio al cliente final.</p>
+        
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+          <strong>¿Cómo establecer el precio correcto?</strong>
+          
+          <div style="display: flex; align-items: flex-start; margin: 15px 0;">
+            <div style="background: #10b981; color: white; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; flex-shrink: 0;">1</div>
+            <div>
+              <strong>Costos:</strong> Calcula todos tus costos de producción.
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; margin: 15px 0;">
+            <div style="background: #10b981; color: white; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; flex-shrink: 0;">2</div>
+            <div>
+              <strong>Margen deseado:</strong> Decide qué porcentaje de ganancia quieres obtener.
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; margin: 15px 0;">
+            <div style="background: #10b981; color: white; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; flex-shrink: 0;">3</div>
+            <div>
+              <strong>Competencia:</strong> Investiga los precios de productos similares en el mercado.
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; margin: 15px 0;">
+            <div style="background: #10b981; color: white; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; flex-shrink: 0;">4</div>
+            <div>
+              <strong>Valor percibido:</strong> Considera lo que tu cliente está dispuesto a pagar.
+            </div>
+          </div>
+        </div>
+        
+        <p><strong>Fórmula básica de precio:</strong></p>
+        <p style="text-align: center; font-weight: bold;">
+          Precio = Costo Total + (Costo Total × % Margen)
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup de MARGEN DE GANANCIA -->
+  <div id="popupMARGEN" class="popup">
+    <div class="popup-content">
+      <span class="popup-close" onclick="closePopup('popupMARGEN')">&times;</span>
+      <div class="popup-title">MARGEN DE GANANCIA</div>
+      <div class="popup-body">
+        <p>Porcentaje de dinero que se gana después de restar los costos al precio de venta.</p>
+        
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+          <strong>Fórmula principal:</strong>
+          <p style="text-align: center; font-size: 18px; margin: 15px 0;">
+            <strong>Margen de Ganancia = [(Precio - Costo) ÷ Costo] × 100%</strong>
+          </p>
+          
+          <strong>Ejemplo práctico:</strong>
+          <ul>
+            <li>Si un producto te cuesta $20 producirlo</li>
+            <li>Y lo vendes a $30</li>
+            <li>Margen = [($30 - $20) ÷ $20] × 100%</li>
+            <li>Margen = ($10 ÷ $20) × 100% = 50%</li>
+          </ul>
+        </div>
+        
+        <div style="background: #e8f5e9; padding: 20px; border-radius: 10px; margin: 20px 0;">
+          <strong>¿Qué significa un buen margen?</strong>
+          <ul>
+            <li><strong>Menos del 10%:</strong> Muy bajo, riesgo de pérdidas</li>
+            <li><strong>10-20%:</strong> Aceptable para algunos negocios</li>
+            <li><strong>20-40%:</strong> Buen margen, negocio saludable</li>
+            <li><strong>Más del 40%:</strong> Excelente margen, muy rentable</li>
+          </ul>
+          
+          <p style="margin-top: 15px;"><em>Nota: Los márgenes ideales varían según la industria.</em></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup de SABÍAS QUÉ -->
+  <div id="popupSABIASQUE" class="popup">
+    <div class="popup-content">
+      <span class="popup-close" onclick="closePopup('popupSABIASQUE')">&times;</span>
+      <div class="popup-title">¿SABÍAS QUÉ?</div>
+      <div class="popup-body">
+        <div style="text-align: center; margin: 20px 0;">
+          <div style="font-size: 22px; font-weight: bold; color: #333; margin-bottom: 20px;">
+            Si tu margen es alto ¡Tu negocio es rentable!
+          </div>
+          
+          <div style="background: #f0f8ff; padding: 25px; border-radius: 12px; border-left: 4px solid #37B5FF;">
+            <p style="font-size: 18px; margin: 0;">
+              Además, para poder usar la fórmula correctamente,<br>
+              <strong>los datos deben ser correctos y actualizados.</strong>
+            </p>
+          </div>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+          <strong>Consejos para mantener un buen margen:</strong>
+          
+          <div style="display: flex; align-items: flex-start; margin: 15px 0;">
+            <div style="background: #FFA521; color: black; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">✓</div>
+            <div>
+              <strong>Controla tus costos:</strong> Revisa periódicamente tus gastos y busca formas de reducirlos sin afectar la calidad.
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; margin: 15px 0;">
+            <div style="background: #FFA521; color: black; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">✓</div>
+            <div>
+              <strong>Actualiza precios:</strong> Ajusta tus precios cuando los costos aumenten o cuando el mercado lo permita.
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; margin: 15px 0;">
+            <div style="background: #FFA521; color: black; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">✓</div>
+            <div>
+              <strong>Calcula regularmente:</strong> No calcules tu margen solo una vez, hazlo periódicamente para detectar tendencias.
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; margin: 15px 0;">
+            <div style="background: #FFA521; color: black; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">✓</div>
+            <div>
+              <strong>Compara con la competencia:</strong> Investiga los márgenes típicos en tu industria para saber si estás en un nivel competitivo.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Funciones para los popups
+    function openPopup(popupId) {
+      document.getElementById(popupId).style.display = "block";
+    }
+
+    function closePopup(popupId) {
+      document.getElementById(popupId).style.display = "none";
+    }
+
+    // Cerrar popups al hacer clic fuera del contenido
+    window.onclick = function(event) {
+      if (event.target.classList.contains('popup')) {
+        event.target.style.display = "none";
+      }
+    }
+
+    // Cerrar popups con ESC
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        document.querySelectorAll('.popup').forEach(popup => {
+          popup.style.display = "none";
+        });
+      }
+    });
+  </script>
 </body>
 </html>
