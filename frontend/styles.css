@@ -41,6 +41,17 @@ button:disabled { background: #E0E0E0; color: #999; cursor: not-allowed; }
   cursor: pointer;
   transition: all 0.2s ease;
   background: #FFFFFF;
+  position: relative;
+}
+
+.pet-option.locked {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+.pet-option.locked:hover {
+  background: #FFFFFF;
+  border-color: transparent;
 }
 
 .pet-option:hover {

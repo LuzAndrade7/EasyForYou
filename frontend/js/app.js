@@ -984,48 +984,7 @@ logoutBtn.addEventListener("click", async () => {
 
 
 
-// ========================================
-// FUNCIONES PARA LOS TOPICS (CONTENIDOS)
-// ========================================
-
-// Abrir topic en modal
-function openTopicModal(topicUrl) {
-  // Crear modal para topic
-  const modal = document.createElement('div');
-  modal.className = 'topic-modal';
-  modal.innerHTML = `
-    <div class="topic-modal-content">
-      <button class="topic-modal-close" onclick="closeTopicModal()">&times;</button>
-      <iframe src="${topicUrl}" class="topic-iframe"></iframe>
-    </div>
-  `;
-  
-  document.body.appendChild(modal);
-  document.body.style.overflow = 'hidden';
-  
-  // Listener para cerrar con ESC
-  document.addEventListener('keydown', handleEscapeKey);
-}
-
-// Manejador de tecla ESC
-function handleEscapeKey(e) {
-  if (e.key === 'Escape') {
-    closeTopicModal();
-  }
-}
-
-// Cerrar modal de topic
-function closeTopicModal() {
-  const modal = document.querySelector('.topic-modal');
-  if (modal) {
-    modal.remove();
-    document.body.style.overflow = 'auto';
-    // Remover el listener de ESC
-    document.removeEventListener('keydown', handleEscapeKey);
-  }
-}
-
-// Cambiar a pestaña contenidos (para usar desde los topics)
+// Cambiar a pestaña contenidos (para usar desde los topics) - versión duplicada eliminada, usar la de abajo
 window.switchToContenidosTab = function() {
   // Quitar active de todos
   tabBtns.forEach(b => b.classList.remove("active"));
@@ -1706,6 +1665,16 @@ function openTopicModal(topicUrl) {
   
   document.body.appendChild(modal);
   document.body.style.overflow = 'hidden';
+  
+  // Listener para cerrar con ESC
+  document.addEventListener('keydown', handleTopicEscapeKey);
+}
+
+// Manejador de tecla ESC para topic modal
+function handleTopicEscapeKey(e) {
+  if (e.key === 'Escape') {
+    closeTopicModal();
+  }
 }
 
 // Cerrar modal de topic
@@ -1714,6 +1683,8 @@ function closeTopicModal() {
   if (modal) {
     modal.remove();
     document.body.style.overflow = 'auto';
+    // Remover el listener de ESC
+    document.removeEventListener('keydown', handleTopicEscapeKey);
   }
 }
 

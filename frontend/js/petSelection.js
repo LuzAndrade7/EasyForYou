@@ -45,10 +45,49 @@ async function checkUserAndPet() {
   }
 }
 
+// Bloquear mascotas que no son gato (solo gato disponible en demo)
+function initPetOptions() {
+  const options = document.querySelectorAll('.pet-option');
+  console.log('Inicializando opciones de mascota, encontradas:', options.length);
+  
+  options.forEach(opt => {
+    const animalType = parseInt(opt.dataset.animal);
+    // Solo el gato (animal_type = 2) está disponible
+    if (animalType !== 2) {
+      opt.classList.add('locked');
+      opt.style.opacity = '0.5';
+      opt.style.cursor = 'not-allowed';
+      opt.style.position = 'relative';
+      // Agregar badge de "Próximamente"
+      if (!opt.querySelector('.demo-badge')) {
+        const badge = document.createElement('span');
+        badge.className = 'demo-badge';
+        badge.textContent = '🔒 Próximamente';
+        badge.style.cssText = 'position:absolute;top:5px;right:5px;background:#666;color:white;padding:3px 8px;border-radius:10px;font-size:9px;z-index:10;';
+        opt.appendChild(badge);
+      }
+    }
+  });
+}
+
+// Inicializar opciones bloqueadas cuando el DOM esté listo
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initPetOptions);
+} else {
+  initPetOptions();
+}
+
 // Manejar selección de mascota
 petGrid.addEventListener("click", (e) => {
   const petOption = e.target.closest(".pet-option");
   if (!petOption) return;
+
+  // Verificar si está bloqueado (no es gato)
+  const animalType = parseInt(petOption.dataset.animal);
+  if (animalType !== 2) {
+    setMsg("⚠️ Esta mascota estará disponible próximamente. Por ahora solo puedes elegir el Gato.", true);
+    return;
+  }
 
   // Quitar selección anterior
   document.querySelectorAll(".pet-option").forEach(opt => {
