@@ -26,20 +26,234 @@
   <main class="container">
     <!-- Tab USUARIO -->
     <section class="tab-content active" id="tab-usuario">
-      <div class="card">
-        <h2>👤 USUARIO</h2>
-        <div id="userInfo">
-          <p>Cargando información del usuario...</p>
+      <div class="user-profile-container">
+        <!-- Cabecera del perfil -->
+        <div class="profile-header">
+          <div class="profile-avatar-section">
+            <div class="profile-avatar-circle" id="profileAvatarCircle">
+              <img id="profileAnimalImg" src="" alt="Avatar" class="profile-animal-img">
+            </div>
+            <div class="profile-level-badge" id="profileLevelBadge">Nivel 1</div>
+          </div>
+          <div class="profile-header-info">
+            <h2 id="profileDisplayName">Cargando...</h2>
+            <p class="profile-email" id="profileEmail">cargando@email.com</p>
+            <div class="profile-stats">
+              <div class="stat-item">
+                <span class="stat-value" id="profilePoints">0</span>
+                <span class="stat-label">Puntos</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="profileQuizzes">0</span>
+                <span class="stat-label">Quizzes</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="profileCalcs">0</span>
+                <span class="stat-label">Cálculos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Información del perfil editable -->
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <h3>📋 Información Personal</h3>
+            <button class="edit-profile-btn" id="editProfileBtn" onclick="toggleEditProfile()">
+              ✏️ Editar
+            </button>
+          </div>
+          
+          <div class="profile-info-display" id="profileInfoDisplay">
+            <div class="info-row">
+              <span class="info-label">👤 Nombre</span>
+              <span class="info-value" id="infoName">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">📧 Correo electrónico</span>
+              <span class="info-value" id="infoEmail">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">📅 Miembro desde</span>
+              <span class="info-value" id="infoJoinDate">-</span>
+            </div>
+          </div>
+          
+          <div class="profile-info-edit" id="profileInfoEdit" style="display: none;">
+            <div class="edit-field">
+              <label for="editName">👤 Nombre</label>
+              <input type="text" id="editName" placeholder="Tu nombre">
+            </div>
+            <div class="edit-field">
+              <label>📧 Correo electrónico</label>
+              <input type="email" disabled id="editEmail" class="input-disabled">
+              <small>El correo no se puede cambiar</small>
+            </div>
+            <div class="edit-buttons">
+              <button class="btn-cancel" onclick="cancelEditProfile()">Cancelar</button>
+              <button class="btn-save" onclick="saveProfile()">💾 Guardar cambios</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Logros y progreso -->
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <h3>🏆 Progreso de Aprendizaje</h3>
+          </div>
+          <div class="progress-section">
+            <div class="progress-item">
+              <div class="progress-info">
+                <span>Quizzes Completados</span>
+                <span id="quizzesProgressText">0/6 completados</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill quiz-progress" id="quizzesProgressBar" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Tab MASCOTA -->
     <section class="tab-content" id="tab-mascota">
-      <div class="card">
-        <h2>🐾 MASCOTA</h2>
-        <div id="petInfo">
-          <p>Cargando información de la mascota...</p>
+      <div class="mascota-container">
+        <!-- Header de la mascota -->
+        <div class="mascota-header">
+          <div class="mascota-avatar-big">
+            <img id="mascotaAvatarImg" src="" alt="Mascota">
+          </div>
+          <div class="mascota-header-info">
+            <h2 id="mascotaName">Cargando...</h2>
+            <p class="mascota-type" id="mascotaType">Tipo de animal</p>
+            <div class="mascota-level-display">
+              <span class="level-label">Nivel</span>
+              <span class="level-number" id="mascotaLevel">1</span>
+            </div>
+            <div class="mascota-xp-bar-container">
+              <div class="xp-bar-bg">
+                <div class="xp-bar-fill" id="mascotaXpBar" style="width: 0%"></div>
+              </div>
+              <span class="xp-text" id="mascotaXpText">0/30 XP</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Editar nombre de mascota -->
+        <div class="mascota-card">
+          <div class="profile-card-header">
+            <h3>✏️ Personaliza tu mascota</h3>
+          </div>
+          <div class="mascota-edit-name">
+            <label for="mascotaEditName">Nombre de tu mascota</label>
+            <div class="edit-name-row">
+              <input type="text" id="mascotaEditName" placeholder="Nombre de tu mascota" disabled>
+              <button class="btn-edit-name" id="btnEditMascotaName" onclick="toggleEditMascotaName()">✏️ Editar</button>
+              <button class="btn-save-name" id="btnSaveMascotaName" onclick="saveMascotaName()" style="display: none;">💾 Guardar</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Videos de niveles -->
+        <div class="mascota-card">
+          <div class="profile-card-header">
+            <h3>🎬 Evolución por Niveles</h3>
+          </div>
+          <p class="levels-description">¡Sube de nivel completando quizzes para desbloquear nuevas animaciones!</p>
+          
+          <div class="levels-grid" id="levelsGrid">
+            <!-- Nivel 1 -->
+            <div class="level-card unlocked" id="levelCard1" data-level="1">
+              <div class="level-badge">Nivel 1</div>
+              <div class="level-video-container">
+                <video class="level-video" id="levelVideo1" loop muted playsinline>
+                  <source src="./videos/GatoNivel1.mp4" type="video/mp4">
+                </video>
+                <div class="locked-overlay" style="display: none;">🔒</div>
+              </div>
+              <button class="play-video-btn" onclick="playLevelVideo(1)">▶️ Reproducir</button>
+              <p class="level-label">Bebé</p>
+              <span class="level-status">✅ Desbloqueado</span>
+            </div>
+            
+            <!-- Nivel 2 -->
+            <div class="level-card locked" id="levelCard2" data-level="2">
+              <div class="level-badge">Nivel 2</div>
+              <div class="level-video-container">
+                <video class="level-video" id="levelVideo2" loop muted playsinline>
+                  <source src="./videos/GatoNivel2.mp4" type="video/mp4">
+                </video>
+                <div class="locked-overlay">🔒</div>
+              </div>
+              <button class="play-video-btn" onclick="playLevelVideo(2)" style="display: none;">▶️ Reproducir</button>
+              <p class="level-label">Pequeño</p>
+              <span class="level-status">🔒 30 pts para desbloquear</span>
+            </div>
+            
+            <!-- Nivel 3 -->
+            <div class="level-card locked" id="levelCard3" data-level="3">
+              <div class="level-badge">Nivel 3</div>
+              <div class="level-video-container">
+                <video class="level-video" id="levelVideo3" loop muted playsinline>
+                  <source src="./videos/GatoNivel3.mp4" type="video/mp4">
+                </video>
+                <div class="locked-overlay">🔒</div>
+              </div>
+              <button class="play-video-btn" onclick="playLevelVideo(3)" style="display: none;">▶️ Reproducir</button>
+              <p class="level-label">Joven</p>
+              <span class="level-status">🔒 60 pts para desbloquear</span>
+            </div>
+            
+            <!-- Nivel 4 -->
+            <div class="level-card locked" id="levelCard4" data-level="4">
+              <div class="level-badge">Nivel 4</div>
+              <div class="level-video-container">
+                <video class="level-video" id="levelVideo4" loop muted playsinline>
+                  <source src="./videos/GatoNivel4.mp4" type="video/mp4">
+                </video>
+                <div class="locked-overlay">🔒</div>
+              </div>
+              <button class="play-video-btn" onclick="playLevelVideo(4)" style="display: none;">▶️ Reproducir</button>
+              <p class="level-label">Adulto</p>
+              <span class="level-status">🔒 90 pts para desbloquear</span>
+            </div>
+            
+            <!-- Nivel 5 -->
+            <div class="level-card locked" id="levelCard5" data-level="5">
+              <div class="level-badge">Nivel 5</div>
+              <div class="level-video-container">
+                <video class="level-video" id="levelVideo5" loop muted playsinline>
+                  <source src="./videos/GatoNivel5.mp4" type="video/mp4">
+                </video>
+                <div class="locked-overlay">🔒</div>
+              </div>
+              <button class="play-video-btn" onclick="playLevelVideo(5)" style="display: none;">▶️ Reproducir</button>
+              <p class="level-label">Máximo</p>
+              <span class="level-status">🔒 120 pts para desbloquear</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Reacciones -->
+        <div class="mascota-card">
+          <div class="profile-card-header">
+            <h3>😺 Reacciones</h3>
+          </div>
+          <div class="reactions-grid">
+            <div class="reaction-card">
+              <video class="reaction-video" id="happyVideo" loop muted playsinline>
+                <source src="./videos/GatoFeliz.mp4" type="video/mp4">
+              </video>
+              <button class="play-reaction-btn" onclick="playReactionVideo('happy')">▶️ Feliz</button>
+            </div>
+            <div class="reaction-card">
+              <video class="reaction-video" id="sadVideo" loop muted playsinline>
+                <source src="./videos/GatoTriste.mp4" type="video/mp4">
+              </video>
+              <button class="play-reaction-btn" onclick="playReactionVideo('sad')">▶️ Triste</button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -107,10 +321,48 @@
 
     <!-- Tab ARCHIVO -->
     <section class="tab-content" id="tab-archivo">
-      <div class="card">
-        <h2>📁 Archivo</h2>
-        <div id="archiveList">
-          <p>Próximamente: Historial y archivos guardados</p>
+      <div class="archivo-container">
+        <div class="archivo-header-card">
+          <div class="archivo-header">
+            <h2>📁 Historial de Cálculos</h2>
+            <p>Aquí se guardan todos los cálculos que realizas en las calculadoras</p>
+          </div>
+        </div>
+        
+        <!-- Filtros y acciones -->
+        <div class="archivo-toolbar">
+          <div class="archivo-filters">
+            <select id="archivoFilter" onchange="filterArchivo()">
+              <option value="all">📊 Todas las calculadoras</option>
+              <option value="margenGanancia">Margen de Ganancia</option>
+              <option value="precioVenta">Precio de Venta Unitario</option>
+              <option value="puntoEquilibrio">Punto de Equilibrio</option>
+              <option value="masivo">Cálculo Masivo</option>
+            </select>
+            <select id="archivoDateFilter" onchange="filterArchivo()">
+              <option value="all">📅 Todas las fechas</option>
+              <option value="today">Hoy</option>
+              <option value="week">Esta semana</option>
+              <option value="month">Este mes</option>
+            </select>
+          </div>
+          <div class="archivo-actions">
+            <button class="btn-export" onclick="exportarTodoPDF()">
+              📄 Exportar Todo a PDF
+            </button>
+            <button class="btn-clear" onclick="limpiarHistorial()">
+              🗑️ Limpiar Historial
+            </button>
+          </div>
+        </div>
+        
+        <!-- Lista de registros -->
+        <div id="archivoList" class="archivo-list">
+          <div class="archivo-empty">
+            <span class="empty-icon">📋</span>
+            <p>No tienes cálculos guardados aún</p>
+            <small>Cuando uses las calculadoras, tus resultados aparecerán aquí</small>
+          </div>
         </div>
       </div>
     </section>
@@ -259,10 +511,16 @@
     </div>
   </div>
 
-  <!-- Librería para leer archivos Excel -->
-  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+  <!-- Supabase PRIMERO (requerido para autenticación) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./js/supabaseClient.js"></script>
+  
+  <!-- Librerías secundarias (cargan en paralelo después) -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js" defer></script>
+  
+  <!-- App principal -->
   <script src="./js/app.js"></script>
 </body>
 </html>

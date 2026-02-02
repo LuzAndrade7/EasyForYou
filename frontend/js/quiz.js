@@ -702,6 +702,11 @@ const QuizSystem = {
     const maxPoints = this.currentQuiz.maxPoints;
     const percentage = Math.round((this.totalScore / maxPoints) * 100);
     
+    // Incrementar contador de quizzes completados
+    const quizzesCompleted = parseInt(localStorage.getItem('quizzesCompleted') || '0');
+    localStorage.setItem('quizzesCompleted', quizzesCompleted + 1);
+    console.log('Quizzes completados:', quizzesCompleted + 1);
+    
     // Reproducir sonido de completar
     this.playSound('complete');
     

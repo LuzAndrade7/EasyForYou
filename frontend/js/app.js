@@ -33,25 +33,21 @@ async function loadUser() {
     return;
   }
 
-  // Verificar si tiene mascota
-  const { data: avatar } = await sb
-    .from("avatars")
-    .select("animal_type, pet_name, level, xp")
-    .eq("user_id", user.id)
-    .single();
+  // Cargar avatar y perfil en PARALELO para mayor velocidad
+  const [avatarResult, profileResult] = await Promise.all([
+    sb.from("avatars").select("animal_type, pet_name, level, xp").eq("user_id", user.id).single(),
+    sb.from("profiles").select("name, email, created_at").eq("id", user.id).single()
+  ]);
+
+  const avatar = avatarResult.data;
+  const profile = profileResult.data;
+  const e2 = profileResult.error;
 
   if (!avatar || !avatar.pet_name) {
     // No tiene mascota, ir a selección
     window.location.href = "./pet-selection.html";
     return;
   }
-
-  // Traer perfil
-  const { data: profile, error: e2 } = await sb
-    .from("profiles")
-    .select("name, email")
-    .eq("id", user.id)
-    .single();
 
   if (e2) {
     console.error(e2);
@@ -60,31 +56,914 @@ async function loadUser() {
     welcome.textContent = `Hola, ${profile.name} `;
   }
 
-  // Cargar información del usuario
-  const userInfo = document.getElementById("userInfo");
-  userInfo.innerHTML = `
-    <p><strong>Nombre:</strong> ${profile?.name || "N/A"}</p>
-    <p><strong>Correo:</strong> ${profile?.email || user.email}</p>
-  `;
+  // Guardar datos globalmente para edición
+  window.currentUserData = {
+    userId: user.id,
+    profile: profile,
+    avatar: avatar
+  };
 
-  // Cargar información de la mascota
-  const petInfo = document.getElementById("petInfo");
-  petInfo.innerHTML = `
-    <div class="pet-display">
-      <img src="${animalImages[avatar.animal_type]}" alt="${animalNames[avatar.animal_type]}" class="pet-avatar" />
-      <div class="pet-details">
-        <h3>${avatar.pet_name}</h3>
-        <p><strong>Tipo:</strong> ${animalNames[avatar.animal_type]}</p>
-        <p><strong>Nivel:</strong> ${avatar.level}</p>
-        <p><strong>Puntos:</strong> ${avatar.xp} pts</p>
-      </div>
-    </div>
+  // Cargar perfil mejorado
+  loadUserProfile(profile, avatar, user);
+  
+  // Cargar pestaña de mascota
+  loadMascotaTab(avatar);
+  
+  // Cargar historial de cálculos
+  loadArchivoHistorial();
+}
+
+// ========================================
+// FUNCIONES PARA PERFIL DE USUARIO
+// ========================================
+
+function loadUserProfile(profile, avatar, user) {
+  const name = profile?.name || 'Usuario';
+  
+  // Imagen del animal como avatar
+  const animalImg = document.getElementById('profileAnimalImg');
+  if (animalImg && avatar) {
+    animalImg.src = animalImages[avatar.animal_type];
+    animalImg.alt = animalNames[avatar.animal_type];
+  }
+  
+  // Actualizar header del perfil
+  const displayName = document.getElementById('profileDisplayName');
+  const emailEl = document.getElementById('profileEmail');
+  const levelBadge = document.getElementById('profileLevelBadge');
+  const pointsEl = document.getElementById('profilePoints');
+  
+  if (displayName) displayName.textContent = name;
+  if (emailEl) emailEl.textContent = profile?.email || user.email;
+  if (levelBadge) levelBadge.textContent = `Nivel ${avatar?.level || 1}`;
+  if (pointsEl) pointsEl.textContent = avatar?.xp || 0;
+  
+  // Cargar estadísticas desde localStorage
+  const calcsCount = JSON.parse(localStorage.getItem('calculosHistorial') || '[]').length;
+  const profileCalcs = document.getElementById('profileCalcs');
+  const profileQuizzes = document.getElementById('profileQuizzes');
+  if (profileCalcs) profileCalcs.textContent = calcsCount;
+  if (profileQuizzes) profileQuizzes.textContent = localStorage.getItem('quizzesCompleted') || 0;
+  
+  // Info display - con verificaciones de null
+  const infoName = document.getElementById('infoName');
+  const infoEmail = document.getElementById('infoEmail');
+  const infoJoinDate = document.getElementById('infoJoinDate');
+  
+  if (infoName) infoName.textContent = name;
+  if (infoEmail) infoEmail.textContent = profile?.email || user.email;
+  
+  // Fecha de registro
+  if (infoJoinDate) {
+    const joinDate = profile?.created_at ? new Date(profile.created_at) : new Date();
+    infoJoinDate.textContent = joinDate.toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+  
+  // Campos editables - con verificaciones
+  const editName = document.getElementById('editName');
+  const editEmail = document.getElementById('editEmail');
+  if (editName) editName.value = name;
+  if (editEmail) editEmail.value = profile?.email || user.email;
+  
+  // Progreso de quizzes
+  updateQuizProgressBar();
+}
+
+function updateQuizProgressBar() {
+  const quizzesCompleted = parseInt(localStorage.getItem('quizzesCompleted') || '0');
+  const maxQuizzes = 6; // 6 temas
+  const percentage = Math.min((quizzesCompleted / maxQuizzes) * 100, 100);
+  
+  const progressBar = document.getElementById('quizzesProgressBar');
+  const progressText = document.getElementById('quizzesProgressText');
+  
+  if (progressBar) {
+    progressBar.style.width = `${percentage}%`;
+  }
+  if (progressText) {
+    progressText.textContent = `${quizzesCompleted}/${maxQuizzes} completados`;
+  }
+}
+
+// ========================================
+// FUNCIONES PARA PESTAÑA MASCOTA
+// ========================================
+
+function loadMascotaTab(avatar) {
+  if (!avatar) return;
+  
+  // Header de mascota
+  const mascotaAvatar = document.getElementById('mascotaAvatarImg');
+  if (mascotaAvatar) {
+    mascotaAvatar.src = animalImages[avatar.animal_type];
+    mascotaAvatar.alt = animalNames[avatar.animal_type];
+  }
+  
+  const mascotaName = document.getElementById('mascotaName');
+  const mascotaType = document.getElementById('mascotaType');
+  const mascotaLevel = document.getElementById('mascotaLevel');
+  
+  if (mascotaName) mascotaName.textContent = avatar.pet_name || 'Mi Mascota';
+  if (mascotaType) mascotaType.textContent = animalNames[avatar.animal_type];
+  if (mascotaLevel) mascotaLevel.textContent = avatar.level;
+  
+  // Barra de XP - con verificaciones
+  const xpNeeded = avatar.level * 30;
+  const xpProgress = (avatar.xp / xpNeeded) * 100;
+  const mascotaXpBar = document.getElementById('mascotaXpBar');
+  const mascotaXpText = document.getElementById('mascotaXpText');
+  if (mascotaXpBar) mascotaXpBar.style.width = `${Math.min(xpProgress, 100)}%`;
+  if (mascotaXpText) mascotaXpText.textContent = `${avatar.xp}/${xpNeeded} XP`;
+  
+  // Campo de edición de nombre
+  const mascotaEditName = document.getElementById('mascotaEditName');
+  if (mascotaEditName) mascotaEditName.value = avatar.pet_name || '';
+  
+  // Actualizar tarjetas de nivel
+  updateLevelCards(avatar.level);
+  
+  // Configurar videos de reacciones
+  setupReactionVideos();
+}
+
+function updateLevelCards(currentLevel) {
+  const levelRequirements = [0, 30, 60, 90, 120]; // XP necesarios para cada nivel
+  
+  for (let level = 1; level <= 5; level++) {
+    const card = document.getElementById(`levelCard${level}`);
+    if (!card) continue;
+    
+    // Limpiar clases previas
+    card.classList.remove('unlocked', 'current', 'locked');
+    
+    // Configurar overlay y botón
+    const overlay = card.querySelector('.locked-overlay');
+    const playBtn = card.querySelector('.play-video-btn');
+    const statusEl = card.querySelector('.level-status');
+    
+    if (level < currentLevel) {
+      // Nivel completado
+      card.classList.add('unlocked');
+      if (overlay) overlay.style.display = 'none';
+      if (playBtn) playBtn.style.display = 'flex';
+      if (statusEl) statusEl.textContent = '✅ Desbloqueado';
+    } else if (level === currentLevel) {
+      // Nivel actual
+      card.classList.add('current');
+      if (overlay) overlay.style.display = 'none';
+      if (playBtn) playBtn.style.display = 'flex';
+      if (statusEl) statusEl.textContent = '⭐ Nivel Actual';
+    } else {
+      // Nivel bloqueado
+      card.classList.add('locked');
+      if (overlay) overlay.style.display = 'flex';
+      if (playBtn) playBtn.style.display = 'none';
+      if (statusEl) statusEl.textContent = `🔒 ${levelRequirements[level - 1]} pts para desbloquear`;
+    }
+  }
+}
+
+function playLevelVideo(level) {
+  const currentLevel = window.currentUserData?.avatar?.level || 1;
+  
+  if (level > currentLevel) {
+    showToast('🔒 Necesitas alcanzar este nivel primero');
+    return;
+  }
+  
+  const video = document.getElementById(`levelVideo${level}`);
+  const card = document.getElementById(`levelCard${level}`);
+  const playBtn = card?.querySelector('.play-video-btn');
+  if (!video) return;
+  
+  // Pausar otros videos y resetear sus botones
+  for (let i = 1; i <= 5; i++) {
+    if (i !== level) {
+      const otherVideo = document.getElementById(`levelVideo${i}`);
+      const otherCard = document.getElementById(`levelCard${i}`);
+      const otherBtn = otherCard?.querySelector('.play-video-btn');
+      if (otherVideo) {
+        otherVideo.pause();
+        otherVideo.currentTime = 0;
+      }
+      if (otherBtn) {
+        otherBtn.textContent = 'Reproducir';
+        otherBtn.classList.remove('playing');
+      }
+    }
+  }
+  
+  // Pausar videos de reacciones
+  const happyVideo = document.getElementById('happyVideo');
+  const sadVideo = document.getElementById('sadVideo');
+  if (happyVideo) {
+    happyVideo.pause();
+    happyVideo.currentTime = 0;
+  }
+  if (sadVideo) {
+    sadVideo.pause();
+    sadVideo.currentTime = 0;
+  }
+  // Resetear botones de reacciones
+  document.querySelectorAll('.play-reaction-btn').forEach(btn => {
+    btn.classList.remove('playing');
+    btn.textContent = btn.textContent.includes('Feliz') ? '▶️ Feliz' : '▶️ Triste';
+  });
+  
+  // Reproducir o pausar
+  if (video.paused) {
+    video.play();
+    if (playBtn) {
+      playBtn.textContent = '⏸️ Pausar';
+      playBtn.classList.add('playing');
+    }
+  } else {
+    video.pause();
+    if (playBtn) {
+      playBtn.textContent = '▶️ Reproducir';
+      playBtn.classList.remove('playing');
+    }
+  }
+}
+
+function setupReactionVideos() {
+  // Los botones de reacción ya están configurados en el HTML
+}
+
+function playReactionVideo(type) {
+  const happyVideo = document.getElementById('happyVideo');
+  const sadVideo = document.getElementById('sadVideo');
+  
+  // Pausar videos de niveles y resetear sus botones
+  for (let i = 1; i <= 5; i++) {
+    const levelVideo = document.getElementById(`levelVideo${i}`);
+    const levelCard = document.getElementById(`levelCard${i}`);
+    const levelBtn = levelCard?.querySelector('.play-video-btn');
+    if (levelVideo) {
+      levelVideo.pause();
+      levelVideo.currentTime = 0;
+    }
+    if (levelBtn) {
+      levelBtn.textContent = '▶️ Reproducir';
+      levelBtn.classList.remove('playing');
+    }
+  }
+  
+  const happyBtn = document.querySelector('.reaction-card:first-child .play-reaction-btn');
+  const sadBtn = document.querySelector('.reaction-card:last-child .play-reaction-btn');
+  
+  if (type === 'happy') {
+    if (sadVideo) {
+      sadVideo.pause();
+      sadVideo.currentTime = 0;
+    }
+    if (sadBtn) {
+      sadBtn.classList.remove('playing');
+      sadBtn.textContent = '▶️ Triste';
+    }
+    
+    if (happyVideo) {
+      if (happyVideo.paused) {
+        happyVideo.play();
+        if (happyBtn) {
+          happyBtn.classList.add('playing');
+          happyBtn.textContent = '⏸️ Feliz';
+        }
+      } else {
+        happyVideo.pause();
+        if (happyBtn) {
+          happyBtn.classList.remove('playing');
+          happyBtn.textContent = '▶️ Feliz';
+        }
+      }
+    }
+  } else if (type === 'sad') {
+    if (happyVideo) {
+      happyVideo.pause();
+      happyVideo.currentTime = 0;
+    }
+    if (happyBtn) {
+      happyBtn.classList.remove('playing');
+      happyBtn.textContent = '▶️ Feliz';
+    }
+    
+    if (sadVideo) {
+      if (sadVideo.paused) {
+        sadVideo.play();
+        if (sadBtn) {
+          sadBtn.classList.add('playing');
+          sadBtn.textContent = '⏸️ Triste';
+        }
+      } else {
+        sadVideo.pause();
+        if (sadBtn) {
+          sadBtn.classList.remove('playing');
+          sadBtn.textContent = '▶️ Triste';
+        }
+      }
+    }
+  }
+}
+
+// Toggle para habilitar edición del nombre de mascota
+function toggleEditMascotaName() {
+  const input = document.getElementById('mascotaEditName');
+  const editBtn = document.getElementById('btnEditMascotaName');
+  const saveBtn = document.getElementById('btnSaveMascotaName');
+  
+  // Habilitar input
+  input.disabled = false;
+  input.focus();
+  
+  // Cambiar botones
+  editBtn.style.display = 'none';
+  saveBtn.style.display = 'inline-flex';
+  
+  // Sonido de click
+  playUISound('click');
+}
+
+async function saveMascotaName() {
+  const input = document.getElementById('mascotaEditName');
+  const newName = input.value.trim();
+  
+  if (!newName) {
+    showToast('❌ El nombre no puede estar vacío');
+    playUISound('error');
+    return;
+  }
+  
+  const data = window.currentUserData;
+  
+  try {
+    const { error } = await sb
+      .from('avatars')
+      .update({ pet_name: newName })
+      .eq('user_id', data.userId);
+    
+    if (error) throw error;
+    
+    // Actualizar datos locales
+    data.avatar.pet_name = newName;
+    
+    // Actualizar UI
+    document.getElementById('mascotaName').textContent = newName;
+    
+    // Deshabilitar input y cambiar botones
+    input.disabled = true;
+    document.getElementById('btnEditMascotaName').style.display = 'inline-flex';
+    document.getElementById('btnSaveMascotaName').style.display = 'none';
+    
+    showToast('✅ Nombre de mascota actualizado');
+    playUISound('success');
+    
+  } catch (error) {
+    console.error('Error guardando nombre:', error);
+    showToast('❌ Error al guardar el nombre');
+    playUISound('error');
+  }
+}
+
+// Sistema de sonidos UI
+function playUISound(type) {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    switch(type) {
+      case 'click':
+        oscillator.frequency.value = 800;
+        gainNode.gain.value = 0.1;
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.05);
+        break;
+      case 'success':
+        oscillator.frequency.value = 523.25; // C5
+        gainNode.gain.value = 0.15;
+        oscillator.start();
+        setTimeout(() => oscillator.frequency.value = 659.25, 100); // E5
+        setTimeout(() => oscillator.frequency.value = 783.99, 200); // G5
+        oscillator.stop(audioContext.currentTime + 0.3);
+        break;
+      case 'error':
+        oscillator.frequency.value = 200;
+        gainNode.gain.value = 0.15;
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.2);
+        break;
+      case 'tab':
+        oscillator.frequency.value = 600;
+        gainNode.gain.value = 0.08;
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.03);
+        break;
+    }
+  } catch (e) {
+    // Silenciar errores de audio
+  }
+}
+
+function toggleEditProfile() {
+  const displayDiv = document.getElementById('profileInfoDisplay');
+  const editDiv = document.getElementById('profileInfoEdit');
+  const editBtn = document.getElementById('editProfileBtn');
+  
+  if (editDiv.style.display === 'none') {
+    displayDiv.style.display = 'none';
+    editDiv.style.display = 'block';
+    editBtn.textContent = '❌ Cancelar';
+    editBtn.classList.add('editing');
+  } else {
+    displayDiv.style.display = 'block';
+    editDiv.style.display = 'none';
+    editBtn.textContent = '✏️ Editar';
+    editBtn.classList.remove('editing');
+  }
+}
+
+function cancelEditProfile() {
+  toggleEditProfile();
+  // Restaurar valores originales
+  const data = window.currentUserData;
+  document.getElementById('editName').value = data.profile?.name || '';
+}
+
+async function saveProfile() {
+  const newName = document.getElementById('editName').value.trim();
+  
+  if (!newName) {
+    alert('El nombre no puede estar vacío');
+    return;
+  }
+  
+  const data = window.currentUserData;
+  
+  try {
+    // Actualizar nombre en profiles
+    const { error: profileError } = await sb
+      .from('profiles')
+      .update({ name: newName })
+      .eq('id', data.userId);
+    
+    if (profileError) throw profileError;
+    
+    // Actualizar datos locales
+    data.profile.name = newName;
+    
+    // Recargar UI
+    loadUserProfile(data.profile, data.avatar, { email: data.profile.email });
+    document.getElementById('welcome').textContent = `Hola, ${newName} `;
+    
+    // Cerrar edición
+    toggleEditProfile();
+    
+    // Mensaje de éxito
+    showToast('✅ Perfil actualizado correctamente');
+    
+  } catch (error) {
+    console.error('Error guardando perfil:', error);
+    alert('Error al guardar los cambios. Intenta de nuevo.');
+  }
+}
+
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.className = 'toast-notification';
+  toast.textContent = message;
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    z-index: 100000;
+    animation: fadeIn 0.3s ease;
   `;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+// ========================================
+// FUNCIONES PARA ARCHIVO/HISTORIAL
+// ========================================
+
+function getCalculosHistorial() {
+  return JSON.parse(localStorage.getItem('calculosHistorial') || '[]');
+}
+
+function saveCalculo(tipo, inputs, resultado) {
+  const historial = getCalculosHistorial();
+  const nuevoCalculo = {
+    id: Date.now(),
+    tipo: tipo,
+    fecha: new Date().toISOString(),
+    inputs: inputs,
+    resultado: resultado
+  };
+  historial.unshift(nuevoCalculo); // Agregar al inicio
+  localStorage.setItem('calculosHistorial', JSON.stringify(historial));
+  
+  // Actualizar contador en perfil
+  const calcsCount = historial.length;
+  const profileCalcs = document.getElementById('profileCalcs');
+  if (profileCalcs) profileCalcs.textContent = calcsCount;
+  
+  // Recargar lista si está visible
+  loadArchivoHistorial();
+}
+
+function loadArchivoHistorial() {
+  const historial = getCalculosHistorial();
+  const container = document.getElementById('archivoList');
+  
+  if (!container) return;
+  
+  if (historial.length === 0) {
+    container.innerHTML = `
+      <div class="archivo-empty">
+        <span class="empty-icon">📋</span>
+        <p>No tienes cálculos guardados aún</p>
+        <small>Cuando uses las calculadoras, tus resultados aparecerán aquí</small>
+      </div>
+    `;
+    return;
+  }
+  
+  const tipoNombres = {
+    margenGanancia: 'Margen de Ganancia',
+    precioVenta: 'Precio de Venta Unitario',
+    puntoEquilibrio: 'Punto de Equilibrio',
+    masivo: 'Cálculo Masivo'
+  };
+  
+  let html = '';
+  historial.forEach(calc => {
+    const fecha = new Date(calc.fecha);
+    const fechaFormateada = fecha.toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    
+    html += `
+      <div class="archivo-item" data-id="${calc.id}" data-tipo="${calc.tipo}">
+        <div class="archivo-item-info">
+          <div class="archivo-item-header">
+            <span class="archivo-tipo-badge ${calc.tipo}">${tipoNombres[calc.tipo] || calc.tipo}</span>
+            <span class="archivo-fecha">📅 ${fechaFormateada}</span>
+          </div>
+          <div class="archivo-item-result">
+            ${formatResultadoArchivo(calc)}
+          </div>
+        </div>
+        <div class="archivo-item-actions">
+          <button class="btn-archivo-action pdf" onclick="exportarCalculoPDF(${calc.id})">📄 PDF</button>
+          <button class="btn-archivo-action delete" onclick="eliminarCalculo(${calc.id})">🗑️</button>
+        </div>
+      </div>
+    `;
+  });
+  
+  container.innerHTML = html;
+}
+
+function formatResultadoArchivo(calc) {
+  switch(calc.tipo) {
+    case 'margenGanancia':
+      return `
+        <strong>Margen:</strong> ${calc.resultado.margen}% | 
+        <strong>Ganancia:</strong> $${calc.resultado.ganancia} | 
+        Precio: $${calc.inputs.precioVenta}, Costo: $${calc.inputs.costo}
+      `;
+    case 'precioVenta':
+      return `
+        <strong>Precio de Venta:</strong> $${calc.resultado.precioVenta} | 
+        <strong>Ganancia/U:</strong> $${calc.resultado.gananciaUnitaria} | 
+        Costo Total: $${calc.inputs.costoTotal}, Unidades: ${calc.inputs.unidades}
+      `;
+    case 'puntoEquilibrio':
+      return `
+        <strong>Punto de Equilibrio:</strong> ${calc.resultado.unidades} unidades | 
+        <strong>Ventas necesarias:</strong> $${calc.resultado.ventasEquilibrio}
+      `;
+    case 'masivo':
+      return `
+        <strong>Productos calculados:</strong> ${calc.resultado.totalProductos} | 
+        <strong>Ganancia estimada:</strong> $${calc.resultado.gananciaTotal}
+      `;
+    default:
+      return JSON.stringify(calc.resultado);
+  }
+}
+
+function filterArchivo() {
+  const tipoFilter = document.getElementById('archivoFilter').value;
+  const dateFilter = document.getElementById('archivoDateFilter').value;
+  const items = document.querySelectorAll('.archivo-item');
+  
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+  
+  items.forEach(item => {
+    let showTipo = tipoFilter === 'all' || item.dataset.tipo === tipoFilter;
+    let showDate = true;
+    
+    if (dateFilter !== 'all') {
+      const historial = getCalculosHistorial();
+      const calc = historial.find(c => c.id == item.dataset.id);
+      if (calc) {
+        const calcDate = new Date(calc.fecha);
+        switch(dateFilter) {
+          case 'today':
+            showDate = calcDate >= today;
+            break;
+          case 'week':
+            showDate = calcDate >= weekAgo;
+            break;
+          case 'month':
+            showDate = calcDate >= monthAgo;
+            break;
+        }
+      }
+    }
+    
+    item.style.display = (showTipo && showDate) ? 'flex' : 'none';
+  });
+}
+
+function eliminarCalculo(id) {
+  if (!confirm('¿Estás seguro de eliminar este cálculo?')) return;
+  
+  let historial = getCalculosHistorial();
+  historial = historial.filter(c => c.id !== id);
+  localStorage.setItem('calculosHistorial', JSON.stringify(historial));
+  loadArchivoHistorial();
+  showToast('🗑️ Cálculo eliminado');
+}
+
+function limpiarHistorial() {
+  if (!confirm('¿Estás seguro de eliminar TODO el historial? Esta acción no se puede deshacer.')) return;
+  
+  localStorage.setItem('calculosHistorial', '[]');
+  loadArchivoHistorial();
+  showToast('🗑️ Historial limpiado');
+}
+
+// ========================================
+// EXPORTAR A PDF
+// ========================================
+
+function exportarCalculoPDF(id) {
+  const historial = getCalculosHistorial();
+  const calc = historial.find(c => c.id === id);
+  if (!calc) return;
+  
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  const tipoNombres = {
+    margenGanancia: 'Margen de Ganancia',
+    precioVenta: 'Precio de Venta Unitario',
+    puntoEquilibrio: 'Punto de Equilibrio',
+    masivo: 'Cálculo Masivo'
+  };
+  
+  // Encabezado
+  doc.setFillColor(8, 40, 219);
+  doc.rect(0, 0, 210, 40, 'F');
+  
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(24);
+  doc.text('EasyForYou', 20, 25);
+  
+  doc.setFontSize(12);
+  doc.text('Reporte de Cálculo Financiero', 120, 25);
+  
+  // Info del documento
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(10);
+  const fecha = new Date(calc.fecha).toLocaleDateString('es-ES', {
+    day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+  });
+  doc.text(`Fecha: ${fecha}`, 20, 55);
+  doc.text(`Usuario: ${window.currentUserData?.profile?.name || 'Usuario'}`, 20, 62);
+  
+  // Título del cálculo
+  doc.setFontSize(16);
+  doc.setTextColor(8, 40, 219);
+  doc.text(tipoNombres[calc.tipo] || calc.tipo, 20, 80);
+  
+  // Línea separadora
+  doc.setDrawColor(8, 40, 219);
+  doc.line(20, 85, 190, 85);
+  
+  // Contenido según tipo
+  doc.setFontSize(11);
+  doc.setTextColor(0, 0, 0);
+  let y = 100;
+  
+  switch(calc.tipo) {
+    case 'margenGanancia':
+      doc.text('DATOS INGRESADOS:', 20, y);
+      y += 10;
+      doc.text(`• Precio de Venta: $${calc.inputs.precioVenta}`, 25, y);
+      y += 7;
+      doc.text(`• Costo: $${calc.inputs.costo}`, 25, y);
+      y += 15;
+      
+      doc.setFontSize(12);
+      doc.setTextColor(8, 40, 219);
+      doc.text('RESULTADOS:', 20, y);
+      y += 10;
+      doc.setFontSize(14);
+      doc.text(`Margen de Ganancia: ${calc.resultado.margen}%`, 25, y);
+      y += 8;
+      doc.text(`Ganancia por Unidad: $${calc.resultado.ganancia}`, 25, y);
+      break;
+      
+    case 'precioVenta':
+      doc.text('DATOS INGRESADOS:', 20, y);
+      y += 10;
+      doc.text(`• Costo Total de Producción: $${calc.inputs.costoTotal}`, 25, y);
+      y += 7;
+      doc.text(`• Unidades Producidas: ${calc.inputs.unidades}`, 25, y);
+      y += 7;
+      doc.text(`• Margen de Ganancia Deseado: ${calc.inputs.margen}%`, 25, y);
+      y += 15;
+      
+      doc.setFontSize(12);
+      doc.setTextColor(8, 40, 219);
+      doc.text('RESULTADOS:', 20, y);
+      y += 10;
+      doc.setFontSize(14);
+      doc.text(`Costo Unitario: $${calc.resultado.costoUnitario}`, 25, y);
+      y += 8;
+      doc.text(`Precio de Venta Sugerido: $${calc.resultado.precioVenta}`, 25, y);
+      y += 8;
+      doc.text(`Ganancia por Unidad: $${calc.resultado.gananciaUnitaria}`, 25, y);
+      break;
+      
+    case 'puntoEquilibrio':
+      doc.text('DATOS INGRESADOS:', 20, y);
+      y += 10;
+      doc.text(`• Costos Fijos: $${calc.inputs.costosFijos}`, 25, y);
+      y += 7;
+      doc.text(`• Precio de Venta Unitario: $${calc.inputs.precioVenta}`, 25, y);
+      y += 7;
+      doc.text(`• Costo Variable Unitario: $${calc.inputs.costoVariable}`, 25, y);
+      y += 15;
+      
+      doc.setFontSize(12);
+      doc.setTextColor(8, 40, 219);
+      doc.text('RESULTADOS:', 20, y);
+      y += 10;
+      doc.setFontSize(14);
+      doc.text(`Punto de Equilibrio: ${calc.resultado.unidades} unidades`, 25, y);
+      y += 8;
+      doc.text(`Ventas Necesarias: $${calc.resultado.ventasEquilibrio}`, 25, y);
+      y += 8;
+      doc.text(`Margen de Contribución: $${calc.resultado.margenContribucion}`, 25, y);
+      break;
+      
+    case 'masivo':
+      doc.text('RESUMEN DEL CÁLCULO MASIVO:', 20, y);
+      y += 10;
+      doc.text(`• Total de Productos: ${calc.resultado.totalProductos}`, 25, y);
+      y += 7;
+      doc.text(`• Total de Unidades: ${calc.resultado.totalUnidades}`, 25, y);
+      y += 7;
+      doc.text(`• Inversión Total: $${calc.resultado.inversionTotal}`, 25, y);
+      y += 7;
+      doc.text(`• Ganancia Estimada Total: $${calc.resultado.gananciaTotal}`, 25, y);
+      
+      // Tabla de productos si existe
+      if (calc.resultado.productos && calc.resultado.productos.length > 0) {
+        y += 15;
+        doc.autoTable({
+          startY: y,
+          head: [['N°', 'Producto', 'Costo U.', 'Precio Venta', 'Ganancia/U']],
+          body: calc.resultado.productos.slice(0, 20).map(p => [
+            p.numero,
+            p.producto.substring(0, 20),
+            `$${p.costoUnitario.toFixed(2)}`,
+            `$${p.precioVenta.toFixed(2)}`,
+            `$${p.gananciaUnitaria.toFixed(2)}`
+          ]),
+          theme: 'grid',
+          headStyles: { fillColor: [8, 40, 219] }
+        });
+      }
+      break;
+  }
+  
+  // Pie de página
+  doc.setFontSize(9);
+  doc.setTextColor(150, 150, 150);
+  doc.text('Generado por EasyForYou - Herramienta de Educación Financiera', 105, 280, { align: 'center' });
+  
+  // Descargar
+  const nombreArchivo = `EasyForYou_${tipoNombres[calc.tipo].replace(/ /g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
+  doc.save(nombreArchivo);
+  
+  showToast('📄 PDF descargado');
+}
+
+function exportarTodoPDF() {
+  const historial = getCalculosHistorial();
+  if (historial.length === 0) {
+    alert('No hay cálculos para exportar');
+    return;
+  }
+  
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // Encabezado
+  doc.setFillColor(8, 40, 219);
+  doc.rect(0, 0, 210, 40, 'F');
+  
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(24);
+  doc.text('EasyForYou', 20, 25);
+  
+  doc.setFontSize(12);
+  doc.text('Historial Completo de Cálculos', 120, 25);
+  
+  // Info
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(10);
+  doc.text(`Usuario: ${window.currentUserData?.profile?.name || 'Usuario'}`, 20, 55);
+  doc.text(`Fecha de exportación: ${new Date().toLocaleDateString('es-ES')}`, 20, 62);
+  doc.text(`Total de cálculos: ${historial.length}`, 20, 69);
+  
+  // Tabla resumen
+  const tipoNombres = {
+    margenGanancia: 'Margen de Ganancia',
+    precioVenta: 'Precio de Venta',
+    puntoEquilibrio: 'Punto de Equilibrio',
+    masivo: 'Cálculo Masivo'
+  };
+  
+  const tableData = historial.map(calc => {
+    const fecha = new Date(calc.fecha).toLocaleDateString('es-ES');
+    let resultado = '';
+    
+    switch(calc.tipo) {
+      case 'margenGanancia':
+        resultado = `Margen: ${calc.resultado.margen}%`;
+        break;
+      case 'precioVenta':
+        resultado = `Precio: $${calc.resultado.precioVenta}`;
+        break;
+      case 'puntoEquilibrio':
+        resultado = `${calc.resultado.unidades} unidades`;
+        break;
+      case 'masivo':
+        resultado = `${calc.resultado.totalProductos} productos`;
+        break;
+    }
+    
+    return [fecha, tipoNombres[calc.tipo], resultado];
+  });
+  
+  doc.autoTable({
+    startY: 80,
+    head: [['Fecha', 'Tipo de Cálculo', 'Resultado Principal']],
+    body: tableData,
+    theme: 'striped',
+    headStyles: { fillColor: [8, 40, 219] }
+  });
+  
+  // Pie de página
+  doc.setFontSize(9);
+  doc.setTextColor(150, 150, 150);
+  doc.text('Generado por EasyForYou - Herramienta de Educación Financiera', 105, 280, { align: 'center' });
+  
+  doc.save(`EasyForYou_Historial_${new Date().toISOString().slice(0,10)}.pdf`);
+  showToast('📄 Historial exportado a PDF');
 }
 
 // Manejar pestañas
 tabBtns.forEach(btn => {
   btn.addEventListener("click", () => {
+    // Sonido de tab
+    playUISound('tab');
+    
     // Quitar active de todos
     tabBtns.forEach(b => b.classList.remove("active"));
     tabContents.forEach(c => c.classList.remove("active"));
@@ -98,6 +977,7 @@ tabBtns.forEach(btn => {
 
 // Logout
 logoutBtn.addEventListener("click", async () => {
+  playUISound('click');
   await sb.auth.signOut();
   window.location.href = "../index.html";
 });
@@ -122,6 +1002,16 @@ function openTopicModal(topicUrl) {
   
   document.body.appendChild(modal);
   document.body.style.overflow = 'hidden';
+  
+  // Listener para cerrar con ESC
+  document.addEventListener('keydown', handleEscapeKey);
+}
+
+// Manejador de tecla ESC
+function handleEscapeKey(e) {
+  if (e.key === 'Escape') {
+    closeTopicModal();
+  }
 }
 
 // Cerrar modal de topic
@@ -130,6 +1020,8 @@ function closeTopicModal() {
   if (modal) {
     modal.remove();
     document.body.style.overflow = 'auto';
+    // Remover el listener de ESC
+    document.removeEventListener('keydown', handleEscapeKey);
   }
 }
 
@@ -234,6 +1126,12 @@ function calcularMargenGanancia() {
     </div>
   `;
   resultadoDiv.classList.add("show");
+  
+  // Guardar en historial
+  saveCalculo('margenGanancia', 
+    { precioVenta: precioVenta.toFixed(2), costo: costo.toFixed(2) },
+    { margen: margen.toFixed(2), ganancia: gananciaUnidad.toFixed(2) }
+  );
 }
 
 // Calculadora: Precio de Venta Unitario
@@ -269,6 +1167,12 @@ function calcularPrecioVenta() {
     </div>
   `;
   resultadoDiv.classList.add("show");
+  
+  // Guardar en historial
+  saveCalculo('precioVenta',
+    { costoTotal: costoTotal.toFixed(2), unidades: unidades, margen: margen },
+    { costoUnitario: costoUnitario.toFixed(2), precioVenta: precioVenta.toFixed(2), gananciaUnitaria: gananciaUnitaria.toFixed(2) }
+  );
 }
 
 // ========================================
@@ -374,6 +1278,22 @@ function procesarArchivoExcel(input) {
       
       // Mostrar resultados
       mostrarResultadosMasivos(productos, resultadosDiv);
+      
+      // Guardar en historial
+      const totalCostos = productos.reduce((sum, p) => sum + p.costoTotal, 0);
+      const totalUnidades = productos.reduce((sum, p) => sum + p.unidades, 0);
+      const totalGanancia = productos.reduce((sum, p) => sum + (p.gananciaUnitaria * p.unidades), 0);
+      
+      saveCalculo('masivo',
+        { archivo: file.name },
+        { 
+          totalProductos: productos.length, 
+          totalUnidades: totalUnidades,
+          inversionTotal: totalCostos.toFixed(2),
+          gananciaTotal: totalGanancia.toFixed(2),
+          productos: productos
+        }
+      );
       
     } catch (error) {
       console.error('Error procesando Excel:', error);
@@ -505,6 +1425,12 @@ function calcularPuntoEquilibrio() {
     </div>
   `;
   resultadoDiv.classList.add("show");
+  
+  // Guardar en historial
+  saveCalculo('puntoEquilibrio',
+    { costosFijos: costosFijos.toFixed(2), precioVenta: precioVenta.toFixed(2), costoVariable: costoVariable.toFixed(2) },
+    { unidades: Math.ceil(puntoEquilibrio), ventasEquilibrio: ventasEquilibrio.toFixed(2), margenContribucion: margenContribucion.toFixed(2) }
+  );
 }
 // ========================================
 // MEJORAS ADICIONALES PARA LAS CALCULADORAS
@@ -735,8 +1661,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+// Mostrar indicador de carga
+function showLoading() {
+  const container = document.querySelector('.container');
+  if (container) {
+    container.style.opacity = '0.5';
+  }
+  welcome.textContent = 'Cargando...';
+}
+
+// Ocultar indicador de carga
+function hideLoading() {
+  const container = document.querySelector('.container');
+  if (container) {
+    container.style.opacity = '1';
+  }
+}
+
 // Cargar al iniciar
-loadUser();
+showLoading();
+loadUser().then(() => {
+  hideLoading();
+}).catch(err => {
+  console.error('Error cargando usuario:', err);
+  hideLoading();
+  welcome.textContent = 'Error al cargar';
+});
 
 // ========================================
 // FUNCIONES PARA LOS TOPICS (CONTENIDOS)
@@ -854,175 +1805,4 @@ function closeCalcModal(calcType) {
       clearTimeout(tooltipTimeout);
     }
   }
-}
-
-// Función helper para mostrar errores
-function mostrarError(resultadoDiv, mensaje) {
-  resultadoDiv.innerHTML = `
-    <div class="resultado-error">
-      <div class="error-icon">⚠️</div>
-      <div class="error-text">${mensaje}</div>
-    </div>
-  `;
-  resultadoDiv.classList.add('show');
-}
-
-// Calcular Margen de Ganancia
-function calcularMargenGanancia() {
-  const precioVenta = parseFloat(document.getElementById('mg-precioVenta').value);
-  const costo = parseFloat(document.getElementById('mg-costo').value);
-  const resultado = document.getElementById('resultado-margenGanancia');
-  
-  if (isNaN(precioVenta) || precioVenta === '') {
-    mostrarError(resultado, 'Por favor ingresa el precio de venta');
-    return;
-  }
-  
-  if (isNaN(costo) || costo === '') {
-    mostrarError(resultado, 'Por favor ingresa el costo');
-    return;
-  }
-  
-  if (precioVenta <= 0) {
-    mostrarError(resultado, 'El precio de venta debe ser mayor a 0');
-    return;
-  }
-  
-  if (costo < 0) {
-    mostrarError(resultado, 'El costo no puede ser negativo');
-    return;
-  }
-  
-  if (costo >= precioVenta) {
-    mostrarError(resultado, 'El costo debe ser menor que el precio de venta para tener ganancia');
-    return;
-  }
-  
-  const margen = ((precioVenta - costo) / precioVenta) * 100;
-  const gananciaUnidad = precioVenta - costo;
-  
-  resultado.innerHTML = `
-    <div class="resultado-box">
-      <div class="resultado-label">Tu margen de ganancia es:</div>
-      <div class="resultado-valor">${margen.toFixed(2)}%</div>
-      <div class="resultado-info">
-        Ganas <strong>$${gananciaUnidad.toFixed(2)}</strong> por cada venta
-      </div>
-    </div>
-  `;
-  resultado.classList.add('show');
-}
-
-// Calcular Precio de Venta Unitario
-function calcularPrecioVenta() {
-  const costoTotal = parseFloat(document.getElementById('pv-costoTotal').value);
-  const unidades = parseFloat(document.getElementById('pv-unidades').value);
-  const margen = parseFloat(document.getElementById('pv-margen').value);
-  const resultado = document.getElementById('resultado-precioVenta');
-  
-  if (isNaN(costoTotal) || costoTotal === '') {
-    mostrarError(resultado, 'Por favor ingresa el costo total de producción');
-    return;
-  }
-  
-  if (isNaN(unidades) || unidades === '') {
-    mostrarError(resultado, 'Por favor ingresa las unidades producidas');
-    return;
-  }
-  
-  if (isNaN(margen) || margen === '') {
-    mostrarError(resultado, 'Por favor ingresa el margen de ganancia deseado');
-    return;
-  }
-  
-  if (costoTotal < 0) {
-    mostrarError(resultado, 'El costo total no puede ser negativo');
-    return;
-  }
-  
-  if (unidades <= 0) {
-    mostrarError(resultado, 'Las unidades deben ser mayor a 0');
-    return;
-  }
-  
-  if (margen < 0) {
-    mostrarError(resultado, 'El margen no puede ser negativo');
-    return;
-  }
-  
-  const costoUnitario = costoTotal / unidades;
-  const precioVenta = costoUnitario * (1 + margen / 100);
-  const gananciaUnidad = precioVenta - costoUnitario;
-  
-  resultado.innerHTML = `
-    <div class="resultado-box">
-      <div class="resultado-label">Tu precio de venta unitario es:</div>
-      <div class="resultado-valor">$${precioVenta.toFixed(2)}</div>
-      <div class="resultado-info">
-        Costo unitario: <strong>$${costoUnitario.toFixed(2)}</strong><br>
-        Ganancia por unidad: <strong>$${gananciaUnidad.toFixed(2)}</strong>
-      </div>
-    </div>
-  `;
-  resultado.classList.add('show');
-}
-
-// Calcular Punto de Equilibrio
-function calcularPuntoEquilibrio() {
-  const costosFijos = parseFloat(document.getElementById('pe-costosFijos').value);
-  const precioVenta = parseFloat(document.getElementById('pe-precioVenta').value);
-  const costoVariable = parseFloat(document.getElementById('pe-costoVariable').value);
-  const resultado = document.getElementById('resultado-puntoEquilibrio');
-  
-  if (isNaN(costosFijos) || costosFijos === '') {
-    mostrarError(resultado, 'Por favor ingresa los costos fijos totales');
-    return;
-  }
-  
-  if (isNaN(precioVenta) || precioVenta === '') {
-    mostrarError(resultado, 'Por favor ingresa el precio de venta unitario');
-    return;
-  }
-  
-  if (isNaN(costoVariable) || costoVariable === '') {
-    mostrarError(resultado, 'Por favor ingresa el costo variable unitario');
-    return;
-  }
-  
-  if (costosFijos < 0) {
-    mostrarError(resultado, 'Los costos fijos no pueden ser negativos');
-    return;
-  }
-  
-  if (precioVenta <= 0) {
-    mostrarError(resultado, 'El precio de venta debe ser mayor a 0');
-    return;
-  }
-  
-  if (costoVariable < 0) {
-    mostrarError(resultado, 'El costo variable no puede ser negativo');
-    return;
-  }
-  
-  const margenContribucion = precioVenta - costoVariable;
-  
-  if (margenContribucion <= 0) {
-    mostrarError(resultado, 'El precio de venta debe ser mayor que el costo variable para tener margen de contribución positivo');
-    return;
-  }
-  
-  const puntoEquilibrio = costosFijos / margenContribucion;
-  const ventasEquilibrio = puntoEquilibrio * precioVenta;
-  
-  resultado.innerHTML = `
-    <div class="resultado-box">
-      <div class="resultado-label">Tu punto de equilibrio es:</div>
-      <div class="resultado-valor">${Math.ceil(puntoEquilibrio)} unidades</div>
-      <div class="resultado-info">
-        Necesitas vender <strong>$${ventasEquilibrio.toFixed(2)}</strong> en total<br>
-        Margen de contribución: <strong>$${margenContribucion.toFixed(2)}</strong> por unidad
-      </div>
-    </div>
-  `;
-  resultado.classList.add('show');
 }
