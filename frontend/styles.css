@@ -330,7 +330,7 @@ button:hover {
   padding: 15px 20px;
   border-radius: 30px;
   text-decoration: none;
-  color: white;
+  color: #ffffff;
   font-weight: bold;
   font-size: 11px;
   min-height: 40px;
@@ -372,8 +372,7 @@ button:hover {
 }
 
 .content-card.yellow {
-  background: #FDBA74;
-  color: #333333;
+  background: #fda444;
 }
 
 .content-card.blue {
@@ -381,11 +380,15 @@ button:hover {
 }
 
 .content-card.cyan {
-  background: #7391FF;
+  background: #5d7be6;
 }
 
 .content-card.lightblue {
   background: #7391FF;
+}
+
+.content-card.purple {
+  background: linear-gradient(135deg, #0828DB 0%, #7391FF 100%);
 }
 
 @media (max-width: 600px) {
@@ -523,17 +526,15 @@ button:hover {
 }
 
 .calc-card.orange:hover {
-  background: #F67E1D;
+  background: #fc892c;
 }
 
 .calc-card.yellow {
-  background: #FDBA74;
-  color: #333333;
+  background: #f79c3c;
 }
 
 .calc-card.yellow:hover {
-  background: #F89B54;
-  color: #FFFFFF;
+  background: #fc7f1f;
 }
 
 .calc-card.blue {
@@ -820,6 +821,241 @@ button:hover {
   font-weight: 500;
 }
 
+/* ========================================
+   TABS Y CARGA MASIVA - PRECIO VENTA
+   ======================================== */
+
+.calc-modal-wide {
+  max-width: 900px !important;
+}
+
+.calc-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.calc-tab {
+  background: #f0f0f0;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 10px 10px 0 0;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.calc-tab:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.calc-tab.active {
+  background: #0828DB;
+  color: white;
+}
+
+.calc-tab-content {
+  display: none;
+}
+
+.calc-tab-content.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Sección de carga */
+.upload-section {
+  background: #f8f9fa;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 20px;
+}
+
+.upload-instructions {
+  margin-bottom: 20px;
+}
+
+.upload-instructions h3 {
+  color: #0828DB;
+  margin: 0 0 15px;
+  font-size: 18px;
+}
+
+.upload-instructions ol {
+  margin: 0;
+  padding-left: 20px;
+  color: #555;
+  line-height: 1.8;
+}
+
+.upload-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.download-template-btn,
+.upload-file-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 25px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.download-template-btn {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  border: none;
+}
+
+.download-template-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+}
+
+.upload-file-btn {
+  background: linear-gradient(135deg, #F89B54, #F67E1D);
+  color: white;
+  border: none;
+}
+
+.upload-file-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(248, 155, 84, 0.4);
+}
+
+.file-status {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.file-status.loading {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.file-status.success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.file-status.error {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Tabla de resultados masivos */
+.resultados-masivos {
+  margin-top: 20px;
+}
+
+.resultados-masivos h3 {
+  color: #0828DB;
+  margin: 0 0 15px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tabla-masiva-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.tabla-masiva {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: white;
+}
+
+.tabla-masiva th {
+  background: linear-gradient(135deg, #0828DB, #7391FF);
+  color: white;
+  padding: 15px 12px;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tabla-masiva td {
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tabla-masiva tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-masiva tr:nth-child(even) {
+  background: #f8f9fa;
+}
+
+.tabla-masiva tr:hover {
+  background: #e8f0ff;
+}
+
+.tabla-masiva .num-col {
+  text-align: center;
+  font-weight: 600;
+  color: #666;
+  width: 50px;
+}
+
+.tabla-masiva .precio-col {
+  font-weight: bold;
+  color: #0828DB;
+}
+
+.tabla-masiva .ganancia-col {
+  color: #4CAF50;
+  font-weight: 500;
+}
+
+.resumen-masivo {
+  margin-top: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #0828DB, #7391FF);
+  border-radius: 12px;
+  color: white;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  text-align: center;
+}
+
+.resumen-item {
+  padding: 10px;
+}
+
+.resumen-item .label {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-bottom: 5px;
+}
+
+.resumen-item .value {
+  font-size: 24px;
+  font-weight: bold;
+}
+
 @media (max-width: 600px) {
   .calc-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -843,5 +1079,26 @@ button:hover {
   .info-tooltip {
     font-size: 12px;
     padding: 10px 12px;
+  }
+  
+  .calc-tabs {
+    flex-direction: column;
+  }
+  
+  .calc-tab {
+    border-radius: 10px;
+  }
+  
+  .upload-buttons {
+    flex-direction: column;
+  }
+  
+  .tabla-masiva {
+    font-size: 12px;
+  }
+  
+  .tabla-masiva th,
+  .tabla-masiva td {
+    padding: 8px 6px;
   }
 }

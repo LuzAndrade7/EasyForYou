@@ -315,8 +315,8 @@
       <button onclick="if(window.parent && window.parent.closeTopicModal) { window.parent.closeTopicModal(); } else { window.location.href='./app.html'; }" class="back-btn">
         <img src="./images/back.png" alt="Volver"> Volver
       </button>
-      <button class="continue-btn" onclick="alert('¡Próximamente!')">
-        Continuar ➜
+      <button class="continue-btn" onclick="QuizSystem.startQuiz('topic1')">
+        Cuestionario ➜
       </button>
     </div>
 
@@ -402,5 +402,10 @@
     
     
   </div>
+
+  <!-- Sistema de Cuestionarios -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./js/supabaseClient.js"></script>
+  <script src="./js/quiz.js"></script>
 </body>
 </html>

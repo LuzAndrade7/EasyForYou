@@ -429,8 +429,8 @@
       <button onclick="if(window.parent && window.parent.closeTopicModal) { window.parent.closeTopicModal(); } else { window.location.href='./app.html'; }" class="back-btn">
         <img src="./images/back.png" alt="Volver"> Volver
       </button>
-      <button class="continue-btn" onclick="alert('¡Próximamente!')">
-        Continuar ➜
+      <button class="continue-btn" onclick="QuizSystem.startQuiz('topic2')">
+        Cuestionario ➜
       </button>
     </div>
 
@@ -445,7 +445,7 @@
     
     <!-- Cuadro ¿QUÉ ES? (no es botón) -->
     <div class="que-es-box">
-      <div class="que-es-title">¿QUÉ ES EL MARGEN DE GANANCIA?</div>
+      <div class="que-es-title">¿QUÉ ES?</div>
       <div class="que-es-content">
         <p>El margen de ganancia es el porcentaje de dinero que se gana después de restar todos los costos al precio de venta. Representa la rentabilidad de tu negocio y te indica cuánto estás ganando realmente por cada producto o servicio que vendes.</p>
       </div>
@@ -719,5 +719,10 @@
       }
     });
   </script>
+
+  <!-- Sistema de Cuestionarios -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./js/supabaseClient.js"></script>
+  <script src="./js/quiz.js"></script>
 </body>
 </html>

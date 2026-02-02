@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Actividad Extra - EasyForYou</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0828DB 0%, #7391FF 100%);
+      min-height: 100vh;
+    }
+
+    .topic-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Título principal */
+    .main-title {
+      background: #FFFFFF;
+      border: 3px solid #001F8B;
+      border-radius: 30px;
+      padding: 15px 40px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px auto 20px;
+      max-width: 500px;
+      color: #333333;
+    }
+
+    /* Barra de navegación superior */
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    /* Botón volver */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: #F89B54;
+      color: #FFFFFF;
+      padding: 14px 35px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      border: 2px solid #001F8B;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #001F8B;
+      transition: all 0.3s;
+    }
+
+    .back-btn:hover {
+      background: #F67E1D;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #001F8B;
+    }
+
+    .back-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .continue-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0828DB;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      border: 2px solid #001F8B;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .continue-btn:hover {
+      background: #001F8B;
+    }
+
+    /* Contenido principal */
+    .content-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 40px;
+      margin: 30px auto;
+      max-width: 800px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .intro-text {
+      text-align: center;
+      font-size: 18px;
+      color: #333;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .challenge-icon {
+      font-size: 80px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .challenge-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #2D53B8;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Información de las categorías */
+    .categories-preview {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .category-card {
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .category-card.activo {
+      background: linear-gradient(135deg, #2196F3, #1976D2);
+    }
+
+    .category-card.pasivo {
+      background: linear-gradient(135deg, #f44336, #d32f2f);
+    }
+
+    .category-card.patrimonio {
+      background: linear-gradient(135deg, #4CAF50, #388E3C);
+    }
+
+    .category-card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .category-card p {
+      margin: 0;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .category-card small {
+      display: block;
+      margin-top: 8px;
+      opacity: 0.8;
+    }
+
+    /* Info del desafío */
+    .challenge-info {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 30px 0;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin: 15px 0;
+    }
+
+    .info-icon {
+      font-size: 28px;
+    }
+
+    .info-text {
+      font-size: 16px;
+      color: #333;
+    }
+
+    .info-text strong {
+      color: #2D53B8;
+    }
+
+    /* Botón iniciar */
+    .start-btn-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .start-btn {
+      background: linear-gradient(135deg, #F89B54 0%, #FDBA74 100%);
+      color: white;
+      padding: 20px 50px;
+      font-size: 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(248, 155, 84, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(248, 155, 84, 0.5);
+    }
+
+    .start-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Responsividad */
+    @media (max-width: 768px) {
+      .categories-preview {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .content-section {
+        padding: 25px;
+        margin: 20px;
+      }
+
+      .challenge-title {
+        font-size: 22px;
+      }
+
+      .top-nav {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topic-container">
+    <!-- Barra de navegación superior -->
+    <div class="top-nav">
+      <button onclick="if(window.parent && window.parent.closeTopicModal) { window.parent.closeTopicModal(); } else { window.location.href='./app.html'; }" class="back-btn">
+        <img src="./images/back.png" alt="Volver"> Volver
+      </button>
+    </div>
+
+    <!-- Título principal -->
+    <div class="main-title">🎯 ACTIVIDAD EXTRA</div>
+
+    <!-- Contenido principal -->
+    <div class="content-section">
+      <div class="challenge-icon">🏆</div>
+      <h2 class="challenge-title">Clasificación Contable</h2>
+      
+      <p class="intro-text">
+        ¡Pon a prueba todo lo que has aprendido! En esta actividad deberás clasificar 
+        diferentes elementos contables en sus categorías correctas.
+      </p>
+
+      <!-- Preview de categorías -->
+      <div class="categories-preview">
+        <div class="category-card activo">
+          <h3>ACTIVO</h3>
+          <p>Todos los bienes que posee la empresa</p>
+          <small>Naturaleza: Deudora</small>
+        </div>
+        <div class="category-card pasivo">
+          <h3>PASIVO</h3>
+          <p>Todas las obligaciones de la empresa</p>
+          <small>Naturaleza: Acreedora</small>
+        </div>
+        <div class="category-card patrimonio">
+          <h3>PATRIMONIO</h3>
+          <p>Todos los derechos sobre la empresa</p>
+          <small>Naturaleza: Acreedora</small>
+        </div>
+      </div>
+
+      <!-- Información del desafío -->
+      <div class="challenge-info">
+        <div class="info-item">
+          <span class="info-icon">⏱️</span>
+          <span class="info-text">Tienes <strong>90 segundos</strong> para completar la actividad</span>
+        </div>
+        <div class="info-item">
+          <span class="info-icon">🎯</span>
+          <span class="info-text">Clasifica <strong>13 elementos</strong> en 3 categorías</span>
+        </div>
+        <div class="info-item">
+          <span class="info-icon">⭐</span>
+          <span class="info-text">Puntaje máximo: <strong>60 puntos</strong></span>
+        </div>
+        <div class="info-item">
+          <span class="info-icon">🚀</span>
+          <span class="info-text">¡Mientras más rápido, más puntos!</span>
+        </div>
+      </div>
+
+      <!-- Botón iniciar -->
+      <div class="start-btn-container">
+        <button class="start-btn" onclick="QuizSystem.startQuiz('extra')">
+          🎮 ¡Iniciar Desafío!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sistema de Cuestionarios -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./js/supabaseClient.js"></script>
+  <script src="./js/quiz.js"></script>
+</body>
+</html>

@@ -76,7 +76,7 @@ async function loadUser() {
         <h3>${avatar.pet_name}</h3>
         <p><strong>Tipo:</strong> ${animalNames[avatar.animal_type]}</p>
         <p><strong>Nivel:</strong> ${avatar.level}</p>
-        <p><strong>Experiencia:</strong> ${avatar.xp} XP</p>
+        <p><strong>Puntos:</strong> ${avatar.xp} pts</p>
       </div>
     </div>
   `;
