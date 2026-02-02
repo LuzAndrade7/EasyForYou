@@ -271,6 +271,196 @@ function calcularPrecioVenta() {
   resultadoDiv.classList.add("show");
 }
 
+// ========================================
+// CARGA MASIVA - PRECIO DE VENTA UNITARIO
+// ========================================
+
+// Cambiar entre tabs
+function switchPVTab(tab) {
+  // Remover clase active de todos los tabs y contenidos
+  document.querySelectorAll('.calc-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.calc-tab-content').forEach(c => c.classList.remove('active'));
+  
+  // Activar el tab seleccionado
+  if (tab === 'individual') {
+    document.querySelector('.calc-tab:first-child').classList.add('active');
+    document.getElementById('pv-tab-individual').classList.add('active');
+  } else {
+    document.querySelector('.calc-tab:last-child').classList.add('active');
+    document.getElementById('pv-tab-masivo').classList.add('active');
+  }
+}
+
+// Procesar archivo Excel
+function procesarArchivoExcel(input) {
+  const file = input.files[0];
+  const statusDiv = document.getElementById('pv-file-status');
+  const resultadosDiv = document.getElementById('pv-resultados-masivos');
+  
+  if (!file) return;
+  
+  // Validar extensión
+  const extension = file.name.split('.').pop().toLowerCase();
+  if (!['xlsx', 'xls'].includes(extension)) {
+    statusDiv.className = 'file-status error';
+    statusDiv.textContent = '❌ Por favor sube un archivo Excel (.xlsx o .xls)';
+    return;
+  }
+  
+  statusDiv.className = 'file-status loading';
+  statusDiv.textContent = '⏳ Procesando archivo...';
+  
+  const reader = new FileReader();
+  
+  reader.onload = function(e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      
+      // Leer primera hoja
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      
+      // Convertir a JSON
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+      
+      // Validar que tenga datos
+      if (jsonData.length < 2) {
+        statusDiv.className = 'file-status error';
+        statusDiv.textContent = '❌ El archivo está vacío o no tiene datos';
+        return;
+      }
+      
+      // Procesar datos (empezar desde fila 2, índice 1)
+      const productos = [];
+      for (let i = 1; i < jsonData.length; i++) {
+        const row = jsonData[i];
+        
+        // Columnas según plantilla:
+        // A (0): N° | B (1): Producto | E (4): Costo Total | H (7): Unidades | K (10): Margen
+        const numero = row[0];
+        const producto = row[1];
+        const costoTotal = parseFloat(row[4]) || 0;
+        const unidades = parseFloat(row[7]) || 0;
+        const margen = parseFloat(row[10]) || 0;
+        
+        // Solo agregar si tiene datos válidos
+        if (producto && costoTotal > 0 && unidades > 0) {
+          const costoUnitario = costoTotal / unidades;
+          const precioVenta = costoUnitario * (1 + margen / 100);
+          const gananciaUnitaria = precioVenta - costoUnitario;
+          
+          productos.push({
+            numero: numero || i,
+            producto,
+            costoTotal,
+            unidades,
+            margen,
+            costoUnitario,
+            precioVenta,
+            gananciaUnitaria
+          });
+        }
+      }
+      
+      if (productos.length === 0) {
+        statusDiv.className = 'file-status error';
+        statusDiv.textContent = '❌ No se encontraron productos válidos. Verifica que las columnas estén correctas.';
+        return;
+      }
+      
+      statusDiv.className = 'file-status success';
+      statusDiv.textContent = `✅ Se procesaron ${productos.length} productos exitosamente`;
+      
+      // Mostrar resultados
+      mostrarResultadosMasivos(productos, resultadosDiv);
+      
+    } catch (error) {
+      console.error('Error procesando Excel:', error);
+      statusDiv.className = 'file-status error';
+      statusDiv.textContent = '❌ Error al procesar el archivo. Verifica que sea un archivo Excel válido.';
+    }
+  };
+  
+  reader.onerror = function() {
+    statusDiv.className = 'file-status error';
+    statusDiv.textContent = '❌ Error al leer el archivo';
+  };
+  
+  reader.readAsArrayBuffer(file);
+}
+
+// Mostrar resultados en tabla
+function mostrarResultadosMasivos(productos, container) {
+  // Calcular totales
+  const totalProductos = productos.length;
+  const totalCostos = productos.reduce((sum, p) => sum + p.costoTotal, 0);
+  const totalUnidades = productos.reduce((sum, p) => sum + p.unidades, 0);
+  const promedioMargen = productos.reduce((sum, p) => sum + p.margen, 0) / totalProductos;
+  const totalGananciaEstimada = productos.reduce((sum, p) => sum + (p.gananciaUnitaria * p.unidades), 0);
+  
+  let html = `
+    <h3>📊 Resultados del Cálculo Masivo</h3>
+    <div class="tabla-masiva-container">
+      <table class="tabla-masiva">
+        <thead>
+          <tr>
+            <th class="num-col">N°</th>
+            <th>Producto</th>
+            <th>Costo Total</th>
+            <th>Unidades</th>
+            <th>Costo Unit.</th>
+            <th>Margen %</th>
+            <th class="precio-col">Precio Venta</th>
+            <th class="ganancia-col">Ganancia/U</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+  
+  productos.forEach(p => {
+    html += `
+      <tr>
+        <td class="num-col">${p.numero}</td>
+        <td>${p.producto}</td>
+        <td>$${p.costoTotal.toFixed(2)}</td>
+        <td>${p.unidades}</td>
+        <td>$${p.costoUnitario.toFixed(2)}</td>
+        <td>${p.margen}%</td>
+        <td class="precio-col">$${p.precioVenta.toFixed(2)}</td>
+        <td class="ganancia-col">$${p.gananciaUnitaria.toFixed(2)}</td>
+      </tr>
+    `;
+  });
+  
+  html += `
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="resumen-masivo">
+      <div class="resumen-item">
+        <div class="label">Total Productos</div>
+        <div class="value">${totalProductos}</div>
+      </div>
+      <div class="resumen-item">
+        <div class="label">Total Unidades</div>
+        <div class="value">${totalUnidades}</div>
+      </div>
+      <div class="resumen-item">
+        <div class="label">Inversión Total</div>
+        <div class="value">$${totalCostos.toFixed(2)}</div>
+      </div>
+      <div class="resumen-item">
+        <div class="label">Ganancia Estimada</div>
+        <div class="value">$${totalGananciaEstimada.toFixed(2)}</div>
+      </div>
+    </div>
+  `;
+  
+  container.innerHTML = html;
+}
+
 // Calculadora: Punto de Equilibrio
 // Fórmula: Costos Fijos / (Precio de Venta - Costo Variable Unitario)
 function calcularPuntoEquilibrio() {

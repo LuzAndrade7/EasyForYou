@@ -929,6 +929,7 @@ button:hover {
   background: linear-gradient(135deg, #F89B54, #F67E1D);
   color: white;
   border: none;
+  margin: 0;
 }
 
 .upload-file-btn:hover {
@@ -987,8 +988,8 @@ button:hover {
 }
 
 .tabla-masiva th {
-  background: linear-gradient(135deg, #0828DB, #7391FF);
-  color: white;
+  background: #d1cce2;
+  color: rgb(0, 0, 0);
   padding: 15px 12px;
   text-align: left;
   font-weight: 600;
@@ -1015,7 +1016,7 @@ button:hover {
 .tabla-masiva .num-col {
   text-align: center;
   font-weight: 600;
-  color: #666;
+  color: #000000;
   width: 50px;
 }
 
@@ -1027,12 +1028,13 @@ button:hover {
 .tabla-masiva .ganancia-col {
   color: #4CAF50;
   font-weight: 500;
+  font-weight: bold;
 }
 
 .resumen-masivo {
   margin-top: 20px;
   padding: 20px;
-  background: linear-gradient(135deg, #0828DB, #7391FF);
+  background: #0828DB;
   border-radius: 12px;
   color: white;
   display: grid;

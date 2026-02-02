@@ -69,12 +69,12 @@
             <span class="content-text">PUNTO DE EQUILIBRIO</span>
             <span class="plus-btn">+</span>
           </a>
-          <a href="#" class="content-card cyan">
-            <span class="content-text"></span>
+          <a href="javascript:void(0);" onclick="openTopicModal('./topic-5.html')" class="content-card cyan">
+            <span class="content-text">BALANCE GENERAL</span>
             <span class="plus-btn">+</span>
           </a>
-          <a href="#" class="content-card lightblue">
-            <span class="content-text"></span>
+          <a href="javascript:void(0);" onclick="openTopicModal('./topic-6.html')" class="content-card purple">
+            <span class="content-text">ACTIVIDAD EXTRA</span>
             <span class="plus-btn">+</span>
           </a>
         </div>
@@ -147,38 +147,78 @@
 
   <!-- Modal Calculadora Precio de Venta Unitario -->
   <div id="calcModal-precioVenta" class="calc-modal">
-    <div class="calc-modal-content">
+    <div class="calc-modal-content calc-modal-wide">
       <button class="calc-modal-close" onclick="closeCalcModal('precioVenta')">&times;</button>
       <h2 class="calc-modal-title">Precio de Venta Unitario</h2>
       <p class="calc-formula">Fórmula: (Costo Total / Unidades) × (1 + Margen/100)</p>
-      <div class="calc-inputs">
-        <div class="input-with-info">
-          <label for="pv-costoTotal">Costo Total de Producción ($)</label>
-          <input type="number" id="pv-costoTotal" placeholder="Ej: 1000" step="0.01" min="0">
-          <button type="button" class="info-btn" onclick="showInfo(this, 'pv-costoTotal-info')">i</button>
-          <div id="pv-costoTotal-info" class="info-tooltip">
-            Suma de todos los costos para producir el lote completo: materiales, mano de obra, energía, etc.
-          </div>
-        </div>
-        <div class="input-with-info">
-          <label for="pv-unidades">Unidades Producidas</label>
-          <input type="number" id="pv-unidades" placeholder="Ej: 50" step="1" min="1">
-          <button type="button" class="info-btn" onclick="showInfo(this, 'pv-unidades-info')">i</button>
-          <div id="pv-unidades-info" class="info-tooltip">
-            Cantidad total de productos que obtuviste del lote de producción.
-          </div>
-        </div>
-        <div class="input-with-info">
-          <label for="pv-margen">Margen de Ganancia Deseado (%)</label>
-          <input type="number" id="pv-margen" placeholder="Ej: 30" step="0.01" min="0">
-          <button type="button" class="info-btn" onclick="showInfo(this, 'pv-margen-info')">i</button>
-          <div id="pv-margen-info" class="info-tooltip">
-            Porcentaje de ganancia que deseas obtener sobre el costo. Ej: 30% significa ganar $30 por cada $100 de costo.
-          </div>
-        </div>
+      
+      <!-- Tabs para cambiar entre modo individual y masivo -->
+      <div class="calc-tabs">
+        <button class="calc-tab active" onclick="switchPVTab('individual')">📝 Individual</button>
+        <button class="calc-tab" onclick="switchPVTab('masivo')">📊 Carga Masiva</button>
       </div>
-      <button class="calc-btn" onclick="calcularPrecioVenta()">Calcular</button>
-      <div id="resultado-precioVenta" class="calc-resultado"></div>
+      
+      <!-- Contenido Tab Individual -->
+      <div id="pv-tab-individual" class="calc-tab-content active">
+        <div class="calc-inputs">
+          <div class="input-with-info">
+            <label for="pv-costoTotal">Costo Total de Producción ($)</label>
+            <input type="number" id="pv-costoTotal" placeholder="Ej: 1000" step="0.01" min="0">
+            <button type="button" class="info-btn" onclick="showInfo(this, 'pv-costoTotal-info')">i</button>
+            <div id="pv-costoTotal-info" class="info-tooltip">
+              Suma de todos los costos para producir el lote completo: materiales, mano de obra, energía, etc.
+            </div>
+          </div>
+          <div class="input-with-info">
+            <label for="pv-unidades">Unidades Producidas</label>
+            <input type="number" id="pv-unidades" placeholder="Ej: 50" step="1" min="1">
+            <button type="button" class="info-btn" onclick="showInfo(this, 'pv-unidades-info')">i</button>
+            <div id="pv-unidades-info" class="info-tooltip">
+              Cantidad total de productos que obtuviste del lote de producción.
+            </div>
+          </div>
+          <div class="input-with-info">
+            <label for="pv-margen">Margen de Ganancia Deseado (%)</label>
+            <input type="number" id="pv-margen" placeholder="Ej: 30" step="0.01" min="0">
+            <button type="button" class="info-btn" onclick="showInfo(this, 'pv-margen-info')">i</button>
+            <div id="pv-margen-info" class="info-tooltip">
+              Porcentaje de ganancia que deseas obtener sobre el costo. Ej: 30% significa ganar $30 por cada $100 de costo.
+            </div>
+          </div>
+        </div>
+        <button class="calc-btn" onclick="calcularPrecioVenta()">Calcular</button>
+        <div id="resultado-precioVenta" class="calc-resultado"></div>
+      </div>
+      
+      <!-- Contenido Tab Carga Masiva -->
+      <div id="pv-tab-masivo" class="calc-tab-content">
+        <div class="upload-section">
+          <div class="upload-instructions">
+            <h3>📥 Instrucciones para carga masiva</h3>
+            <ol>
+              <li>Descarga la plantilla base haciendo clic en el botón de abajo</li>
+              <li>Llena la plantilla con los datos de tus productos</li>
+              <li>Guarda el archivo y súbelo aquí</li>
+            </ol>
+          </div>
+          
+          <div class="upload-buttons">
+            <a href="./assets/PlantillaPrecioVentaUnitario.xlsx" download class="download-template-btn">
+              📄 Descargar Plantilla
+            </a>
+            
+            <label class="upload-file-btn">
+              📤 Subir Archivo Excel
+              <input type="file" id="pv-file-input" accept=".xlsx,.xls" onchange="procesarArchivoExcel(this)" hidden>
+            </label>
+          </div>
+          
+          <div id="pv-file-status" class="file-status"></div>
+        </div>
+        
+        <!-- Tabla de resultados masivos -->
+        <div id="pv-resultados-masivos" class="resultados-masivos"></div>
+      </div>
     </div>
   </div>
 
@@ -219,6 +259,8 @@
     </div>
   </div>
 
+  <!-- Librería para leer archivos Excel -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./js/supabaseClient.js"></script>
   <script src="./js/app.js"></script>
