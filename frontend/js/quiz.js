@@ -1,4 +1,4 @@
-// Sistema de Cuestionarios - EasyForYou
+// Sistema de Cuestionarios - EAS for you
 // Maneja preguntas de opción múltiple y actividades de clasificación
 
 const QuizSystem = {

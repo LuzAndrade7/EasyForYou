@@ -1,4 +1,6 @@
-const supabase = window.supabaseClient;
+// Auth script - Firebase version (legacy file, use login.js and register.js instead)
+const auth = window.firebaseAuth;
+const db = window.firebaseDb;
 
 const registerForm = document.getElementById("registerForm");
 const loginForm = document.getElementById("loginForm");
@@ -20,34 +22,24 @@ registerForm.addEventListener("submit", async (e) => {
   try {
     setMsg("Creando cuenta...");
 
-    // 1) Crear usuario en Auth
-    const { data, error } = await supabase.auth.signUp({ email, password });
-    if (error) throw error;
+    // 1) Crear usuario en Firebase Auth
+    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+    const user = userCredential.user;
 
-    // OJO: si tu Supabase pide confirmar email, data.user existe,
-    // pero la sesión puede venir null. Igual guardamos perfil.
-    const userId = data.user?.id;
-    if (!userId) {
-      setMsg("Cuenta creada. Revisa tu correo para confirmar.", false);
-      return;
-    }
-
-    // 2) Guardar perfil (tabla profiles)
-    const { error: e2 } = await supabase.from("profiles").insert({
-      id: userId,
-      name,
-      email
+    // 2) Guardar perfil en Firestore
+    await db.collection("profiles").doc(user.uid).set({
+      name: name,
+      email: email,
+      created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
-    if (e2) throw e2;
 
     // 3) Crear avatar por defecto (animal 1)
-    const { error: e3 } = await supabase.from("avatars").insert({
-      user_id: userId,
+    await db.collection("avatars").doc(user.uid).set({
+      user_id: user.uid,
       animal_type: 1,
       level: 1,
       xp: 0
     });
-    if (e3) throw e3;
 
     setMsg("✅ Cuenta creada. Ahora inicia sesión.", false);
     registerForm.reset();
@@ -67,8 +59,7 @@ loginForm.addEventListener("submit", async (e) => {
   try {
     setMsg("Iniciando sesión...");
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
+    await auth.signInWithEmailAndPassword(email, password);
 
     setMsg("✅ Login exitoso. Entrando...", false);
 

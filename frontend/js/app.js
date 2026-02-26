@@ -4,8 +4,9 @@ const logoutBtn = document.getElementById("logoutBtn");
 const tabBtns = document.querySelectorAll(".tab-btn");
 const tabContents = document.querySelectorAll(".tab-content");
 
-// Obtener el cliente de Supabase
-const sb = window.supabaseClient;
+// Obtener los clientes de Firebase
+const auth = window.firebaseAuth;
+const db = window.firebaseDb;
 
 // Mapeo de animales
 const animalNames = {
@@ -25,23 +26,21 @@ const animalImages = {
 };
 
 async function loadUser() {
-  const { data: { user }, error } = await sb.auth.getUser();
-  if (error) console.error(error);
-
+  const user = auth.currentUser;
+  
   if (!user) {
     window.location.href = "../index.html";
     return;
   }
 
   // Cargar avatar y perfil en PARALELO para mayor velocidad
-  const [avatarResult, profileResult] = await Promise.all([
-    sb.from("avatars").select("animal_type, pet_name, level, xp").eq("user_id", user.id).single(),
-    sb.from("profiles").select("name, email, created_at").eq("id", user.id).single()
+  const [avatarDoc, profileDoc] = await Promise.all([
+    db.collection("avatars").doc(user.uid).get(),
+    db.collection("profiles").doc(user.uid).get()
   ]);
 
-  const avatar = avatarResult.data;
-  const profile = profileResult.data;
-  const e2 = profileResult.error;
+  const avatar = avatarDoc.data();
+  const profile = profileDoc.data();
 
   if (!avatar || !avatar.pet_name) {
     // No tiene mascota, ir a selección
@@ -49,8 +48,8 @@ async function loadUser() {
     return;
   }
 
-  if (e2) {
-    console.error(e2);
+  if (!profile) {
+    console.error("Profile not found");
     welcome.textContent = `Hola`;
   } else {
     welcome.textContent = `Hola, ${profile.name} `;
@@ -58,7 +57,7 @@ async function loadUser() {
 
   // Guardar datos globalmente para edición
   window.currentUserData = {
-    userId: user.id,
+    userId: user.uid,
     profile: profile,
     avatar: avatar
   };
@@ -749,7 +748,7 @@ function exportarCalculoPDF(id) {
   
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(24);
-  doc.text('EasyForYou', 20, 25);
+  doc.text('EAS for you', 20, 25);
   
   doc.setFontSize(12);
   doc.text('Reporte de Cálculo Financiero', 120, 25);
@@ -874,10 +873,10 @@ function exportarCalculoPDF(id) {
   // Pie de página
   doc.setFontSize(9);
   doc.setTextColor(150, 150, 150);
-  doc.text('Generado por EasyForYou - Herramienta de Educación Financiera', 105, 280, { align: 'center' });
+  doc.text('Generado por EAS for you - Herramienta de Educación Financiera', 105, 280, { align: 'center' });
   
   // Descargar
-  const nombreArchivo = `EasyForYou_${tipoNombres[calc.tipo].replace(/ /g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
+  const nombreArchivo = `EASforYou_${tipoNombres[calc.tipo].replace(/ /g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
   doc.save(nombreArchivo);
   
   showToast('📄 PDF descargado');
@@ -899,7 +898,7 @@ function exportarTodoPDF() {
   
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(24);
-  doc.text('EasyForYou', 20, 25);
+  doc.text('EAS for you', 20, 25);
   
   doc.setFontSize(12);
   doc.text('Historial Completo de Cálculos', 120, 25);
@@ -952,9 +951,9 @@ function exportarTodoPDF() {
   // Pie de página
   doc.setFontSize(9);
   doc.setTextColor(150, 150, 150);
-  doc.text('Generado por EasyForYou - Herramienta de Educación Financiera', 105, 280, { align: 'center' });
+  doc.text('Generado por EAS for you - Herramienta de Educación Financiera', 105, 280, { align: 'center' });
   
-  doc.save(`EasyForYou_Historial_${new Date().toISOString().slice(0,10)}.pdf`);
+  doc.save(`EASforYou_Historial_${new Date().toISOString().slice(0,10)}.pdf`);
   showToast('📄 Historial exportado a PDF');
 }
 
@@ -978,7 +977,7 @@ tabBtns.forEach(btn => {
 // Logout
 logoutBtn.addEventListener("click", async () => {
   playUISound('click');
-  await sb.auth.signOut();
+  await auth.signOut();
   window.location.href = "../index.html";
 });
 
@@ -1094,7 +1093,7 @@ function calcularMargenGanancia() {
 }
 
 // Calculadora: Precio de Venta Unitario
-// Fórmula: (Costo Total / Unidades) × (1 + Margen/100)
+// Fórmula: (Costo Total de Producción / Unidades Producidas) + Margen de Ganancia
 function calcularPrecioVenta() {
   const costoTotal = parseFloat(document.getElementById("pv-costoTotal").value);
   const unidades = parseFloat(document.getElementById("pv-unidades").value);
@@ -1112,8 +1111,8 @@ function calcularPrecioVenta() {
   }
 
   const costoUnitario = costoTotal / unidades;
-  const precioVenta = costoUnitario * (1 + margen / 100);
-  const gananciaUnitaria = precioVenta - costoUnitario;
+  const precioVenta = costoUnitario + margen;
+  const gananciaUnitaria = margen;
 
   resultadoDiv.innerHTML = `
     <div class="resultado-box">
@@ -1638,14 +1637,21 @@ function hideLoading() {
   }
 }
 
-// Cargar al iniciar
+// Cargar al iniciar - usando Firebase onAuthStateChanged
 showLoading();
-loadUser().then(() => {
-  hideLoading();
-}).catch(err => {
-  console.error('Error cargando usuario:', err);
-  hideLoading();
-  welcome.textContent = 'Error al cargar';
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    loadUser().then(() => {
+      hideLoading();
+    }).catch(err => {
+      console.error('Error cargando usuario:', err);
+      hideLoading();
+      welcome.textContent = 'Error al cargar';
+    });
+  } else {
+    // No hay usuario autenticado, redirigir al login
+    window.location.href = "../index.html";
+  }
 });
 
 // ========================================

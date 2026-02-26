@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EasyForYou - Login</title>
+  <title>EAS for you - Login</title>
   <link rel="stylesheet" href="./frontend/styles.css" />
 </head>
 <body class="auth-page">
   <main class="container">
-    <h1>EasyForYou</h1>
+    <h1>EAS for you</h1>
     <p class="muted">Inicia sesión para continuar</p>
 
     <div class="card">
@@ -31,11 +31,13 @@
     </div>
   </main>
 
-  <!-- Supabase JS (CDN) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Firebase JS SDKs (CDN) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <!-- Tus scripts -->
-  <script src="./frontend/js/supabaseClient.js"></script>
+  <script src="./frontend/js/firebaseClient.js"></script>
   <script src="./frontend/js/loginRoot.js"></script>
 </body>
 </html>

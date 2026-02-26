@@ -1,17 +1,18 @@
-// Register script
+// Register script - Firebase version
 const msg = document.getElementById("msg");
 
-// Obtener el cliente de Supabase
-const sb = window.supabaseClient;
+// Obtener los clientes de Firebase
+const auth = window.firebaseAuth;
+const db = window.firebaseDb;
 
 function setMsg(text, isError = false) {
   msg.textContent = text;
   msg.style.color = isError ? "crimson" : "green";
 }
 
-// Verificar que Supabase está disponible
-if (!sb) {
-  console.error("Supabase client not initialized!");
+// Verificar que Firebase está disponible
+if (!auth || !db) {
+  console.error("Firebase not initialized!");
   setMsg("Error: No se pudo conectar con el servidor", true);
 }
 
@@ -27,56 +28,30 @@ registerForm.addEventListener("submit", async (e) => {
   try {
     setMsg("Creando cuenta...");
 
-    // 1) Crear usuario en Auth
-    const { data, error } = await sb.auth.signUp({ 
-      email, 
-      password,
-      options: {
-        data: {
-          name: name
-        }
-      }
+    // 1) Crear usuario en Firebase Auth
+    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+
+    console.log("SignUp response:", user);
+
+    // 2) Actualizar el nombre del usuario en Auth
+    await user.updateProfile({
+      displayName: name
     });
-    
-    if (error) {
-      // Manejar rate limit
-      if (error.message.includes("security purposes")) {
-        setMsg("Por seguridad, espera unos segundos e intenta de nuevo.", true);
-        return;
-      }
-      throw error;
-    }
 
-    console.log("SignUp response:", data);
-
-    const userId = data.user?.id;
-    
-    // Verificar si el email necesita confirmación
-    if (data.user && !data.session) {
-      setMsg("Cuenta creada. Revisa tu correo para confirmar tu email.", false);
-      return;
-    }
-    
-    if (!userId) {
-      setMsg("Error al crear cuenta. Intenta de nuevo.", true);
-      return;
-    }
-
-    // 2) Guardar perfil (tabla profiles)
-    const { error: e2 } = await sb.from("profiles").insert({
-      id: userId,
-      name,
-      email
+    // 3) Guardar perfil en Firestore (colección profiles)
+    await db.collection("profiles").doc(user.uid).set({
+      name: name,
+      email: email,
+      created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
-    
-    if (e2) {
-      console.error("Profile insert error:", e2);
-      // Continuar aunque falle el perfil
-    } else {
-      console.log("Profile created successfully");
-    }
+
+    console.log("Profile created successfully");
 
     setMsg("Cuenta creada exitosamente. Redirigiendo al login...", false);
+    
+    // Cerrar sesión para que el usuario inicie sesión manualmente
+    await auth.signOut();
     
     // Redirigir al login después de 2 segundos (index en la raíz)
     setTimeout(() => {
@@ -88,10 +63,12 @@ registerForm.addEventListener("submit", async (e) => {
     
     // Mensajes de error más amigables
     let errorMsg = err.message || "Error al registrarse";
-    if (errorMsg.includes("already registered") || errorMsg.includes("User already registered")) {
+    if (err.code === "auth/email-already-in-use") {
       errorMsg = "Este correo ya está registrado. Intenta iniciar sesión.";
-    } else if (errorMsg.includes("duplicate key") || errorMsg.includes("unique constraint")) {
-      errorMsg = "Este correo ya está en uso. Intenta con otro.";
+    } else if (err.code === "auth/weak-password") {
+      errorMsg = "La contraseña debe tener al menos 6 caracteres.";
+    } else if (err.code === "auth/invalid-email") {
+      errorMsg = "El formato del correo no es válido.";
     }
     
     setMsg(errorMsg, true);

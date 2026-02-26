@@ -1,5 +1,5 @@
 -- =====================================================
--- SCRIPT COMPLETO PARA SUPABASE - EasyForYou
+-- SCRIPT COMPLETO PARA SUPABASE - EAS for you
 -- Ejecutar en: Supabase Dashboard > SQL Editor
 -- =====================================================
 

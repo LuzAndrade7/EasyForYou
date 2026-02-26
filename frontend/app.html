@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EasyForYou - Dashboard</title>
+  <title>EAS for you - Dashboard</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <header class="app-header">
-    <h1>EasyForYou</h1>
+    <h1>EAS for you</h1>
     <div class="header-right">
       <span id="welcome">Cargando...</span>
       <button id="logoutBtn" class="btn-logout">Cerrar sesión</button>
@@ -402,7 +402,7 @@
     <div class="calc-modal-content calc-modal-wide">
       <button class="calc-modal-close" onclick="closeCalcModal('precioVenta')">&times;</button>
       <h2 class="calc-modal-title">Precio de Venta Unitario</h2>
-      <p class="calc-formula">Fórmula: (Costo Total / Unidades) × (1 + Margen/100)</p>
+      <p class="calc-formula">Fórmula: (Costo Total de Producción / Unidades Producidas) + Margen de Ganancia</p>
       
       <!-- Tabs para cambiar entre modo individual y masivo -->
       <div class="calc-tabs">
@@ -430,11 +430,11 @@
             </div>
           </div>
           <div class="input-with-info">
-            <label for="pv-margen">Margen de Ganancia Deseado (%)</label>
-            <input type="number" id="pv-margen" placeholder="Ej: 30" step="0.01" min="0">
+            <label for="pv-margen">Margen de Ganancia Deseado ($)</label>
+            <input type="number" id="pv-margen" placeholder="Ej: 5" step="0.01" min="0">
             <button type="button" class="info-btn" onclick="showInfo(this, 'pv-margen-info')">i</button>
             <div id="pv-margen-info" class="info-tooltip">
-              Porcentaje de ganancia que deseas obtener sobre el costo. Ej: 30% significa ganar $30 por cada $100 de costo.
+              Cantidad de ganancia que deseas obtener por cada unidad vendida. Ej: $5 significa ganar $5 por cada unidad.
             </div>
           </div>
         </div>
@@ -511,9 +511,11 @@
     </div>
   </div>
 
-  <!-- Supabase PRIMERO (requerido para autenticación) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="./js/supabaseClient.js"></script>
+  <!-- Firebase JS SDKs (CDN) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="./js/firebaseClient.js"></script>
   
   <!-- Librerías secundarias (cargan en paralelo después) -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js" defer></script>

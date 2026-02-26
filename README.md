@@ -1,6 +1,6 @@
-# EasyForYou 🐾📚
+# EAS for you 🐾📚
 
-EasyForYou es una aplicación web educativa dirigida a estudiantes de colegio, cuyo objetivo es apoyar el aprendizaje mediante contenidos interactivos y un sistema de progreso visual basado en un animalito virtual.
+EAS for you es una aplicación web educativa dirigida a estudiantes de colegio, cuyo objetivo es apoyar el aprendizaje mediante contenidos interactivos y un sistema de progreso visual basado en un animalito virtual.
 
 Cada estudiante puede registrarse, elegir un animal, avanzar por los contenidos de la asignatura y ver cómo su animal sube de nivel conforme completa los temas. Además, la aplicación incluye una calculadora académica y un historial donde se guardan los resultados (Arch).
 
@@ -39,11 +39,12 @@ Desarrollar una plataforma web sencilla y amigable que:
 
 ### Backend/DB como servicio
 
-- **Supabase** (Auth + PostgreSQL + API)
+- **Firebase** (Auth + Firestore)
 
 ### Publicación
 
 - **GitHub Pages** (sitio web)
+- **Firebase Hosting** (alternativa)
 
 ---
 
@@ -74,7 +75,7 @@ http://localhost:5500
 
 ## Estructura del proyecto
 
-EasyForYou/
+EASforYou/
 │
 ├── frontend/ # Sitio web (HTML, CSS, JS)
 ├── backend/ # (No usado en la versión final) Experimentos con Node/Express
@@ -82,13 +83,26 @@ EasyForYou/
 
 ---
 
-## 🔐 Configuración de Supabase
+## 🔐 Configuración de Firebase
 
-En frontend/js/supabaseClient.js se configuran:
+En frontend/js/firebaseClient.js se configuran las credenciales de Firebase:
 
-SUPABASE_URL
+```javascript
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.firebasestorage.app",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID",
+  measurementId: "YOUR_MEASUREMENT_ID",
+};
+```
 
-SUPABASE_ANON_KEY
+Estas credenciales se obtienen en Firebase Console:
+Project Settings → General → Your apps → Web app.
 
-Estas credenciales se obtienen en Supabase:
-Project Settings → API.
+### Colecciones de Firestore necesarias:
+
+- `profiles`: Almacena información del perfil de usuario
+- `avatars`: Almacena las mascotas y su progreso

@@ -1,12 +1,13 @@
-// Pet Selection script
+// Pet Selection script - Firebase version
 const msg = document.getElementById("msg");
 const petGrid = document.getElementById("petGrid");
 const petNameSection = document.getElementById("petNameSection");
 const petNameInput = document.getElementById("petName");
 const confirmPetBtn = document.getElementById("confirmPetBtn");
 
-// Obtener el cliente de Supabase
-const sb = window.supabaseClient;
+// Obtener los clientes de Firebase
+const auth = window.firebaseAuth;
+const db = window.firebaseDb;
 
 let selectedAnimal = null;
 
@@ -15,34 +16,31 @@ function setMsg(text, isError = false) {
   msg.style.color = isError ? "crimson" : "green";
 }
 
-// Verificar que Supabase está disponible
-if (!sb) {
-  console.error("Supabase client not initialized!");
+// Verificar que Firebase está disponible
+if (!auth || !db) {
+  console.error("Firebase not initialized!");
   setMsg("Error: No se pudo conectar con el servidor", true);
 }
 
 // Verificar sesión y si ya tiene mascota
 async function checkUserAndPet() {
-  const { data: { user } } = await sb.auth.getUser();
-  
-  if (!user) {
-    // No hay sesión, ir al login (index en la raíz)
-    window.location.href = "../index.html";
-    return;
-  }
+  auth.onAuthStateChanged(async (user) => {
+    if (!user) {
+      // No hay sesión, ir al login (index en la raíz)
+      window.location.href = "../index.html";
+      return;
+    }
 
-  // Verificar si ya tiene mascota con nombre
-  const { data: avatar } = await sb
-    .from("avatars")
-    .select("pet_name")
-    .eq("user_id", user.id)
-    .single();
+    // Verificar si ya tiene mascota con nombre
+    const avatarDoc = await db.collection("avatars").doc(user.uid).get();
+    const avatar = avatarDoc.data();
 
-  if (avatar && avatar.pet_name) {
-    // Ya tiene mascota, ir al dashboard
-    window.location.href = "./app.html";
-    return;
-  }
+    if (avatar && avatar.pet_name) {
+      // Ya tiene mascota, ir al dashboard
+      window.location.href = "./app.html";
+      return;
+    }
+  });
 }
 
 // Bloquear mascotas que no son gato (solo gato disponible en demo)
@@ -119,63 +117,39 @@ confirmPetBtn.addEventListener("click", async () => {
     setMsg("Guardando tu mascota...");
     confirmPetBtn.disabled = true;
 
-    const { data: { user } } = await sb.auth.getUser();
+    const user = auth.currentUser;
     if (!user) throw new Error("No hay sesión activa");
 
     // Primero asegurar que existe el perfil
-    const { data: existingProfile } = await sb
-      .from("profiles")
-      .select("id")
-      .eq("id", user.id)
-      .single();
+    const profileDoc = await db.collection("profiles").doc(user.uid).get();
 
-    if (!existingProfile) {
+    if (!profileDoc.exists) {
       // Crear perfil si no existe
-      const { error: profileError } = await sb
-        .from("profiles")
-        .insert({
-          id: user.id,
-          name: user.user_metadata?.name || user.email?.split('@')[0] || "Usuario",
-          email: user.email
-        });
-      
-      if (profileError) {
-        console.error("Error creating profile:", profileError);
-        // Continuar aunque falle, el avatar puede funcionar si la FK apunta a auth.users
-      }
+      await db.collection("profiles").doc(user.uid).set({
+        name: user.displayName || user.email?.split('@')[0] || "Usuario",
+        email: user.email,
+        created_at: firebase.firestore.FieldValue.serverTimestamp()
+      });
     }
 
     // Verificar si ya existe un avatar para este usuario
-    const { data: existingAvatar } = await sb
-      .from("avatars")
-      .select("id")
-      .eq("user_id", user.id)
-      .single();
+    const avatarDoc = await db.collection("avatars").doc(user.uid).get();
 
-    if (existingAvatar) {
+    if (avatarDoc.exists) {
       // Actualizar avatar existente
-      const { error } = await sb
-        .from("avatars")
-        .update({
-          animal_type: selectedAnimal,
-          pet_name: petNameInput.value.trim()
-        })
-        .eq("user_id", user.id);
-
-      if (error) throw error;
+      await db.collection("avatars").doc(user.uid).update({
+        animal_type: selectedAnimal,
+        pet_name: petNameInput.value.trim()
+      });
     } else {
       // Crear nuevo avatar
-      const { error } = await sb
-        .from("avatars")
-        .insert({
-          user_id: user.id,
-          animal_type: selectedAnimal,
-          pet_name: petNameInput.value.trim(),
-          level: 1,
-          xp: 0
-        });
-
-      if (error) throw error;
+      await db.collection("avatars").doc(user.uid).set({
+        user_id: user.uid,
+        animal_type: selectedAnimal,
+        pet_name: petNameInput.value.trim(),
+        level: 1,
+        xp: 0
+      });
     }
 
     setMsg("¡Mascota guardada! Entrando al dashboard...", false);

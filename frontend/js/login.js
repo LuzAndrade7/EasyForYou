@@ -1,43 +1,37 @@
-// Login script
+// Login script - Firebase version
 const msg = document.getElementById("msg");
 
-// Obtener el cliente de Supabase
-const sb = window.supabaseClient;
+// Obtener los clientes de Firebase
+const auth = window.firebaseAuth;
+const db = window.firebaseDb;
 
 function setMsg(text, isError = false) {
   msg.textContent = text;
   msg.style.color = isError ? "crimson" : "green";
 }
 
-// Verificar que Supabase está disponible
-if (!sb) {
-  console.error("Supabase client not initialized!");
+// Verificar que Firebase está disponible
+if (!auth || !db) {
+  console.error("Firebase not initialized!");
   setMsg("Error: No se pudo conectar con el servidor", true);
 }
 
 // Verificar si ya hay sesión activa
 async function checkSession() {
   try {
-    const { data: { user }, error } = await sb.auth.getUser();
-    if (error) {
-      console.log("No active session");
-      return;
-    }
-    
-    if (user) {
-      // Si ya está logueado, verificar si tiene mascota
-      const { data: avatar } = await sb
-        .from("avatars")
-        .select("pet_name")
-        .eq("user_id", user.id)
-        .single();
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        // Si ya está logueado, verificar si tiene mascota
+        const avatarDoc = await db.collection("avatars").doc(user.uid).get();
+        const avatar = avatarDoc.data();
 
-      if (avatar && avatar.pet_name) {
-        window.location.href = "./app.html";
-      } else {
-        window.location.href = "./pet-selection.html";
+        if (avatar && avatar.pet_name) {
+          window.location.href = "./app.html";
+        } else {
+          window.location.href = "./pet-selection.html";
+        }
       }
-    }
+    });
   } catch (err) {
     console.log("Session check error:", err);
   }
@@ -54,21 +48,14 @@ loginForm.addEventListener("submit", async (e) => {
   try {
     setMsg("Iniciando sesión...");
 
-    const { data, error } = await sb.auth.signInWithPassword({ 
-      email, 
-      password 
-    });
-    
-    if (error) throw error;
+    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+    const user = userCredential.user;
 
-    console.log("Login successful:", data.user.email);
+    console.log("Login successful:", user.email);
 
     // Verificar si el usuario ya tiene avatar con nombre
-    const { data: avatar } = await sb
-      .from("avatars")
-      .select("pet_name")
-      .eq("user_id", data.user.id)
-      .single();
+    const avatarDoc = await db.collection("avatars").doc(user.uid).get();
+    const avatar = avatarDoc.data();
 
     setMsg("Login exitoso. Entrando...", false);
 
@@ -83,10 +70,12 @@ loginForm.addEventListener("submit", async (e) => {
     
     // Mensajes de error más amigables
     let errorMsg = err.message || "Error al iniciar sesión";
-    if (errorMsg.includes("Email not confirmed")) {
-      errorMsg = "Debes confirmar tu email antes de iniciar sesión. Revisa tu bandeja de entrada.";
-    } else if (errorMsg.includes("Invalid login credentials")) {
+    if (err.code === "auth/user-not-found" || err.code === "auth/wrong-password") {
       errorMsg = "Correo o contraseña incorrectos.";
+    } else if (err.code === "auth/invalid-email") {
+      errorMsg = "El formato del correo no es válido.";
+    } else if (err.code === "auth/too-many-requests") {
+      errorMsg = "Demasiados intentos fallidos. Intenta más tarde.";
     }
     
     setMsg(errorMsg, true);

@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EasyForYou - Elige tu Mascota</title>
+  <title>EAS for you - Elige tu Mascota</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <main class="container">
-    <h1>¡Bienvenido a EasyForYou!</h1>
+    <h1>¡Bienvenido a EAS for you!</h1>
     <p class="muted">Elige tu mascota y dale un nombre</p>
 
     <div class="card">
@@ -49,11 +49,13 @@
     <p id="msg" class="msg"></p>
   </main>
 
-  <!-- Supabase JS (CDN) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Firebase JS SDKs (CDN) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <!-- Tus scripts -->
-  <script src="./js/supabaseClient.js"></script>
+  <script src="./js/firebaseClient.js"></script>
   <script src="./js/petSelection.js"></script>
 </body>
 </html>
