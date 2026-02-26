@@ -760,14 +760,16 @@ const QuizSystem = {
   // Guardar puntos en la mascota
   async savePointsToPet(points) {
     try {
-      const sb = window.supabaseClient;
-      if (!sb) {
-        console.log("Supabase no disponible, puntos guardados localmente");
+      const auth = window.firebaseAuth;
+      const db = window.firebaseDb;
+      
+      if (!auth || !db) {
+        console.log("Firebase no disponible, puntos guardados localmente");
         this.savePointsLocally(points);
         return;
       }
       
-      const { data: { user } } = await sb.auth.getUser();
+      const user = auth.currentUser;
       if (!user) {
         console.log("Usuario no autenticado, puntos guardados localmente");
         this.savePointsLocally(points);
@@ -775,36 +777,25 @@ const QuizSystem = {
       }
       
       // Obtener datos actuales del avatar
-      const { data: avatar, error: fetchError } = await sb
-        .from("avatars")
-        .select("xp, level")
-        .eq("user_id", user.id)
-        .single();
+      const avatarDoc = await db.collection("avatars").doc(user.uid).get();
       
-      if (fetchError) {
-        console.error("Error obteniendo avatar:", fetchError);
+      if (!avatarDoc.exists) {
+        console.error("Error obteniendo avatar: no existe");
         this.savePointsLocally(points);
         return;
       }
+      
+      const avatar = avatarDoc.data();
       
       // Calcular nuevo XP y nivel
       const newXP = (avatar.xp || 0) + points;
       const newLevel = Math.min(5, Math.floor(newXP / 30) + 1); // Cada 30 puntos sube de nivel, máximo nivel 5
       
       // Actualizar en la base de datos
-      const { error: updateError } = await sb
-        .from("avatars")
-        .update({ 
-          xp: newXP, 
-          level: newLevel 
-        })
-        .eq("user_id", user.id);
-      
-      if (updateError) {
-        console.error("Error actualizando avatar:", updateError);
-        this.savePointsLocally(points);
-        return;
-      }
+      await db.collection("avatars").doc(user.uid).update({ 
+        xp: newXP, 
+        level: newLevel 
+      });
       
       console.log(`¡Puntos guardados! XP: ${newXP}, Nivel: ${newLevel}`);
       

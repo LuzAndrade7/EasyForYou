@@ -114,7 +114,13 @@ function loadUserProfile(profile, avatar, user) {
   
   // Fecha de registro
   if (infoJoinDate) {
-    const joinDate = profile?.created_at ? new Date(profile.created_at) : new Date();
+    let joinDate;
+    if (profile?.created_at) {
+      // Firestore Timestamp tiene método toDate()
+      joinDate = profile.created_at.toDate ? profile.created_at.toDate() : new Date(profile.created_at);
+    } else {
+      joinDate = new Date();
+    }
     infoJoinDate.textContent = joinDate.toLocaleDateString('es-ES', {
       day: 'numeric',
       month: 'long',
@@ -399,12 +405,9 @@ async function saveMascotaName() {
   const data = window.currentUserData;
   
   try {
-    const { error } = await sb
-      .from('avatars')
-      .update({ pet_name: newName })
-      .eq('user_id', data.userId);
-    
-    if (error) throw error;
+    await db.collection('avatars').doc(data.userId).update({
+      pet_name: newName
+    });
     
     // Actualizar datos locales
     data.avatar.pet_name = newName;
@@ -507,12 +510,9 @@ async function saveProfile() {
   
   try {
     // Actualizar nombre en profiles
-    const { error: profileError } = await sb
-      .from('profiles')
-      .update({ name: newName })
-      .eq('id', data.userId);
-    
-    if (profileError) throw profileError;
+    await db.collection('profiles').doc(data.userId).update({
+      name: newName
+    });
     
     // Actualizar datos locales
     data.profile.name = newName;
