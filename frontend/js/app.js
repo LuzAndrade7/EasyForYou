@@ -48,6 +48,30 @@ async function loadUser() {
     return;
   }
 
+  // Verificar si es un usuario diferente al anterior
+  const lastUserId = localStorage.getItem('lastUserId');
+  const isNewOrDifferentUser = lastUserId !== user.uid;
+  
+  // Siempre cargar datos desde Firebase (fuente de verdad)
+  // Esto sobrescribe cualquier dato local antiguo
+  if (avatar.completedQuizzes && avatar.completedQuizzes.length > 0) {
+    localStorage.setItem('completedQuizzes', JSON.stringify(avatar.completedQuizzes));
+    localStorage.setItem('quizzesCompleted', avatar.completedQuizzes.length.toString());
+  } else {
+    // Usuario nuevo o sin quizzes - limpiar localStorage
+    localStorage.removeItem('completedQuizzes');
+    localStorage.setItem('quizzesCompleted', '0');
+  }
+  
+  if (avatar.calculosHistorial && avatar.calculosHistorial.length > 0) {
+    localStorage.setItem('calculosHistorial', JSON.stringify(avatar.calculosHistorial));
+  } else {
+    localStorage.removeItem('calculosHistorial');
+  }
+  
+  // Guardar el ID del usuario actual
+  localStorage.setItem('lastUserId', user.uid);
+
   if (!profile) {
     console.error("Profile not found");
     welcome.textContent = `Hola`;
@@ -563,7 +587,7 @@ function getCalculosHistorial() {
   return JSON.parse(localStorage.getItem('calculosHistorial') || '[]');
 }
 
-function saveCalculo(tipo, inputs, resultado) {
+async function saveCalculo(tipo, inputs, resultado) {
   const historial = getCalculosHistorial();
   const nuevoCalculo = {
     id: Date.now(),
@@ -574,6 +598,19 @@ function saveCalculo(tipo, inputs, resultado) {
   };
   historial.unshift(nuevoCalculo); // Agregar al inicio
   localStorage.setItem('calculosHistorial', JSON.stringify(historial));
+  
+  // Guardar también en Firebase para persistencia
+  try {
+    const user = auth.currentUser;
+    if (user) {
+      await db.collection("avatars").doc(user.uid).update({
+        calculosHistorial: historial
+      });
+      console.log('Historial guardado en Firebase');
+    }
+  } catch (error) {
+    console.error('Error guardando historial en Firebase:', error);
+  }
   
   // Actualizar contador en perfil
   const calcsCount = historial.length;
@@ -979,6 +1016,10 @@ tabBtns.forEach(btn => {
 // Logout
 logoutBtn.addEventListener("click", async () => {
   playUISound('click');
+  
+  // NO borramos localStorage aquí - los datos se limpian solo cuando cambia de usuario
+  // Esto permite que el mismo usuario mantenga su caché al volver a entrar
+  
   await auth.signOut();
   window.location.href = "../index.html";
 });

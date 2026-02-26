@@ -142,14 +142,19 @@ confirmPetBtn.addEventListener("click", async () => {
         pet_name: petNameInput.value.trim()
       });
     } else {
-      // Crear nuevo avatar
+      // Crear nuevo avatar (con arrays vacíos para quizzes y cálculos)
       await db.collection("avatars").doc(user.uid).set({
         user_id: user.uid,
         animal_type: selectedAnimal,
         pet_name: petNameInput.value.trim(),
         level: 0,
-        xp: 0
+        xp: 0,
+        completedQuizzes: [],
+        calculosHistorial: []
       });
+      
+      // Guardar ID del usuario (la limpieza se hace en app.js)
+      localStorage.setItem('lastUserId', user.uid);
     }
 
     setMsg("¡Mascota guardada! Entrando al dashboard...", false);

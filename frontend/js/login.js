@@ -57,6 +57,9 @@ loginForm.addEventListener("submit", async (e) => {
     const avatarDoc = await db.collection("avatars").doc(user.uid).get();
     const avatar = avatarDoc.data();
 
+    // Guardar el ID del usuario actual (la limpieza se hace en app.js si es diferente)
+    localStorage.setItem('lastUserId', user.uid);
+
     setMsg("Login exitoso. Entrando...", false);
 
     // Redirigir según si tiene mascota o no

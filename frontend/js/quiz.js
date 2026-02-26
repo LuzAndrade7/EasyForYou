@@ -716,6 +716,9 @@ const QuizSystem = {
       localStorage.setItem('quizzesCompleted', completedQuizzes.length);
       console.log('Quiz completado por primera vez:', quizId);
       console.log('Total quizzes únicos completados:', completedQuizzes.length);
+      
+      // Guardar también en Firebase para persistencia
+      this.saveCompletedQuizzesToFirebase(completedQuizzes);
     } else {
       console.log('Quiz ya completado anteriormente, no suma puntos:', quizId);
     }
@@ -835,6 +838,26 @@ const QuizSystem = {
     } catch (error) {
       console.error("Error guardando puntos:", error);
       this.savePointsLocally(points);
+    }
+  },
+  
+  // Guardar quizzes completados en Firebase
+  async saveCompletedQuizzesToFirebase(completedQuizzes) {
+    try {
+      const auth = window.firebaseAuth;
+      const db = window.firebaseDb;
+      
+      if (!auth || !db) return;
+      
+      const user = auth.currentUser;
+      if (!user) return;
+      
+      await db.collection("avatars").doc(user.uid).update({
+        completedQuizzes: completedQuizzes
+      });
+      console.log('Quizzes completados guardados en Firebase');
+    } catch (error) {
+      console.error('Error guardando quizzes en Firebase:', error);
     }
   },
   
