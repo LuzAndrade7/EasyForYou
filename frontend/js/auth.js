@@ -37,7 +37,7 @@ registerForm.addEventListener("submit", async (e) => {
     await db.collection("avatars").doc(user.uid).set({
       user_id: user.uid,
       animal_type: 1,
-      level: 1,
+      level: 0,
       xp: 0
     });
 

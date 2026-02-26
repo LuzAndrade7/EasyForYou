@@ -147,7 +147,7 @@ confirmPetBtn.addEventListener("click", async () => {
         user_id: user.uid,
         animal_type: selectedAnimal,
         pet_name: petNameInput.value.trim(),
-        level: 1,
+        level: 0,
         xp: 0
       });
     }

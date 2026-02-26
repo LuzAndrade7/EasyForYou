@@ -94,7 +94,7 @@ function loadUserProfile(profile, avatar, user) {
   
   if (displayName) displayName.textContent = name;
   if (emailEl) emailEl.textContent = profile?.email || user.email;
-  if (levelBadge) levelBadge.textContent = `Nivel ${avatar?.level || 1}`;
+  if (levelBadge) levelBadge.textContent = `Nivel ${avatar?.level ?? 0}`;
   if (pointsEl) pointsEl.textContent = avatar?.xp || 0;
   
   // Cargar estadísticas desde localStorage
@@ -196,7 +196,9 @@ function loadMascotaTab(avatar) {
 }
 
 function updateLevelCards(currentLevel) {
-  const levelRequirements = [0, 30, 60, 90, 120]; // XP necesarios para cada nivel
+  // currentLevel puede ser 0, 1, 2, 3, 4, 5
+  // Las tarjetas son del nivel 1 al 5
+  const levelRequirements = [30, 60, 90, 120, 150]; // XP necesarios para nivel 1, 2, 3, 4, 5
   
   for (let level = 1; level <= 5; level++) {
     const card = document.getElementById(`levelCard${level}`);
@@ -211,19 +213,19 @@ function updateLevelCards(currentLevel) {
     const statusEl = card.querySelector('.level-status');
     
     if (level < currentLevel) {
-      // Nivel completado
+      // Nivel ya superado
       card.classList.add('unlocked');
       if (overlay) overlay.style.display = 'none';
       if (playBtn) playBtn.style.display = 'flex';
       if (statusEl) statusEl.textContent = '✅ Desbloqueado';
     } else if (level === currentLevel) {
-      // Nivel actual
+      // Nivel actual (desbloqueado)
       card.classList.add('current');
       if (overlay) overlay.style.display = 'none';
       if (playBtn) playBtn.style.display = 'flex';
       if (statusEl) statusEl.textContent = '⭐ Nivel Actual';
     } else {
-      // Nivel bloqueado
+      // Nivel bloqueado (mayor al actual)
       card.classList.add('locked');
       if (overlay) overlay.style.display = 'flex';
       if (playBtn) playBtn.style.display = 'none';
@@ -233,7 +235,7 @@ function updateLevelCards(currentLevel) {
 }
 
 function playLevelVideo(level) {
-  const currentLevel = window.currentUserData?.avatar?.level || 1;
+  const currentLevel = window.currentUserData?.avatar?.level ?? 0;
   
   if (level > currentLevel) {
     showToast('🔒 Necesitas alcanzar este nivel primero');

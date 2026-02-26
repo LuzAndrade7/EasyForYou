@@ -3,6 +3,7 @@
 
 const QuizSystem = {
   currentQuiz: null,
+  currentQuizId: null,
   currentQuestionIndex: 0,
   totalScore: 0,
   timerInterval: null,
@@ -266,6 +267,7 @@ const QuizSystem = {
     }
     
     this.currentQuiz = quiz;
+    this.currentQuizId = topicId; // Guardar ID del quiz para verificar si ya se completó
     this.currentQuestionIndex = 0;
     this.totalScore = 0;
     
@@ -701,11 +703,22 @@ const QuizSystem = {
   showResults() {
     const maxPoints = this.currentQuiz.maxPoints;
     const percentage = Math.round((this.totalScore / maxPoints) * 100);
+    const quizId = this.currentQuizId; // ID del quiz actual (topic1, topic2, etc.)
     
-    // Incrementar contador de quizzes completados
-    const quizzesCompleted = parseInt(localStorage.getItem('quizzesCompleted') || '0');
-    localStorage.setItem('quizzesCompleted', quizzesCompleted + 1);
-    console.log('Quizzes completados:', quizzesCompleted + 1);
+    // Verificar si este quiz ya fue completado antes
+    const completedQuizzes = JSON.parse(localStorage.getItem('completedQuizzes') || '[]');
+    const isFirstTime = !completedQuizzes.includes(quizId);
+    
+    // Solo incrementar si es la primera vez que completa este quiz
+    if (isFirstTime) {
+      completedQuizzes.push(quizId);
+      localStorage.setItem('completedQuizzes', JSON.stringify(completedQuizzes));
+      localStorage.setItem('quizzesCompleted', completedQuizzes.length);
+      console.log('Quiz completado por primera vez:', quizId);
+      console.log('Total quizzes únicos completados:', completedQuizzes.length);
+    } else {
+      console.log('Quiz ya completado anteriormente, no suma puntos:', quizId);
+    }
     
     // Reproducir sonido de completar
     this.playSound('complete');
@@ -727,20 +740,30 @@ const QuizSystem = {
       emoji = '💪';
     }
     
+    // Mensaje diferente si ya lo hizo antes
+    const repeatMessage = isFirstTime 
+      ? '' 
+      : '<p class="repeat-notice">⚠️ Ya completaste este quiz antes. No se sumarán puntos adicionales.</p>';
+    
+    const buttonText = isFirstTime 
+      ? '🐾 Guardar Puntos y Continuar' 
+      : '✓ Continuar (sin puntos extra)';
+    
     const quizBody = document.getElementById('quizBody');
     quizBody.innerHTML = `
       <div class="results-container">
         <div class="results-emoji">${emoji}</div>
         <h2 class="results-title">¡Cuestionario Completado!</h2>
         <div class="results-score">
-          <div class="score-big">${this.totalScore}</div>
+          <div class="score-big">${isFirstTime ? this.totalScore : 0}</div>
           <div class="score-max">de ${maxPoints} puntos</div>
         </div>
         <div class="results-percentage">${percentage}%</div>
         <p class="results-message">${message}</p>
+        ${repeatMessage}
         <div class="results-buttons">
-          <button class="result-btn primary" onclick="QuizSystem.saveAndClose()">
-            🐾 Guardar Puntos y Continuar
+          <button class="result-btn primary" onclick="QuizSystem.saveAndClose(${isFirstTime})">
+            ${buttonText}
           </button>
         </div>
       </div>
@@ -751,9 +774,13 @@ const QuizSystem = {
   },
   
   // Guardar puntos y cerrar
-  async saveAndClose() {
-    // Guardar puntos en la mascota
-    await this.savePointsToPet(this.totalScore);
+  async saveAndClose(isFirstTime = true) {
+    // Solo guardar puntos si es la primera vez que hace este quiz
+    if (isFirstTime) {
+      await this.savePointsToPet(this.totalScore);
+    } else {
+      console.log('Quiz repetido, no se guardan puntos adicionales');
+    }
     this.closeQuiz();
   },
   
@@ -787,9 +814,10 @@ const QuizSystem = {
       
       const avatar = avatarDoc.data();
       
-      // Calcular nuevo XP y nivel
+      // Calcular nuevo XP y nivel (empieza en 0, máximo 5)
       const newXP = (avatar.xp || 0) + points;
-      const newLevel = Math.min(5, Math.floor(newXP / 30) + 1); // Cada 30 puntos sube de nivel, máximo nivel 5
+      // Nivel 0: 0-29 pts, Nivel 1: 30-59 pts, Nivel 2: 60-89 pts, etc.
+      const newLevel = Math.min(5, Math.floor(newXP / 30));
       
       // Actualizar en la base de datos
       await db.collection("avatars").doc(user.uid).update({ 
@@ -845,7 +873,7 @@ const QuizSystem = {
         <h2 class="level-up-title">🎉 ¡SUBISTE DE NIVEL! 🎉</h2>
         <div class="cat-video-container">
           <video autoplay playsinline class="cat-level-video" id="catLevelVideo">
-            <source src="./videos/GatoNivel${Math.min(newLevel - 1, 4)}.mp4" type="video/mp4">
+            <source src="./videos/GatoNivel${Math.min(newLevel, 5)}.mp4" type="video/mp4">
           </video>
         </div>
         <div class="level-badge">
@@ -1503,6 +1531,16 @@ const QuizSystem = {
         margin-bottom: 30px;
       }
       
+      .repeat-notice {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        color: #856404;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 14px;
+        margin: 15px 0;
+        border: 1px solid #ffc107;
+      }
+      
       .results-buttons {
         display: flex;
         gap: 15px;
@@ -1548,11 +1586,13 @@ const QuizSystem = {
         height: 100%;
         background: rgba(0, 0, 0, 0.9);
         display: flex;
-        justify-content: center;
-        align-items: center;
+        justify-content: flex-start;
+        align-items: flex-start;
         z-index: 200000;
         opacity: 0;
         transition: opacity 0.5s ease;
+        overflow-y: auto;
+        padding: 20px 0;
       }
       
       .level-up-overlay.show {
@@ -1566,6 +1606,7 @@ const QuizSystem = {
         text-align: center;
         max-width: 450px;
         width: 90%;
+        margin: auto;
         position: relative;
         box-shadow: 0 0 60px rgba(255, 215, 0, 0.5);
         border: 3px solid #FFD700;
@@ -1591,13 +1632,13 @@ const QuizSystem = {
       }
       
       .cat-video-container {
-        width: 250px;
-        height: 250px;
-        margin: 20px auto;
+        width: 320px;
+        height: 320px;
+        margin: 25px auto;
         border-radius: 50%;
         overflow: hidden;
-        border: 4px solid #FFD700;
-        box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        border: 5px solid #FFD700;
+        box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
       }
       
       .cat-level-video {
